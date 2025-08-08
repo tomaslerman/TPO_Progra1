@@ -1,0 +1,99 @@
+def menu_ventas():
+    print("Menu Ventas")
+    print("-------------")
+    print("1: ID del producto:")
+    print("2: Mostrar producto en disponibilidad:")
+    print("3: Precio del producto:")
+    print("4: Descuento del producto:")
+    print("5: Archivar producto vendido :")
+    opcion= int (input("Ingrese opcion deseada:"))
+    return opcion
+    
+def validacion(opcion):   
+    while opcion !=-1 and opcion < 1 or opcion > 5:
+        print("Debe ingresar rangos de opcion del 1 al 5: ")
+        menu_ventas()
+        opcion=int(input("Ingrese nuevamente una opcion del Menu ventas: "))
+    return opcion
+
+def matriz_ventas(lista_ventas):
+    datos=[]
+    for i in range(len(lista_ventas)):
+        codigo=len(datos)+1
+        descripcion=input("Ingrese nombre del medicamento")
+        precio_unitario=int(input("Ingrese precio del medicamento"))
+        cantidad=int(input("Ingrese cantidad de medicamentos:"))
+        producto=[codigo,descripcion,precio_unitario,cantidad,precio_unitario*cantidad]
+        datos.append(producto)
+    return datos
+
+def mostrar_matriz(titulos,matriz):
+    filas=len(matriz)
+    columnas=len(matriz[0])
+    for titulo in titulos:
+        print(titulo,end="\t")
+    print()
+    for fila in range (filas):
+        for columna in range (columnas):
+            print(matriz[fila][columna],end="\t")
+        print()
+    
+            
+        
+        
+def menu_recetas():
+    print("Menu Recetas Medicas")
+    print("------------------")
+    print("1: ID de receta:")
+    print("2: Cargar receta medica:")
+    print("3: Mostrar producto en disponibilidad: ")
+    print("4: Archivar receta: ")
+
+def menu_inventario():
+    print("Menu Inventario")
+    print("----------------------")
+    print("1: Archivar producto: ")
+    print("2: Modificar producto registrado:")
+    print("3: Control de Stock: ")
+    print("4: Registrar producto proximo a vencer: ")
+    print("5: Registro de compra de producto:")
+    print("6: Registro de venta de producto: ")
+
+def menu_reportes():
+    print(" Menu Reportes")
+    print("---------------")
+    print("1: ID del usuario: ")
+    print("2: Reporte de ventas: ")
+    print("3: Reporte de recetas: ")
+    print("4: Reporte de stock vendido : ")
+    
+def menu():  
+    opcion= menu_ventas() 
+    validacion(opcion)
+    while opcion!=-1:
+        if opcion==1:
+            pass
+        elif opcion==2:
+            pass
+        elif opcion==3:
+            producto=int(input("Ingrese cantidad de productos: "))
+            titulos=["Codigo","Medicamento", "Precio", "Cantidad subtotal"]
+            lista_ventas.append(producto)
+            matriz=matriz_ventas(lista_ventas)
+            print(matriz)
+            mostrar_matriz(titulos,matriz)
+            
+            
+            
+        
+
+
+#programa principal
+
+
+lista_ventas=[]
+lista_recetas=[]
+lista_productos=[]
+
+menu()
+    
