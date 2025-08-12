@@ -1,22 +1,20 @@
 def menu_ventas():
     print("Menu Ventas")
     print("-------------")
-    print("1: ID del producto:")
-    print("2: Mostrar producto en disponibilidad:")
-    print("3: Precio del producto:")
-    print("4: Descuento del producto:")
-    print("5: Archivar producto vendido :")
+    print("1: Agregar venta")
+    print("2: Modificar venta")
+    print("3: Archivar venta")
     opcion= int (input("Ingrese opcion deseada:"))
     return opcion
     
 def validacion(opcion):   
-    while opcion !=-1 and opcion < 1 or opcion > 5:
-        print("Debe ingresar rangos de opcion del 1 al 5: ")
+    while opcion !=-1 and opcion < 1 or opcion > 3:
+        print("Debe ingresar rangos de opcion del 1 al 3: ")
         menu_ventas()
         opcion=int(input("Ingrese nuevamente una opcion del Menu ventas: "))
     return opcion
 
-def matriz_ventas(lista_ventas):
+def matriz_productos(lista_ventas):
     datos=[]
     for i in range(len(lista_ventas)):
         codigo=len(datos)+1
@@ -44,28 +42,24 @@ def mostrar_matriz(titulos,matriz):
 def menu_recetas():
     print("Menu Recetas Medicas")
     print("------------------")
-    print("1: ID de receta:")
-    print("2: Cargar receta medica:")
-    print("3: Mostrar producto en disponibilidad: ")
-    print("4: Archivar receta: ")
+    print("1: Buscar receta por ID")
+    print("2: Cargar receta medica")
+    print("3: Mostrar lista completa")
+    print("4: Archivar receta")
 
 def menu_inventario():
     print("Menu Inventario")
     print("----------------------")
-    print("1: Archivar producto: ")
-    print("2: Modificar producto registrado:")
-    print("3: Control de Stock: ")
-    print("4: Registrar producto proximo a vencer: ")
-    print("5: Registro de compra de producto:")
-    print("6: Registro de venta de producto: ")
+    print("1: Agregar nuevo producto")
+    print("2: Modificar producto")
+    print("3: Archivar producto")
+    print("4: Buscar producto por ID")
 
 def menu_reportes():
     print(" Menu Reportes")
     print("---------------")
-    print("1: ID del usuario: ")
-    print("2: Reporte de ventas: ")
-    print("3: Reporte de recetas: ")
-    print("4: Reporte de stock vendido : ")
+    print("1: Reporte de ventas")
+    print("2: Reporte de stock vendido")
     
 def menu():  
     opcion= menu_ventas() 
