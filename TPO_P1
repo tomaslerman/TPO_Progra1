@@ -47,8 +47,42 @@ def agregar_producto(matriz_productos):
     precio_unit = int(input("Ingrese el precio unitario: $"))#funcion para validar mayores que un numero(1)
     producto.append(codigo,descripcion,cant_stock,precio_unit)
     matriz_productos.append(producto)
-            
-            
+
+def fechaYvalidacion():
+    anio = int(input("Ingrese año: "))
+    while anio<=0 or anio>2025:
+        print("Error! El año ingresado no es válido")
+        anio = int(input("Vuelva a ingrese año: "))
+    mes = int(input("Ingrese mes: "))
+    while mes<1 or mes>12:
+        print("Error! El mes ingresado no es válido")
+        mes = int(input("Vuelva a ingresar el mes:"))
+    dia = int(input("Ingrese día: "))
+    if mes==2:
+        while dia<1 or dia>29:
+            print("Error! El día ingresado no es válido")
+            dia = int(input("Vuelva a ingresar el día:"))
+    elif mes==1 or mes==3 or mes==5 or mes==7 or mes==8 or mes==10 or mes==12:
+        while dia<1 or dia>31:
+            print("Error! El día ingresado no es válido")
+            dia = int(input("Vuelva a ingresar el día:"))
+    else:
+        while dia<1 or dia>30:
+            print("Error! El día ingresado no es válido")
+            dia = int(input("Vuelva a ingresar el día:"))
+    fecha = (dia,"/",mes,"/",anio)
+    return fecha
+
+
+def agregar_receta(matriz_recetas):
+    receta = []
+    codigo = len(matriz_recetas) + 1
+    producto = int(input("Ingrese el código del producto: "))#funcion para buscar el producto y validar input mayor a (1)
+    fecha = fechaYvalidacion()
+    medico = input("Ingrese el nombre completo del médico: ")
+    cantidad = int(input("Ingrese la cantidad de medicamento: "))
+    receta.append(codigo,producto,fecha,medico,cantidad)
+    matriz_recetas.append(receta)
                    
         
 
