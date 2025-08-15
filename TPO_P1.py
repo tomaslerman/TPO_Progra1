@@ -33,11 +33,44 @@ def agregar_cliente(matriz_clientes):
     cliente = []
     nombre = input("Ingrese el nombre: ")
     edad = int(input("Ingrese edad: "))
-    obra_social = int(input("Ingrese la obra social: "))#funcion para pedir obra social
+    obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
     telefono = int(input("Ingrese un número de teléfono:"))
     id_cliente = len(matriz_clientes) + 1  
     cliente.append(id_cliente, obra_social, nombre, edad, telefono)
     matriz_clientes.append(cliente)
+
+def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales):
+    id_cliente = int(input("Ingrese el ID del cliente a modificar: "))
+    pos = buscar_dato(matriz_clientes, id_cliente)
+    while pos == -1:
+        print("El ID del cliente es inválido")
+        id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
+        pos = buscar_dato(matriz_clientes, id_cliente)
+    nombre = input("Ingrese el nuevo nombre del cliente: ")
+    edad = int(input("Ingrese la nueva edad del cliente: "))
+    obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)  # función para ingresar ID de obra social
+    telefono = int(input("Ingrese el nuevo número de teléfono del cliente: "))  
+    matriz_clientes[pos][2] = nombre
+    matriz_clientes[pos][3] = edad
+    matriz_clientes[pos][1] = obra_social
+    matriz_clientes[pos][4] = telefono
+    print("Cliente modificado correctamente.")
+
+def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
+    print("Obras sociales disponibles:")
+    mostrar_matriz(encabezados_obras_sociales, matriz_obras_sociales)
+    id_obra_social = int(input("Ingrese el ID de la obra social: "))
+    pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    while pos == -1:
+        print("El ID de la obra social es inválido")
+        id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
+        pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    return id_obra_social
+
+
+
+
+
 
 def agregar_producto(matriz_productos):
     producto = []
@@ -120,6 +153,34 @@ def buscar_dato(matriz,dato):
             return i
     return -1
 
+
+def agregar_obra_social(matriz_obras_sociales):
+    obra_social = []
+    id_o_s = len(matriz_obras_sociales) + 1
+    nombre = input("Ingrese el nombre de la obra social: ")
+    descuento = int(input("Ingrese el descuento que aplica la obra social: "))
+    while descuento < 0 or descuento > 100:
+        print("El descuento debe estar entre 0 y 100")
+        descuento = int(input("Vuelva a ingresar el descuento: "))
+    obra_social.append(id_o_s, nombre, descuento)
+    matriz_obras_sociales.append(obra_social)
+
+def modificar_obra_social(matriz_obras_sociales):
+    id_obra_social = int(input("Ingrese el ID de la obra social a modificar: "))
+    pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    while pos == -1:
+        print("El ID de la obra social es inválido")
+        id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
+        pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    nombre = input("Ingrese el nuevo nombre de la obra social: ")
+    descuento = int(input("Ingrese el nuevo descuento que aplica la obra social: "))
+    while descuento < 0 or descuento > 100:
+        print("El descuento debe estar entre 0 y 100")
+        descuento = int(input("Vuelva a ingresar el descuento: "))
+    matriz_obras_sociales[pos][1] = nombre
+    matriz_obras_sociales[pos][2] = descuento
+    print("Obra social modificada correctamente.")
+    
 def dar_baja_elementos(matriz):
     id_elemento = int(input("Ingrese el ID: "))
     pos = buscar_dato(matriz,id_elemento)
