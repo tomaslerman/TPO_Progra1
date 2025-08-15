@@ -120,13 +120,22 @@ def buscar_dato(matriz,dato):
             return i
     return -1
 
-def dar_baja_receta(matriz):
-    receta = int(input("Ingrese el ID de receta: "))
-    pos = buscar_dato(matriz_recetas,receta)
+def dar_baja_elementos(matriz):
+    id_elemento = int(input("Ingrese el ID: "))
+    pos = buscar_dato(matriz,id_elemento)
     while pos==-1:
         print("Error! El ID ingresado es inválido")
-        receta = int(input("Vuelva a ingresar el ID de receta: "))
-        pos = buscar_dato(matriz_recetas,receta)
+        receta = int(input("Vuelva a ingresar el ID: "))
+        pos = buscar_dato(matriz,id_elemento)
+    for i in range(len(matriz[0])):
+        print(matriz[pos][i])
+    confirmacion = int(input("Desea eliminar estos datos? (1 para SI o 2 para NO): "))
+    if confirmacion == 1:
+        matriz.pop(pos)
+        enter = input("Dato eliminado exitosamente. Volviendo a menu...")
+    else:
+        print("Cancelando operación")
+        enter = input("Volviendo a menu...")
     
 
 
