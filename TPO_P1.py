@@ -1,0 +1,260 @@
+    
+def validar_opcion(opcion,inicio,fin,encabezado):   
+    while opcion !=-1 and opcion < inicio or opcion > fin:
+        print("Debe ingresar rangos de opcion del ",inicio,"al",fin)
+        menu(encabezado)
+        opcion=int(input("Ingrese nuevamente una opcion del Menu ventas: "))
+    return opcion
+
+
+def mostrar_matriz(titulos,matriz):
+    filas=len(matriz)
+    columnas=len(matriz[0])
+    for titulo in titulos:
+        print(titulo,end="\t")
+    print()
+    for fila in range (filas):
+        for columna in range (columnas):
+            print(matriz[fila][columna],end="\t")
+        print()
+    
+            
+        
+def menu(lista_encabezados):
+    for encabezado in lista_encabezados:
+        print(encabezado, end="\t")
+    
+    opcion=int(input("Ingrese opcion deseada: "))
+    opcion = validar_opcion(opcion, 1, len(lista_encabezados), lista_encabezados)
+    return opcion
+
+
+def agregar_cliente(matriz_clientes):
+    cliente = []
+    nombre = input("Ingrese el nombre: ")
+    edad = int(input("Ingrese edad: "))
+    obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
+    telefono = int(input("Ingrese un número de teléfono:"))
+    id_cliente = len(matriz_clientes) + 1  
+    cliente.append(id_cliente, obra_social, nombre, edad, telefono)
+    matriz_clientes.append(cliente)
+
+def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales):
+    id_cliente = int(input("Ingrese el ID del cliente a modificar: "))
+    pos = buscar_dato(matriz_clientes, id_cliente)
+    while pos == -1:
+        print("El ID del cliente es inválido")
+        id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
+        pos = buscar_dato(matriz_clientes, id_cliente)
+    nombre = input("Ingrese el nuevo nombre del cliente: ")
+    edad = int(input("Ingrese la nueva edad del cliente: "))
+    obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)  # función para ingresar ID de obra social
+    telefono = int(input("Ingrese el nuevo número de teléfono del cliente: "))  
+    matriz_clientes[pos][2] = nombre
+    matriz_clientes[pos][3] = edad
+    matriz_clientes[pos][1] = obra_social
+    matriz_clientes[pos][4] = telefono
+    print("Cliente modificado correctamente.")
+
+def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
+    print("Obras sociales disponibles:")
+    mostrar_matriz(encabezados_obras_sociales, matriz_obras_sociales)
+    id_obra_social = int(input("Ingrese el ID de la obra social: "))
+    pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    while pos == -1:
+        print("El ID de la obra social es inválido")
+        id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
+        pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    return id_obra_social
+
+
+
+
+
+
+def agregar_producto(matriz_productos):
+    producto = []
+    codigo = (len(matriz_productos) + 1)
+    descripcion = input("Ingrese la descripción: ")
+    cant_stock = int(input("Ingrese cantidad en stock: "))#funcion para validar mayores que que un numero(0)
+    cant_stock=validar_mayor_que(cant_stock,0)
+    precio_unit = int(input("Ingrese el precio unitario: $"))#funcion para validar mayores que un numero(1)
+    precio_unit=validar_mayor_que(precio_unit,1)
+    producto.append(codigo,descripcion,cant_stock,precio_unit)
+    matriz_productos.append(producto)
+
+def modificar_producto(matriz_productos):
+    id=int(input("Ingrese el código del producto a modificar: "))
+    pos = buscar_dato(matriz_productos,id)
+    while pos==-1:
+        print(" El código del producto es inválido")
+        id = int(input("Vuelva a ingresar el código del producto: "))
+        pos = buscar_dato(matriz_productos,id)
+    descripcion = input("Ingrese la nueva descripción del producto: ")
+    cant_stock = int(input("Ingrese la nueva cantidad en stock: "))
+    cant_stock=validar_mayor_que(cant_stock,0)#funcion para validar mayores que que un numero(0)
+    precio_unit = int(input("Ingrese el nuevo precio unitario: $"))
+    precio_unit=validar_mayor_que(precio_unit,1)#funcion para validar mayores que un numero(1)
+    matriz_productos[pos][1] = descripcion
+    matriz_productos[pos][2] = cant_stock
+    matriz_productos[pos][3] = precio_unit
+    print("Producto modificado correctamente.")
+def validar_mayor_que(valor, minimo):
+    while valor <= minimo:
+        print(f"El valor debe ser mayor que {minimo}")
+        valor = int(input(f"Ingrese un valor mayor que {minimo}: "))
+    return valor
+    
+        
+
+def fechaYvalidacion():
+    anio = int(input("Ingrese año: "))
+    while anio<=0 or anio>2025:
+        print("Error! El año ingresado no es válido")
+        anio = int(input("Vuelva a ingrese año: "))
+    mes = int(input("Ingrese mes: "))
+    while mes<1 or mes>12:
+        print("Error! El mes ingresado no es válido")
+        mes = int(input("Vuelva a ingresar el mes:"))
+    dia = int(input("Ingrese día: "))
+    if mes==2:
+        while dia<1 or dia>29:
+            print("Error! El día ingresado no es válido")
+            dia = int(input("Vuelva a ingresar el día:"))
+    elif mes==1 or mes==3 or mes==5 or mes==7 or mes==8 or mes==10 or mes==12:
+        while dia<1 or dia>31:
+            print("Error! El día ingresado no es válido")
+            dia = int(input("Vuelva a ingresar el día:"))
+    else:
+        while dia<1 or dia>30:
+            print("Error! El día ingresado no es válido")
+            dia = int(input("Vuelva a ingresar el día:"))
+    fecha = (dia,"/",mes,"/",anio)
+    return fecha
+
+
+def agregar_receta(matriz_recetas):
+    receta = []
+    codigo = len(matriz_recetas) + 1
+    producto = int(input("Ingrese el código del producto: "))#funcion para buscar el producto y validar input mayor a (1)
+    encontrado = buscar_dato(matriz_productos,producto)
+    while encontrado==-1:
+        print("Error! Código de producto inválido")
+        producto = int(input("Vuelva a ingresar el código del producto: "))
+    fecha = fechaYvalidacion()
+    medico = input("Ingrese el nombre completo del médico: ")
+    cantidad = int(input("Ingrese la cantidad de medicamento: "))
+    receta.append(codigo,producto,fecha,medico,cantidad)
+    matriz_recetas.append(receta)
+                   
+def buscar_dato(matriz,dato):
+    for i in range(len(matriz)):
+        if matriz[i][0] == dato:
+            return i
+    return -1
+
+
+def agregar_obra_social(matriz_obras_sociales):
+    obra_social = []
+    id_o_s = len(matriz_obras_sociales) + 1
+    nombre = input("Ingrese el nombre de la obra social: ")
+    descuento = int(input("Ingrese el descuento que aplica la obra social: "))
+    while descuento < 0 or descuento > 100:
+        print("El descuento debe estar entre 0 y 100")
+        descuento = int(input("Vuelva a ingresar el descuento: "))
+    obra_social.append(id_o_s, nombre, descuento)
+    matriz_obras_sociales.append(obra_social)
+
+def modificar_obra_social(matriz_obras_sociales):
+    id_obra_social = int(input("Ingrese el ID de la obra social a modificar: "))
+    pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    while pos == -1:
+        print("El ID de la obra social es inválido")
+        id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
+        pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    nombre = input("Ingrese el nuevo nombre de la obra social: ")
+    descuento = int(input("Ingrese el nuevo descuento que aplica la obra social: "))
+    while descuento < 0 or descuento > 100:
+        print("El descuento debe estar entre 0 y 100")
+        descuento = int(input("Vuelva a ingresar el descuento: "))
+    matriz_obras_sociales[pos][1] = nombre
+    matriz_obras_sociales[pos][2] = descuento
+    print("Obra social modificada correctamente.")
+    
+def dar_baja_elementos(matriz):
+    id_elemento = int(input("Ingrese el ID: "))
+    pos = buscar_dato(matriz,id_elemento)
+    while pos==-1:
+        print("Error! El ID ingresado es inválido")
+        receta = int(input("Vuelva a ingresar el ID: "))
+        pos = buscar_dato(matriz,id_elemento)
+    for i in range(len(matriz[0])):
+        print(matriz[pos][i])
+    confirmacion = int(input("Desea eliminar estos datos? (1 para SI o 2 para NO): "))
+    if confirmacion == 1:
+        matriz.pop(pos)
+        enter = input("Dato eliminado exitosamente. Volviendo a menu...")
+    else:
+        print("Cancelando operación")
+        enter = input("Volviendo a menu...")
+    
+
+
+#programa principal
+encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes"]
+encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa"]
+encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista completa"]
+encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa"]
+encabezados_sub_menu_reportes = ["Estadística de ventas"]
+encabezados_ventas = ["id_venta","fecha","id_cliente","total"]
+matriz_ventas = [[1, "2023-10-01", 1, 150],
+                 [2, "2023-10-02", 2, 200],
+                 [3, "2023-10-03", 1, 300],
+                 [4, "2023-10-04", 3, 250],
+                 [5, "2023-10-05", 2, 400]]
+encabezados_productos = ["id_producto", "descripcion", "stock", "precio_unitario"]
+matriz_productos = [[1, "Paracetamol", 1, 10],
+                    [2, "Ibuprofeno", 3, 15],
+                    [3, "Amoxicilina", 2, 20],
+                    [4, "Omeprazol", 5, 25],
+                    [5, "Cetirizina", 4, 30]]
+encabezados_recetas = ["id_receta", "id_producto", "fecha", "medico","cantidad"]
+matriz_recetas = [
+    [1, 1, "2023-10-01", "Dr. Perez", 2],
+    [2, 2, "2023-10-02", "Dr. Gomez", 1],
+    [3, 3, "2023-10-03", "Dr. Lopez", 3],
+    [4, 4, "2023-10-04", "Dr. Martinez", 1],
+    [5, 5, "2023-10-05", "Dr. Fernandez", 4]
+]
+encabezados_clientes = ["id_cliente","id_obra_social", "nombre","edad", "telefono"]
+matriz_clientes = [
+    [1, 1, "Juan Perez", 30, "123456789"],
+    [2, 2, "Maria Gomez", 25, "987654321"],
+    [3, 3, "Carlos Lopez", 40, "456789123"],
+    [4, 4, "Ana Martinez", 35, "321654987"],
+    [5, 5, "Luis Fernandez", 28, "159753486"]
+]
+encabezados_detalle_ventas = ["id_venta", "id_receta",  "subtotal"]
+matriz_detalle_ventas = [
+    [1, 1, 100],
+    [1, 2, 150],
+    [3, 3, 200],
+    [4, 4, 250],
+    [5, 5, 300]
+    ]
+encabezados_obras_sociales = ["id_obra_social", "nombre", "descuento"]
+matriz_obras_sociales = [
+    [1, "Osde", 10],
+    [2, "Hospital italiano", 15],
+    [3, "Medife", 20],
+    [4, "Omint", 5],
+    [5, "Osecac", 12]
+]
+#menu(encabezados_menu)
+#prueba de funciones
+opcion = menu(encabezados_menu)
+resultado=modificar_producto(matriz_productos)
+mostrar_matriz(encabezados_productos, matriz_productos)
+print("resultado", resultado)
+
+    
