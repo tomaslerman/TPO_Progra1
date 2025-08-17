@@ -104,7 +104,25 @@ def validar_mayor_que(valor, minimo):
         print(f"El valor debe ser mayor que {minimo}")
         valor = int(input(f"Ingrese un valor mayor que {minimo}: "))
     return valor
-    
+
+def dar_baja_producto(matriz_productos):
+    id_producto=int(input("Ingrese el ID del producto a dar de baja: "))
+    pos=buscar_dato(matriz_productos,id_producto)
+    while pos==-1:
+        print("Error el ID ingresado no es valido")
+        id_producto = int(input("Vuelva a ingresar el ID del producto: "))
+        pos = buscar_dato(matriz_productos,id_producto)
+    for i in range(len(matriz_productos[0])):
+        print(matriz_productos[pos][i], end="\t")
+    print()
+    confirmacion = input("¿Está seguro que desea dar de baja este producto? 1 para si o 2 para no: ")
+    if confirmacion==1:
+        matriz_productos.pop(pos)
+        enter=input("Presione Enter para continuar y volver al menu")
+    else:
+        print("Operación cancelada. El producto no fue dado de baja.")
+        enter=input("Presione Enter para continuar y volver al menu")
+    return matriz_productos    
         
 
 def fechaYvalidacion():
