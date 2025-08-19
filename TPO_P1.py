@@ -6,7 +6,6 @@ def validar_opcion(opcion,inicio,fin,encabezado):
         opcion=int(input("Ingrese nuevamente una opcion del Menu ventas: "))
     return opcion
 
-
 def mostrar_matriz(titulos,matriz):
     filas=len(matriz)
     columnas=len(matriz[0])
@@ -17,17 +16,6 @@ def mostrar_matriz(titulos,matriz):
         for columna in range (columnas):
             print(matriz[fila][columna],end="\t")
         print()
-    
-            
-        
-def menu(lista_encabezados):
-    for encabezado in lista_encabezados:
-        print(encabezado, end="\t")
-    
-    opcion=int(input("Ingrese opcion deseada: "))
-    opcion = validar_opcion(opcion, 1, len(lista_encabezados), lista_encabezados)
-    return opcion
-
 
 def agregar_cliente(matriz_clientes):
     cliente = []
@@ -171,7 +159,6 @@ def buscar_dato(matriz,dato):
             return i
     return -1
 
-
 def agregar_obra_social(matriz_obras_sociales):
     obra_social = []
     id_o_s = len(matriz_obras_sociales) + 1
@@ -236,12 +223,90 @@ def menu_principal():
         else:
             print("Opción no válida. Intente nuevamente.")
 
+def submenu_ventas():
+    opcion = 0
+    while opcion != -1:
+        print("Submenú Ventas")
+        for i, encabezado in enumerate(encabezados_submenu_ventas):
+            print(f"{i + 1}. {encabezado}")
+        opcion = int(input("Seleccione una opción: "))
+        opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_ventas)
+        if opcion == 1:  # Agregar venta
+            agregar_venta()
+        elif opcion == 2:  # Modificar venta
+            modificar_venta()
+        elif opcion == 3:  # Dar baja venta
+            dar_baja_elementos(matriz_ventas)
+        elif opcion == 4:  # Mostrar lista completa
+            mostrar_matriz(matriz_ventas)
+        elif opcion == -1:  # Volver al menú principal
+            print("Volviendo al menú principal.")
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+def submenu_inventario():
+    opcion = 0
+    while opcion != -1:
+        print("Submenú Inventario")
+        for i, encabezado in enumerate(encabezados_submenu_inventario):
+            print(f"{i + 1}. {encabezado}")
+        opcion = int(input("Seleccione una opción: "))
+        opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_inventario)
+        if opcion == 1:  # Agregar producto
+            agregar_producto()
+        elif opcion == 2:  # Modificar Producto
+            modificar_producto()
+        elif opcion == 3:  # Dar baja producto
+            dar_baja_elementos(matriz_productos)
+        elif opcion == 4:  # Mostrar lista completa
+            mostrar_matriz(matriz_productos)
+        elif opcion == -1:  # Volver al menú principal
+            print("Volviendo al menú principal.")
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+def submenu_clientes():
+    opcion = 0
+    while opcion != -1:
+        print("Submenú Clientes")
+        for i, encabezado in enumerate(encabezados_submenu_clientes):
+            print(f"{i + 1}. {encabezado}")
+        opcion = int(input("Seleccione una opción: "))
+        opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
+        if opcion == 1:  # Agregar cliente
+            agregar_cliente()
+        elif opcion == 2:  # Modificar cliente
+            modificar_cliente()
+        elif opcion == 3:  # Dar baja cliente
+            dar_baja_elementos(matriz_clientes)
+        elif opcion == 4:  # Mostrar lista completa
+            mostrar_matriz(matriz_clientes)
+        elif opcion == -1:  # Volver al menú principal
+            print("Volviendo al menú principal.")
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
+def submenu_reportes():
+    opcion = 0
+    while opcion != -1:
+        print("Submenú Reportes")
+        for i, encabezado in enumerate(encabezados_sub_menu_reportes):
+            print(f"{i + 1}. {encabezado}")
+        opcion = int(input("Seleccione una opción: "))
+        opcion = validar_opcion(opcion, 1, 4, encabezados_sub_menu_reportes)
+        if opcion == 1:  # Estadística de ventas
+            estadisticas_ventas()
+        elif opcion == -1:  # Volver al menú principal
+            print("Volviendo al menú principal.")
+        else:
+            print("Opción no válida. Intente nuevamente.")
+
 #programa principal
 encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes","-1. Terminar programa"]
-encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa"]
-encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista completa"]
-encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa"]
-encabezados_sub_menu_reportes = ["Estadística de ventas"]
+encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa", "-1. Volver a menu"]
+encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista completa", "-1. Volver a menu"]
+encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa", "-1. Volver a menu"]
+encabezados_sub_menu_reportes = ["Estadística de ventas", "-1. Volver a menu"]
 encabezados_ventas = ["id_venta","fecha","id_cliente","total"]
 matriz_ventas = [[1, "2023-10-01", 1, 150],
                  [2, "2023-10-02", 2, 200],
