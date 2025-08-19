@@ -213,8 +213,7 @@ def menu_principal():
     opcion = 0
     while opcion != -1:
         print("Menu Principal")
-        for i, encabezado in enumerate(encabezados_menu):
-            print(f"{i + 1}. {encabezado}")
+        mostrar_encabezado(encabezados_menu)
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:  # Ventas
             submenu_ventas()
@@ -233,8 +232,7 @@ def submenu_ventas():
     opcion = 0
     while opcion != -1:
         print("Submenú Ventas")
-        for i, encabezado in enumerate(encabezados_submenu_ventas):
-            print(f"{i + 1}. {encabezado}")
+        mostrar_encabezado(encabezados_submenu_ventas)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_ventas)
         if opcion == 1:  # Agregar venta
@@ -281,8 +279,7 @@ def submenu_inventario():
     opcion = 0
     while opcion != -1:
         print("Submenú Inventario")
-        for i, encabezado in enumerate(encabezados_submenu_inventario):
-            print(f"{i + 1}. {encabezado}")
+        mostrar_encabezado(encabezados_submenu_inventario)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_inventario)
         if opcion == 1:  # Agregar producto
@@ -302,8 +299,7 @@ def submenu_clientes():
     opcion = 0
     while opcion != -1:
         print("Submenú Clientes")
-        for i, encabezado in enumerate(encabezados_submenu_clientes):
-            print(f"{i + 1}. {encabezado}")
+        mostrar_encabezado(encabezados_submenu_clientes)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
@@ -323,8 +319,7 @@ def submenu_reportes():
     opcion = 0
     while opcion != -1:
         print("Submenú Reportes")
-        for i, encabezado in enumerate(encabezados_sub_menu_reportes):
-            print(f"{i + 1}. {encabezado}")
+        mostrar_encabezado(encabezados_sub_menu_reportes)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_sub_menu_reportes)
         if opcion == 1:  # Estadística de ventas
