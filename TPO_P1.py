@@ -2,9 +2,14 @@
 def validar_opcion(opcion,inicio,fin,encabezado):   
     while opcion !=-1 and opcion < inicio or opcion > fin:
         print("Debe ingresar rangos de opcion del ",inicio,"al",fin)
-        menu(encabezado)
-        opcion=int(input("Ingrese nuevamente una opcion del Menu ventas: "))
+        mostrar_encabezado(encabezado)
+        opcion=int(input("Ingrese nuevamente una opcion: "))
     return opcion
+
+def mostrar_encabezado(encabezado):
+    print("Opciones disponibles:")
+    for i in range(len(encabezado)):
+        print(f"{i + 1}. {encabezado[i]}")
 
 def mostrar_matriz(titulos,matriz):
     filas=len(matriz)
@@ -29,11 +34,11 @@ def agregar_cliente(matriz_clientes):
 
 def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales):
     id_cliente = int(input("Ingrese el ID del cliente a modificar: "))
-    pos = buscar_dato(matriz_clientes, id_cliente)
+    pos = buscar_id(matriz_clientes, id_cliente)
     while pos == -1:
         print("El ID del cliente es inválido")
         id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
-        pos = buscar_dato(matriz_clientes, id_cliente)
+        pos = buscar_id(matriz_clientes, id_cliente)
     nombre = input("Ingrese el nuevo nombre del cliente: ")
     edad = int(input("Ingrese la nueva edad del cliente: "))
     obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)  # función para ingresar ID de obra social
@@ -48,11 +53,11 @@ def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
     print("Obras sociales disponibles:")
     mostrar_matriz(encabezados_obras_sociales, matriz_obras_sociales)
     id_obra_social = int(input("Ingrese el ID de la obra social: "))
-    pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    pos = buscar_id(matriz_obras_sociales, id_obra_social)
     while pos == -1:
         print("El ID de la obra social es inválido")
         id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
-        pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+        pos = buscar_id(matriz_obras_sociales, id_obra_social)
     return id_obra_social
 
 
@@ -73,11 +78,11 @@ def agregar_producto(matriz_productos):
 
 def modificar_producto(matriz_productos):
     id=int(input("Ingrese el código del producto a modificar: "))
-    pos = buscar_dato(matriz_productos,id)
+    pos = buscar_id(matriz_productos,id)
     while pos==-1:
         print(" El código del producto es inválido")
         id = int(input("Vuelva a ingresar el código del producto: "))
-        pos = buscar_dato(matriz_productos,id)
+        pos = buscar_id(matriz_productos,id)
     descripcion = input("Ingrese la nueva descripción del producto: ")
     cant_stock = int(input("Ingrese la nueva cantidad en stock: "))
     cant_stock=validar_mayor_que(cant_stock,0)#funcion para validar mayores que que un numero(0)
@@ -87,6 +92,7 @@ def modificar_producto(matriz_productos):
     matriz_productos[pos][2] = cant_stock
     matriz_productos[pos][3] = precio_unit
     print("Producto modificado correctamente.")
+
 def validar_mayor_que(valor, minimo):
     while valor <= minimo:
         print(f"El valor debe ser mayor que {minimo}")
@@ -95,11 +101,11 @@ def validar_mayor_que(valor, minimo):
 
 def dar_baja_producto(matriz_productos):
     id_producto=int(input("Ingrese el ID del producto a dar de baja: "))
-    pos=buscar_dato(matriz_productos,id_producto)
+    pos=buscar_id(matriz_productos,id_producto)
     while pos==-1:
         print("Error el ID ingresado no es valido")
         id_producto = int(input("Vuelva a ingresar el ID del producto: "))
-        pos = buscar_dato(matriz_productos,id_producto)
+        pos = buscar_id(matriz_productos,id_producto)
     for i in range(len(matriz_productos[0])):
         print(matriz_productos[pos][i], end="\t")
     print()
@@ -143,7 +149,7 @@ def agregar_receta(matriz_recetas):
     receta = []
     codigo = len(matriz_recetas) + 1
     producto = int(input("Ingrese el código del producto: "))#funcion para buscar el producto y validar input mayor a (1)
-    encontrado = buscar_dato(matriz_productos,producto)
+    encontrado = buscar_id(matriz_productos,producto)
     while encontrado==-1:
         print("Error! Código de producto inválido")
         producto = int(input("Vuelva a ingresar el código del producto: "))
@@ -153,11 +159,11 @@ def agregar_receta(matriz_recetas):
     receta.append(codigo,producto,fecha,medico,cantidad)
     matriz_recetas.append(receta)
                    
-def buscar_dato(matriz,dato):
+def buscar_id(matriz,dato):
     for i in range(len(matriz)):
         if matriz[i][0] == dato:
             return i
-    return -1
+    return 
 
 def agregar_obra_social(matriz_obras_sociales):
     obra_social = []
@@ -172,11 +178,11 @@ def agregar_obra_social(matriz_obras_sociales):
 
 def modificar_obra_social(matriz_obras_sociales):
     id_obra_social = int(input("Ingrese el ID de la obra social a modificar: "))
-    pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+    pos = buscar_id(matriz_obras_sociales, id_obra_social)
     while pos == -1:
         print("El ID de la obra social es inválido")
         id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
-        pos = buscar_dato(matriz_obras_sociales, id_obra_social)
+        pos = buscar_id(matriz_obras_sociales, id_obra_social)
     nombre = input("Ingrese el nuevo nombre de la obra social: ")
     descuento = int(input("Ingrese el nuevo descuento que aplica la obra social: "))
     while descuento < 0 or descuento > 100:
@@ -188,11 +194,11 @@ def modificar_obra_social(matriz_obras_sociales):
     
 def dar_baja_elementos(matriz):
     id_elemento = int(input("Ingrese el ID: "))
-    pos = buscar_dato(matriz,id_elemento)
+    pos = buscar_id(matriz,id_elemento)
     while pos==-1:
         print("Error! El ID ingresado es inválido")
         receta = int(input("Vuelva a ingresar el ID: "))
-        pos = buscar_dato(matriz,id_elemento)
+        pos = buscar_id(matriz,id_elemento)
     for i in range(len(matriz[0])):
         print(matriz[pos][i])
     confirmacion = int(input("Desea eliminar estos datos? (1 para SI o 2 para NO): "))
@@ -249,22 +255,22 @@ def agregar_venta_y_detalle(matriz):
     id_venta = len(matriz) + 1
     fecha = fechaYvalidacion()
     id_cliente = int(input("Ingrese el ID del cliente: "))
-    pos_cliente = buscar_dato(matriz_clientes, id_cliente)
+    pos_cliente = buscar_id(matriz_clientes, id_cliente)
     while pos_cliente == -1:
         print("Error! El ID del cliente es inválido")
         id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
-        pos_cliente = buscar_dato(matriz_clientes, id_cliente)
+        pos_cliente = buscar_id(matriz_clientes, id_cliente)
     total = int(input("Ingrese el total de la venta: "))
     venta.append(id_venta, fecha, id_cliente, total)
     matriz.append(venta)
 
 def modificar_venta(matriz):
     id_venta = int(input("Ingrese el ID de la venta a modificar: "))
-    pos = buscar_dato(matriz, id_venta)
+    pos = buscar_id(matriz, id_venta)
     while pos == -1:
         print("El ID de la venta es inválido")
         id_venta = int(input("Vuelva a ingresar el ID de la venta: "))
-        pos = buscar_dato(matriz, id_venta)
+        pos = buscar_id(matriz, id_venta)
     fecha = fechaYvalidacion()
     total = int(input("Ingrese el nuevo total de la venta: "))
     matriz[pos][1] = fecha
