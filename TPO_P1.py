@@ -215,11 +215,29 @@ def dar_baja_elementos(matriz):
     else:
         print("Cancelando operación")
         enter = input("Volviendo a menu...")
-    
 
+def menu_principal():
+    opcion = 0
+    while opcion != -1:
+        print("Menu Principal")
+        for i, encabezado in enumerate(encabezados_menu):
+            print(f"{i + 1}. {encabezado}")
+        opcion = int(input("Seleccione una opción: "))
+        if opcion == 1:  # Ventas
+            submenu_ventas()
+        elif opcion == 2:  # Inventario
+            submenu_inventario()
+        elif opcion == 3:  # Clientes
+            submenu_clientes()
+        elif opcion == 4:  # Reportes
+            submenu_reportes()
+        elif opcion == -1:  # Terminar programa
+            print("Programa finalizado.")
+        else:
+            print("Opción no válida. Intente nuevamente.")
 
 #programa principal
-encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes"]
+encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes","-1. Terminar programa"]
 encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa"]
 encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista completa"]
 encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa"]
