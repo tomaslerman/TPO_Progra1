@@ -9,7 +9,7 @@ def validar_opcion(opcion,inicio,fin,encabezado):
 def mostrar_encabezado(encabezado):
     print("Opciones disponibles:")
     for i in range(len(encabezado)):
-        print(f"{i + 1}. {encabezado[i]}")
+        print(encabezado[i])
 
 def mostrar_matriz(titulos,matriz):
     filas=len(matriz)
@@ -22,15 +22,15 @@ def mostrar_matriz(titulos,matriz):
             print(matriz[fila][columna],end="\t")
         print()
 
-def agregar_cliente(matriz_clientes):
+def agregar_cliente(matriz):
     cliente = []
     nombre = input("Ingrese el nombre: ")
     edad = int(input("Ingrese edad: "))
     obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
     telefono = int(input("Ingrese un número de teléfono:"))
-    id_cliente = len(matriz_clientes) + 1  
+    id_cliente = len(matriz) + 1  
     cliente.append(id_cliente, obra_social, nombre, edad, telefono)
-    matriz_clientes.append(cliente)
+    matriz.append(cliente)
 
 def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales):
     id_cliente = int(input("Ingrese el ID del cliente a modificar: "))
@@ -49,9 +49,18 @@ def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_
     matriz_clientes[pos][4] = telefono
     print("Cliente modificado correctamente.")
 
+def mostrar_matriz_cuadro(encabezados, matriz):
+    for i in range(len(encabezados)):
+        print(f"{encabezados[i]:<20}", end="")
+    print()
+    for fila in matriz:
+        for elemento in fila:
+            print(f"{elemento:<20}", end="")
+        print()
+
 def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
     print("Obras sociales disponibles:")
-    mostrar_matriz(encabezados_obras_sociales, matriz_obras_sociales)
+    mostrar_matriz_cuadro(encabezados_obras_sociales, matriz_obras_sociales)
     id_obra_social = int(input("Ingrese el ID de la obra social: "))
     pos = buscar_id(matriz_obras_sociales, id_obra_social)
     while pos == -1:
@@ -59,11 +68,6 @@ def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
         id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
         pos = buscar_id(matriz_obras_sociales, id_obra_social)
     return id_obra_social
-
-
-
-
-
 
 def agregar_producto(matriz_productos):
     producto = []
@@ -303,9 +307,9 @@ def submenu_clientes():
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
-            agregar_cliente()
+            agregar_cliente(matriz_clientes)
         elif opcion == 2:  # Modificar cliente
-            modificar_cliente()
+            modificar_cliente(matriz_clientes)
         elif opcion == 3:  # Dar baja cliente
             dar_baja_elementos(matriz_clientes)
         elif opcion == 4:  # Mostrar lista completa
@@ -381,9 +385,7 @@ matriz_obras_sociales = [
 ]
 #menu(encabezados_menu)
 #prueba de funciones
-#opcion = menu(encabezados_menu)
-resultado=modificar_producto(matriz_productos)
-mostrar_matriz(encabezados_productos, matriz_productos)
-print("resultado", resultado)
+menu_principal()  # Llamada al menú principal para iniciar el programa
+
 
     
