@@ -1,5 +1,6 @@
     
 def login(matriz_login):
+    print("Bienvenido al sistema de gestión de farmacia.")
     usuario = input("Ingrese su usuario: ")
     while not usuario.isalpha():
         print("El usuario debe contener solo letras.")
