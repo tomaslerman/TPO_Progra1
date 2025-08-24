@@ -16,32 +16,40 @@ def login(matriz_login):
         lista_contra=[dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
     print("Login ingresado correctamente para el usuario:", usuario)
     
-    opcion=input("Si desea agregar usuario, Ingrese 1 , si desea eliminar usuario, Ingrese 2, si desea modificar usuario, Ingrese 3, si desea salir Ingrese -1") 
-    while opcion != "-1":
-        opcion = validar_opcion(opcion, 1, 3, ["1. Agregar usuario", "2. Eliminar usuario", "3. Modificar usuario", "-1. Salir"])
-        
-        if opcion == "1":
+    opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
+    while opcion != -1:
+        opcion = validar_opcion(opcion, 1, 3, encabezados_login)
+        if opcion == 1:
             agregar_usuario(matriz_login)
-        elif opcion == "2":
+        elif opcion == 2:
             eliminar_usuario(matriz_login)
-        elif opcion == "3":
+        elif opcion == 3:
             modificar_usuario(matriz_login)
+        opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
+    menu_principal()
    
 def agregar_usuario(matriz_login):
     usuario = input("Ingrese nuevo usuario: ")
-    contrasena= input("Ingrese nueva contraseña: ")
     while not usuario.isalpha():
         print("El usuario debe contener solo letras.")
         usuario = input("Ingrese nuevamente el usuario: ")
+        print("El usuario :", usuario,"fue ingresado correctamente.")
+    contrasena= input("Ingrese nueva contraseña: ")
     while not contrasena.isalnum():
         print("La contraseña debe contener solo caracteres alfanuméricos.")
-        contrasena= input("Ingrese nuevamente contraseña: ") 
+        contrasena= input("Ingrese nuevamente contraseña: ")
     matriz_login.append([usuario, contrasena])
     print("Usuario agregado correctamente.")      
-        
-   
+    opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
+    opcion = validar_opcion(opcion, 1, 3, encabezados_login)
+    while opcion==-1:
+        print("Volviendo al menú principal...")
+        menu_principal()
 
 def eliminar_usuario(matriz_login):
+    datos=input("Presione 1 si no recuerda el usuario a eliminar:")
+    if datos=="1":
+        mostrar_matriz(encabezado_contra, matriz_login)
     usuario = input("Ingrese el usuario a eliminar: ")
     pos = buscar_id(matriz_login, usuario)
     while pos == -1:
@@ -49,12 +57,20 @@ def eliminar_usuario(matriz_login):
         usuario = input("Vuelva a ingresar el usuario a eliminar: ")
         pos = buscar_id(matriz_login, usuario)
     matriz_login.pop(pos)
-    print("Usuario eliminado correctamente.")    
+    print("Usuario eliminado correctamente.")
+    opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
+    opcion = validar_opcion(opcion, 1, 3, encabezados_login)
+    while opcion==-1:
+        print("Volviendo al menú principal...")
+        menu_principal()   
 
 def modificar_usuario(matriz_login):
+    datos=input("Presione 1 si no recuerda el usuario a eliminar:")
+    if datos=="1":
+        mostrar_matriz(encabezado_contra, matriz_login)
     usuario = input("Ingrese el usuario a modificar: ")
     fila=[dato for dato in matriz_login if dato[0] == usuario]
-    while fila==[]:
+    while len(fila)==0:
         print("El usuario no existe.")
         usuario = input("Vuelva a ingresar el usuario a modificar: ")
         fila=[dato for dato in matriz_login if dato[0] == usuario]
@@ -62,14 +78,19 @@ def modificar_usuario(matriz_login):
     nuevo_usuario = input("Ingrese el nuevo nombre de usuario: ") 
     while not nuevo_usuario.isalpha():
         print("El usuario debe contener solo letras.")
-        nuevo_usuario = input("Ingrese nuevamente el nuevo nombre de usuario: ") 
-    while not contrasena.isalnum():
+        nuevo_usuario = input("Ingrese nuevamente el nuevo nombre de usuario: ")
+    nueva_contrasena= input("Ingrese nueva contraseña: ") 
+    while not nueva_contrasena.isalnum():
         print("La contraseña debe contener solo caracteres alfanuméricos.")
-        contrasena= input("Ingrese nuevamente contraseña: ")
-    nueva_contrasena = input("Ingrese la nueva contraseña: ")
+        nueva_contrasena= input("Ingrese nuevamente contraseña: ")
     matriz_login[pos][0] = nuevo_usuario
     matriz_login[pos][1] = nueva_contrasena
     print("Usuario modificado correctamente")
+    opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
+    opcion = validar_opcion(opcion, 1, 3, encabezados_login)
+    while opcion==-1:
+        print("Volviendo al menú principal...")
+        menu_principal()
     
 def validar_opcion(opcion,inicio,fin,encabezado):   
     while opcion !=-1 and opcion < inicio or opcion > fin:
@@ -406,7 +427,8 @@ def submenu_reportes():
             print("Opción no válida. Intente nuevamente.")
 
 #programa principal
-
+encabezados_login=["1. Agregar usuario","2. Eliminar usuario","3. Modificar usuario","-1. Volver a menu"]
+encabezado_contra=["Usuario","Contraseña"]
 encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes","-1. Terminar programa"]
 encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa", "-1. Volver a menu"]
 encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista completa", "-1. Volver a menu"]
@@ -414,7 +436,10 @@ encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. 
 encabezados_sub_menu_reportes = ["Estadística de ventas", "-1. Volver a menu"]
 encabezados_ventas = ["id_venta","fecha","id_cliente","total"]
 
-matriz_login=[["stephy","uade1010"],["tomas","uade2020"],["matias","uade3030"],["lourdes","uade4040"]]
+matriz_login=[["stephy","uade1010"],
+              ["tomas","uade2020"],
+              ["matias","uade3030"],
+              ["lourdes","uade4040"]]
 
 matriz_ventas = [[1, "2023-10-01", 1, 150],
                  [2, "2023-10-02", 2, 200],
@@ -460,6 +485,7 @@ matriz_obras_sociales = [
     [5, "Osecac", 12]
 ]
 
+login(matriz_login)  # Llamada a la función de login
 menu_principal()  # Llamada al menú principal para iniciar el programa
 
 
