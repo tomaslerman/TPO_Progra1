@@ -1,21 +1,26 @@
     
 def login(matriz_login):
     usuario = input("Ingrese su usuario: ")
-    contrasena = input("Ingrese su contraseña: ")
     while not usuario.isalpha():
         print("El usuario debe contener solo letras.")
         usuario = input("Ingrese su usuario nuevamente: ")
+    contrasena = input("Ingrese su contraseña: ")
     while not contrasena.isalnum():
         print("La contraseña debe contener solo caracteres alfanuméricos.")
         contrasena = input("Ingrese su contraseña nuevamente: ")   
     lista_contra=[dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
     while len(lista_contra)==0:
-        print("Usuario o contraseña incorrectos. Intente nuevamente.")
+        print("Usuario o contraseña incorrecta. Ingrese nuevamente su usuario y contraseña: ")
         usuario = input("Ingrese su usuario: ")
+        while not usuario.isalpha():
+            print("El usuario debe contener solo letras.")
+            usuario = input("Ingrese su usuario nuevamente: ")
         contrasena = input("Ingrese su contraseña: ")
+        while not contrasena.isalnum():
+            print("La contraseña debe contener solo caracteres alfanuméricos.")
+            contrasena = input("Ingrese su contraseña nuevamente: ")   
         lista_contra=[dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
     print("Login ingresado correctamente para el usuario:", usuario)
-    
     opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
     while opcion != -1:
         opcion = validar_opcion(opcion, 1, 3, encabezados_login)
@@ -26,7 +31,10 @@ def login(matriz_login):
         elif opcion == 3:
             modificar_usuario(matriz_login)
         opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
-    menu_principal()
+        opcion = validar_opcion(opcion, 1, 3, encabezados_login)
+    while opcion==-1:
+        print("Volviendo al menú principal...")
+        menu_principal()
    
 def agregar_usuario(matriz_login):
     usuario = input("Ingrese nuevo usuario: ")
