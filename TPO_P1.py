@@ -1,25 +1,17 @@
     
 def login(matriz_login):
     print("Bienvenido al sistema de gestión de farmacia.")
-    usuario = input("Ingrese su usuario: ")
-    while not usuario.isalpha():
-        print("El usuario debe contener solo letras.")
-        usuario = input("Ingrese su usuario nuevamente: ")
-    contrasena = input("Ingrese su contraseña: ")
-    while not contrasena.isalnum():
-        print("La contraseña debe contener solo caracteres alfanuméricos.")
-        contrasena = input("Ingrese su contraseña nuevamente: ")   
+    usuario = pedir_usuario()
+
+    contrasena = pedir_contrasena()
+
     lista_contra=[dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
     while len(lista_contra)==0:
         print("Usuario o contraseña incorrecta. Ingrese nuevamente su usuario y contraseña: ")
-        usuario = input("Ingrese su usuario: ")
-        while not usuario.isalpha():
-            print("El usuario debe contener solo letras.")
-            usuario = input("Ingrese su usuario nuevamente: ")
-        contrasena = input("Ingrese su contraseña: ")
-        while not contrasena.isalnum():
-            print("La contraseña debe contener solo caracteres alfanuméricos.")
-            contrasena = input("Ingrese su contraseña nuevamente: ")   
+        usuario = pedir_usuario()
+
+        contrasena = pedir_contrasena()
+  
         lista_contra=[dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
     print("Login ingresado correctamente para el usuario:", usuario)
     opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
@@ -36,7 +28,21 @@ def login(matriz_login):
     while opcion==-1:
         print("Volviendo al menú principal...")
         menu_principal()
-   
+
+def pedir_usuario():
+    usuario = input("Ingrese usuario: ").strip()
+    while not usuario.isalpha():
+        print("El usuario debe contener solo letras.")
+        usuario = input("Ingrese usuario nuevamente: ").strip()
+    return usuario
+
+def pedir_contrasena():
+    contrasena = input("Ingrese contraseña: ").strip()
+    while not contrasena.isalnum():
+        print("La contraseña debe contener solo caracteres alfanuméricos.")
+        contrasena = input("Ingrese contraseña nuevamente: ").strip()
+    return contrasena
+
 def agregar_usuario(matriz_login):
     usuario = input("Ingrese nuevo usuario: ")
     while not usuario.isalpha():
@@ -435,6 +441,22 @@ def submenu_reportes():
         else:
             print("Opción no válida. Intente nuevamente.")
 
+def buscar_por_nombre(matriz, nombre, columna, encabezados):
+    resultados = [fila for fila in matriz if nombre.lower() in fila[columna].lower()]
+    if resultados:
+        mostrar_matriz_cuadro(encabezados, resultados)
+    else:
+        print("No se encontraron coincidencias.")
+
+def estadisticas_ventas(matriz_ventas):
+    total_ventas = len(matriz_ventas)
+    suma_total = sum([venta[3] for venta in matriz_ventas])
+    promedio = suma_total / total_ventas if total_ventas > 0 else 0
+    print(f"Cantidad de ventas: {total_ventas}")
+    print(f"Total vendido: ${suma_total}")
+    print(f"Promedio por venta: ${promedio:.2f}")
+
+
 #programa principal
 encabezados_login=["1. Agregar usuario","2. Eliminar usuario","3. Modificar usuario","-1. Volver a menu"]
 encabezado_contra=["Usuario","Contraseña"]
@@ -449,7 +471,7 @@ matriz_login=[["stephy","uade1010"],
               ["tomas","uade2020"],
               ["matias","uade3030"],
               ["lourdes","uade4040"]]
-
+encabezados_ventas = ["id_venta","fecha","id_cliente","total"]
 matriz_ventas = [[1, "2023-10-01", 1, 150],
                  [2, "2023-10-02", 2, 200],
                  [3, "2023-10-03", 1, 300],
