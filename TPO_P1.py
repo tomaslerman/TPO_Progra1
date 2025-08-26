@@ -14,20 +14,7 @@ def login(matriz_login):
   
         lista_contra=[dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
     print("Login ingresado correctamente para el usuario:", usuario)
-    opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
-    while opcion != -1:
-        opcion = validar_opcion(opcion, 1, 3, encabezados_login)
-        if opcion == 1:
-            agregar_usuario(matriz_login)
-        elif opcion == 2:
-            eliminar_usuario(matriz_login)
-        elif opcion == 3:
-            modificar_usuario(matriz_login)
-        opcion = int(input("Ingrese una opción 1. Agregar usuario, 2. Eliminar usuario, 3. Modificar usuario, -1. Volver a menu: "))
-        opcion = validar_opcion(opcion, 1, 3, encabezados_login)
-    while opcion==-1:
-        print("Volviendo al menú principal...")
-        menu_principal()
+    menu_principal()
 
 def pedir_usuario():
     usuario = input("Ingrese usuario: ").strip()
@@ -115,7 +102,6 @@ def validar_opcion(opcion,inicio,fin,encabezado):
     return opcion
 
 def mostrar_encabezado(encabezado):
-    print("Opciones disponibles:")
     for i in range(len(encabezado)):
         print(encabezado[i])
 
@@ -458,7 +444,6 @@ def estadisticas_ventas(matriz_ventas):
 
 
 #programa principal
-encabezados_login=["1. Agregar usuario","2. Eliminar usuario","3. Modificar usuario","-1. Volver a menu"]
 encabezado_contra=["Usuario","Contraseña"]
 encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes","-1. Terminar programa"]
 encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa", "-1. Volver a menu"]
