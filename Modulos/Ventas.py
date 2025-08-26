@@ -31,3 +31,16 @@ def agregar_venta_y_detalle(matriz):
     total = int(input("Ingrese el total de la venta: "))
     venta.append(id_venta, fecha, id_cliente, total)
     matriz.append(venta)
+    
+def modificar_venta(matriz):
+    id_venta = int(input("Ingrese el ID de la venta a modificar: "))
+    pos = buscar_id(matriz, id_venta)
+    while pos == -1:
+        print("El ID de la venta es inválido")
+        id_venta = int(input("Vuelva a ingresar el ID de la venta: "))
+        pos = buscar_id(matriz, id_venta)
+    fecha = fechaYvalidacion()
+    total = int(input("Ingrese el nuevo total de la venta: "))
+    matriz[pos][1] = fecha
+    matriz[pos][3] = total
+    print("Venta modificada correctamente.")
