@@ -193,7 +193,7 @@ def agregar_receta(matriz_recetas):
     receta.append(codigo,producto,fecha,medico,cantidad)
     matriz_recetas.append(receta)
                    
-def buscar_id(matriz,dato):
+def buscar_id(matriz,dato):#while
     for i in range(len(matriz)):
         if matriz[i][0] == dato:
             return i
