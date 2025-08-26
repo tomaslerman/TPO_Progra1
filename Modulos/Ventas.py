@@ -44,3 +44,11 @@ def modificar_venta(matriz):
     matriz[pos][1] = fecha
     matriz[pos][3] = total
     print("Venta modificada correctamente.")
+def estadisticas_ventas(matriz_ventas):
+    total_ventas = len(matriz_ventas)
+    suma_total = sum([venta[3] for venta in matriz_ventas])
+    promedio = suma_total / total_ventas if total_ventas > 0 else 0
+    print(f"Cantidad de ventas: {total_ventas}")
+    print(f"Total vendido: ${suma_total}")
+    print(f"Promedio por venta: ${promedio:.2f}")
+

@@ -152,7 +152,6 @@ def dar_baja_producto(matriz_productos):
         enter=input("Presione Enter para continuar y volver al menu")
     return matriz_productos    
         
-
 def fechaYvalidacion():
     anio = int(input("Ingrese año: "))
     while anio<=0 or anio>2025:
@@ -178,7 +177,6 @@ def fechaYvalidacion():
     fecha = (dia,"/",mes,"/",anio)
     return fecha
 
-
 def agregar_receta(matriz_recetas):
     receta = []
     codigo = len(matriz_recetas) + 1
@@ -193,7 +191,7 @@ def agregar_receta(matriz_recetas):
     receta.append(codigo,producto,fecha,medico,cantidad)
     matriz_recetas.append(receta)
                    
-def buscar_id(matriz,dato):
+def buscar_id(matriz,dato):#while
     for i in range(len(matriz)):
         if matriz[i][0] == dato:
             return i
