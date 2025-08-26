@@ -78,6 +78,18 @@ def buscar_por_nombre(matriz, nombre, columna, encabezados):
     else:
         print("No se encontraron coincidencias.")
 
+def buscar_id(matriz,dato):
+    i=0
+    pos = -1
+    encontro=False
+    while i < len(matriz) and encontro==False:
+        if matriz[i][0]==dato:
+            encontro=True
+            pos = i
+        i+=1    
+    return pos
+
+
 def menu_principal():
     opcion = 0
     while opcion != -1:
