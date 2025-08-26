@@ -17,3 +17,17 @@ def submenu_ventas():
             print("Volviendo al menú principal.")
         else:
             print("Opción no válida. Intente nuevamente.")
+
+def agregar_venta_y_detalle(matriz):
+    venta = []
+    id_venta = len(matriz) + 1
+    fecha = fechaYvalidacion()
+    id_cliente = int(input("Ingrese el ID del cliente: "))
+    pos_cliente = buscar_id(matriz_clientes, id_cliente)
+    while pos_cliente == -1:
+        print("Error! El ID del cliente es inválido")
+        id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
+        pos_cliente = buscar_id(matriz_clientes, id_cliente)
+    total = int(input("Ingrese el total de la venta: "))
+    venta.append(id_venta, fecha, id_cliente, total)
+    matriz.append(venta)
