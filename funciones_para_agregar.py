@@ -48,3 +48,9 @@ cadena = "Python"
 print(cadena.center(20, '*')) # *******Python*******
 print(cadena.ljust(20, '-')) # Python--------------
 print(cadena.rjust(20, '+')) # ++++++++++++++Python
+
+#Formato moneda
+formatoMoneda = lambda valor: f'${valor:,.2f}'
+
+#Formato porcentaje
+formatoPorcentaje = lambda valor: f'{valor:.2f}%'
