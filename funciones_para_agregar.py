@@ -16,6 +16,7 @@ cantidad_ana = nombres.count("Ana") # Cuenta cuántas veces aparece "Ana" en la 
 print("Apariciones de 'Ana':", cantidad_ana) # Apariciones de 'Ana': 3
 
 # Para total de venta
+numeros = [1,8,6,9,4,8,2]
 suma_total = sum(numeros) # Suma de todos los elementos
 
 # Podeos usar para busquedas alfabéticas
@@ -54,3 +55,8 @@ formatoMoneda = lambda valor: f'${valor:,.2f}'
 
 #Formato porcentaje
 formatoPorcentaje = lambda valor: f'{valor:.2f}%'
+
+# Ordenar por código
+productos = [[102,"Arroz","Alimentos",950],[103,"Carne","Alimentos",1500],[104,"Leche","Lácteos",800]]
+print(sorted(productos,key=lambda fila: fila[0]))
+
