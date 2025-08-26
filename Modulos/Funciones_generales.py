@@ -46,6 +46,7 @@ def validar_mayor_que(valor, minimo):
         valor = int(input(f"Ingrese un valor mayor que {minimo}: "))
     return valor
 
+def fechaYvalidacion():
     anio = int(input("Ingrese año: "))
     while anio<=0 or anio>2025:
         print("Error! El año ingresado no es válido")
@@ -77,3 +78,21 @@ def buscar_por_nombre(matriz, nombre, columna, encabezados):
     else:
         print("No se encontraron coincidencias.")
 
+def menu_principal():
+    opcion = 0
+    while opcion != -1:
+        print("Menu Principal")
+        mostrar_encabezado(encabezados_menu)
+        opcion = int(input("Seleccione una opción: "))
+        if opcion == 1:  # Ventas
+            submenu_ventas()
+        elif opcion == 2:  # Inventario
+            submenu_inventario()
+        elif opcion == 3:  # Clientes
+            submenu_clientes()
+        elif opcion == 4:  # Reportes
+            submenu_reportes()
+        elif opcion == -1:  # Terminar programa
+            print("Programa finalizado.")
+        else:
+            print("Opción no válida. Intente nuevamente.")
