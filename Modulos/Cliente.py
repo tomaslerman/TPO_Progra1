@@ -1,10 +1,11 @@
 import Funciones_generales
+import Datos_de_prueba
 
 def agregar_cliente(matriz):
     cliente = []
     nombre = input("Ingrese el nombre: ")
     edad = int(input("Ingrese edad: "))
-    obra_social = Funciones_generales.ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
+    obra_social = Funciones_generales.ingresar_id_obra_social(Datos_de_prueba.matriz_obras_sociales,Datos_de_prueba.encabezados_obras_sociales)#funcion para pedir obra social
     telefono = int(input("Ingrese un número de teléfono:"))
     id_cliente = len(matriz) + 1  
     cliente.append(id_cliente, obra_social, nombre, edad, telefono)
@@ -31,17 +32,17 @@ def submenu_clientes():
     opcion = 0
     while opcion != -1:
         print("Submenú Clientes")
-        Funciones_generales.mostrar_encabezado(encabezados_submenu_clientes)
+        Funciones_generales.mostrar_encabezado(Datos_de_prueba.encabezados_submenu_clientes)
         opcion = int(input("Seleccione una opción: "))
-        opcion = Funciones_generales.validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
+        opcion = Funciones_generales.validar_opcion(opcion, 1, 4, Datos_de_prueba.encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
-            agregar_cliente(matriz_clientes)
+            agregar_cliente(Datos_de_prueba.matriz_clientes)
         elif opcion == 2:  # Modificar cliente
-            modificar_cliente(matriz_clientes)
+            modificar_cliente(Datos_de_prueba.matriz_clientes)
         elif opcion == 3:  # Dar baja cliente
-            Funciones_generales.dar_baja_elementos(matriz_clientes)
+            Funciones_generales.dar_baja_elementos(Datos_de_prueba.matriz_clientes)
         elif opcion == 4:  # Mostrar lista completa
-            Funciones_generales.mostrar_matriz(matriz_clientes)
+            Funciones_generales.mostrar_matriz(Datos_de_prueba.matriz_clientes)
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
         else:

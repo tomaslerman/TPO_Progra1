@@ -2,12 +2,13 @@ import Ventas
 import Productos
 import Cliente
 import Funciones_generales
+import Datos_de_prueba
 
 def menu_principal():
     opcion = 0
     while opcion != -1:
         print("Menu Principal")
-        Funciones_generales.mostrar_encabezado(encabezados_menu)
+        Funciones_generales.mostrar_encabezado(Datos_de_prueba.encabezados_menu)
         opcion = int(input("Seleccione una opción: "))
         if opcion == 1:  # Ventas
             Ventas.submenu_ventas()
