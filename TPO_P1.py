@@ -14,7 +14,7 @@ def login(matriz_login):
   
         lista_contra=[dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
     print("Login ingresado correctamente para el usuario:", usuario)
-    menu_principal()
+    
 
 def pedir_usuario():
     usuario = input("Ingrese usuario: ").strip()
@@ -85,7 +85,7 @@ def mostrar_matriz_cuadro(encabezados, matriz):
     print()
     for fila in matriz:
         for elemento in fila:
-            print(f"{elemento:<20}", end="")
+            print(f"{str(elemento):<20}", end="")
         print()
 
 def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
@@ -100,22 +100,26 @@ def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
     return id_obra_social
 
 def agregar_producto(matriz_productos):
-    producto = []
     codigo = (len(matriz_productos) + 1)
-    descripcion = input("Ingrese la descripción: ")
+    descripcion = input("Ingrese nombre del producto a agregar: ")
     cant_stock = int(input("Ingrese cantidad en stock: "))#funcion para validar mayores que que un numero(0)
     cant_stock=validar_mayor_que(cant_stock,0)
     precio_unit = int(input("Ingrese el precio unitario: $"))#funcion para validar mayores que un numero(1)
     precio_unit=validar_mayor_que(precio_unit,1)
-    producto.append(codigo,descripcion,cant_stock,precio_unit)
+    producto=[codigo,descripcion,cant_stock,precio_unit]
     matriz_productos.append(producto)
+    print("Producto agregado correctamente.")
+    return matriz_productos
 
 def modificar_producto(matriz_productos):
-    id=int(input("Ingrese el código del producto a modificar: "))
+    id=int(input("Ingrese el ID del producto a modificar , si no recuerda el  ID presione 1 : "))
+    if id==1:
+        print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
+    id=int(input("Ingrese el ID del producto a modificar: "))
     pos = buscar_id(matriz_productos,id)
     while pos==-1:
-        print(" El código del producto es inválido")
-        id = int(input("Vuelva a ingresar el código del producto: "))
+        print(" El ID del producto es inválido")
+        id = int(input("Vuelva a ingresar el ID del producto: "))
         pos = buscar_id(matriz_productos,id)
     descripcion = input("Ingrese la nueva descripción del producto: ")
     cant_stock = int(input("Ingrese la nueva cantidad en stock: "))
@@ -126,6 +130,7 @@ def modificar_producto(matriz_productos):
     matriz_productos[pos][2] = cant_stock
     matriz_productos[pos][3] = precio_unit
     print("Producto modificado correctamente.")
+    return matriz_productos
 
 def validar_mayor_que(valor, minimo):
     while valor <= minimo:
@@ -134,7 +139,10 @@ def validar_mayor_que(valor, minimo):
     return valor
 
 def dar_baja_producto(matriz_productos):
-    id_producto=int(input("Ingrese el ID del producto a dar de baja: "))
+    id_producto=int(input("Ingrese el ID del producto a dar de baja si no recuerda el ID presione 1: "))
+    if id_producto==1:
+        print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
+    id_producto=int(input("Ingrese el código del producto a modificar: "))
     pos=buscar_id(matriz_productos,id_producto)
     while pos==-1:
         print("Error el ID ingresado no es valido")
@@ -143,9 +151,10 @@ def dar_baja_producto(matriz_productos):
     for i in range(len(matriz_productos[0])):
         print(matriz_productos[pos][i], end="\t")
     print()
-    confirmacion = input("¿Está seguro que desea dar de baja este producto? 1 para si o 2 para no: ")
+    confirmacion = int(input("¿Está seguro que desea dar de baja este producto? 1 para si o 2 para no: "))
     if confirmacion==1:
         matriz_productos.pop(pos)
+        print("Producto dado de baja.")
         enter=input("Presione Enter para continuar y volver al menu")
     else:
         print("Operación cancelada. El producto no fue dado de baja.")
@@ -202,11 +211,6 @@ def buscar_id(matriz,dato):
         i+=1    
     return pos
     
-       
-        
-    
-
-
 
 def agregar_obra_social(matriz_obras_sociales):
     obra_social = []
@@ -261,7 +265,7 @@ def menu_principal():
         if opcion == 1:  # Ventas
             submenu_ventas()
         elif opcion == 2:  # Inventario
-            submenu_inventario()
+            submenu_inventario(matriz_productos)
         elif opcion == 3:  # Clientes
             submenu_clientes()
         elif opcion == 4:  # Reportes
@@ -318,7 +322,7 @@ def modificar_venta(matriz):
     matriz[pos][3] = total
     print("Venta modificada correctamente.")
 
-def submenu_inventario():
+def submenu_inventario(matriz_productos):
     opcion = 0
     while opcion != -1:
         print("Submenú Inventario")
@@ -326,17 +330,20 @@ def submenu_inventario():
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_inventario)
         if opcion == 1:  # Agregar producto
-            agregar_producto()
+            agregar_producto(matriz_productos)
         elif opcion == 2:  # Modificar Producto
-            modificar_producto()
+            modificar_producto(matriz_productos)
         elif opcion == 3:  # Dar baja producto
-            dar_baja_elementos(matriz_productos)
+            dar_baja_producto(matriz_productos)
         elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz(matriz_productos)
+            mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
+            menu_principal()
+    
         else:
             print("Opción no válida. Intente nuevamente.")
+    
 
 def submenu_clientes():
     opcion = 0
@@ -407,7 +414,7 @@ matriz_ventas = [[1, "2023-10-01", 1, 150],
                  [3, "2023-10-03", 1, 300],
                  [4, "2023-10-04", 3, 250],
                  [5, "2023-10-05", 2, 400]]
-encabezados_productos = ["id_producto", "descripcion", "stock", "precio_unitario"]
+encabezados_productos = ["ID_producto", "Descripcion", "Stock", "Precio_Unitario"]
 matriz_productos = [[1, "Paracetamol", 1, 10],
                     [2, "Ibuprofeno", 3, 15],
                     [3, "Amoxicilina", 2, 20],
@@ -447,7 +454,8 @@ matriz_obras_sociales = [
 ]
 
 login(matriz_login)  # Llamada a la función de login
-menu_principal()  # Llamada al menú principal para iniciar el programa
+menu_principal()# Llamada al menú principal para iniciar el programa
+
 
 
     
