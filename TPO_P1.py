@@ -160,6 +160,15 @@ def dar_baja_producto(matriz_productos):
         print("Operación cancelada. El producto no fue dado de baja.")
         enter=input("Presione Enter para continuar y volver al menu")
     return matriz_productos    
+
+def stock_por_agotar(matriz_productos):#pasar a github
+    productos_agotarse=[fila for fila in matriz_productos if (fila[2])<=2]
+    ordenar_stock=sorted(productos_agotarse,key=lambda fila: (fila[2]))
+    print("Productos de stock proximos a agotarse :")
+    print(f"{'ID':<5} {'Descripcion':<10}    {'Stock':<10}   {'Precio_Unitario':<10}       {'Disponibilidad':<5}")
+    for p in ordenar_stock:
+        print(f"{p[0]:<5} {p[1]:<10}      {p[2]:<10}       {p[3]:<10}        {p[4]:<5}")
+    
         
 def fechaYvalidacion():
     anio = int(input("Ingrese año: "))
@@ -337,6 +346,7 @@ def submenu_inventario(matriz_productos):
             dar_baja_producto(matriz_productos)
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
+            stock_por_agotar(matriz_productos)
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
             menu_principal()
