@@ -4,6 +4,7 @@ from .cliente import submenu_clientes
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_cuadro, stock_por_agotar
 from .estadisticas import submenu_reportes
 from .datos_de_prueba import encabezados_menu, encabezados_productos, encabezados_submenu_inventario
+from .estadisticas import submenu_reportes
 
 def menu_principal():
     opcion = 0
@@ -43,6 +44,5 @@ def submenu_inventario(matriz_productos):
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
             menu_principal()
-    
         else:
             print("Opción no válida. Intente nuevamente.")
