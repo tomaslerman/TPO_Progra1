@@ -33,7 +33,7 @@ def agregar_venta_y_detalle(matriz):
         pos_cliente = buscar_id(matriz_clientes, id_cliente)
         print ("Ingresando a detalle de venta...")
     total = agregar_detalle_de_venta(id_venta, matriz_detalle_ventas)
-    venta.append(id_venta, fecha, id_cliente, total)
+    venta = [id_venta, fecha, id_cliente, total]
     matriz.append(venta)
 
 def agregar_detalle_de_venta(id_venta, matriz):
@@ -74,4 +74,5 @@ def estadisticas_ventas(matriz_ventas):
     print(f"Cantidad de ventas: {total_ventas}")
     print(f"Total vendido: ${suma_total}")
     print(f"Promedio por venta: ${promedio:.2f}")
+
 
