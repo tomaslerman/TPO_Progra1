@@ -165,9 +165,9 @@ def stock_por_agotar(matriz_productos):#pasar a github
     productos_agotarse=[fila for fila in matriz_productos if (fila[2])<=2]
     ordenar_stock=sorted(productos_agotarse,key=lambda fila: (fila[2]))
     print("Productos de stock proximos a agotarse :")
-    print(f"{'ID':<5} {'Descripcion':<10}    {'Stock':<10}   {'Precio_Unitario':<10}       {'Disponibilidad':<5}")
+    print(f"{'ID':<5} {'Descripcion':<10}    {'Stock':<10}   {'Precio_Unitario':<10} )
     for p in ordenar_stock:
-        print(f"{p[0]:<5} {p[1]:<10}      {p[2]:<10}       {p[3]:<10}        {p[4]:<5}")
+        print(f"{p[0]:<5} {p[1]:<10}      {p[2]:<10}       {p[3]:<10} )
     
         
 def fechaYvalidacion():
