@@ -1,4 +1,4 @@
-    
+import re    
 def login(matriz_login):
     print("Bienvenido al sistema de gestión de farmacia.")
     usuario = pedir_usuario()
@@ -169,6 +169,20 @@ def stock_por_agotar(matriz_productos):#pasar a github
     for p in ordenar_stock:
         print(f"{p[0]:<5} {p[1]:<10}      {p[2]:<10}       {p[3]:<10}" )
     
+def detalle_medicamento(matriz):
+    id_med = int(input("Ingrese id del medicamento a saber su detalle: "))
+    pos_id = buscar_id(matriz, id_med)
+
+    while pos_id == -1:
+        id_med = int(input("Error. Ingrese id del medicamento a saber su detalle: "))
+        pos_id = buscar_id(matriz, id_med)
+
+    if re.findall("^zina", matriz[pos_id][1]):
+        print("Es un producto quimico ")
+    elif re.findall("^mol", matriz[pos_id][1]):
+        print("Es un medicamento micromolecular")
+    else:
+        print("No se puede saber especificamente su tipo")
         
 def fechaYvalidacion():
     anio = int(input("Ingrese año: "))
@@ -347,6 +361,8 @@ def submenu_inventario(matriz_productos):
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
             stock_por_agotar(matriz_productos)
+        elif opcion == 5:#detalle medicamento
+            detalle_medicamento(matriz_productos)
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
             menu_principal()
@@ -409,7 +425,7 @@ def estadisticas_ventas(matriz_ventas):
 encabezado_contra=["Usuario","Contraseña"]
 encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes","-1. Terminar programa"]
 encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa", "-1. Volver a menu"]
-encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista completa", "-1. Volver a menu"]
+encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista completa","5. Detalle de medicamento", "-1. Volver a menu"]
 encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa", "-1. Volver a menu"]
 encabezados_sub_menu_reportes = ["Estadística de ventas", "-1. Volver a menu"]
 encabezados_ventas = ["id_venta","fecha","id_cliente","total"]

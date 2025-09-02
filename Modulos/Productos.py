@@ -49,17 +49,17 @@ def dar_baja_producto(matriz_productos):
         enter=input("Presione Enter para continuar y volver al menu")
     return matriz_productos
 
-def detalle_medicamento(matriz_prouctos):
+def detalle_medicamento(matriz):
     id_med = int(input("Ingrese id del medicamento a saber su detalle: "))
-    pos_id = buscar_id(matriz_productos, id_med)
-
+    pos_id = buscar_id(matriz, id_med)
+    print(pos_id)
     while pos_id == -1:
         id_med = int(input("Error. Ingrese id del medicamento a saber su detalle: "))
-        pos_id = buscar_id(matriz_productos, id_med)
-
-    if re.findall("^zina", matriz_productos[pos_id][1]):
+        pos_id = buscar_id(matriz, id_med)
+    print(matriz[pos_id][1])
+    if re.findall("zina$", matriz[pos_id][1]):
         print("Es un producto quimico ")
-    elif re.findall("^mol", matriz_productos[pos_id][1]):
+    elif re.findall("mol$", matriz[pos_id][1]):
         print("Es un medicamento micromolecular")
     else:
         print("No se puede saber especificamente su tipo")
