@@ -1,7 +1,8 @@
 from .ventas import submenu_ventas
 from .productos import agregar_producto, modificar_producto, dar_baja_producto
 from .cliente import submenu_clientes
-from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_cuadro
+from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_cuadro, stock_por_agotar
+from .estadisticas import submenu_reportes
 from .datos_de_prueba import encabezados_menu, encabezados_productos, encabezados_submenu_inventario
 
 def menu_principal():
@@ -38,6 +39,7 @@ def submenu_inventario(matriz_productos):
             dar_baja_producto(matriz_productos)
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
+            stock_por_agotar(matriz_productos)
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
             menu_principal()

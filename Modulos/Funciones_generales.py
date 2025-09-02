@@ -106,11 +106,10 @@ def dar_baja_elementos(matriz):
         print("Cancelando operación")
         enter = input("Volviendo a menu...")
     
-    def stock_por_agotar(matriz_productos):
+def stock_por_agotar(matriz_productos):
     productos_agotarse=[fila for fila in matriz_productos if (fila[2])<=2]
     ordenar_stock=sorted(productos_agotarse,key=lambda fila: (fila[2]))
     print("Productos de stock proximos a agotarse :")
     print(f"{'ID':<5} {'Descripcion':<10}    {'Stock':<10}   {'Precio_Unitario':<10}       {'Disponibilidad':<5}")
     for p in ordenar_stock:
         print(f"{p[0]:<5} {p[1]:<10}      {p[2]:<10}       {p[3]:<10}        {p[4]:<5}")
-    

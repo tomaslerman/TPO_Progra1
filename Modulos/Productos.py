@@ -1,5 +1,5 @@
 from .datos_de_prueba import  matriz_productos
-from.funciones_generales import validar_mayor_que,buscar_id
+from .funciones_generales import validar_mayor_que,buscar_id,stock_por_agotar
 
 def agregar_producto(matriz_productos):
     producto = []
