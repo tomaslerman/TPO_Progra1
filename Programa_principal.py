@@ -1,4 +1,4 @@
-import Modulos
+import modulos
 
-Modulos.Login.login(Modulos.matriz_login)
-Modulos.Funciones_generales.menu_principal()
+modulos.login(modulos.matriz_login)
+modulos.menu_principal()

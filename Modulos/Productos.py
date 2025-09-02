@@ -1,4 +1,4 @@
-
+from .datos_de_prueba import  matriz_productos
 from.funciones_generales import validar_mayor_que,buscar_id
 
 def agregar_producto(matriz_productos):
@@ -29,8 +29,6 @@ def modificar_producto(matriz_productos):
     matriz_productos[pos][3] = precio_unit
     print("Producto modificado correctamente.")
 
-
-
 def dar_baja_producto(matriz_productos):
     id_producto=int(input("Ingrese el ID del producto a dar de baja: "))
     pos=buscar_id(matriz_productos,id_producto)
@@ -48,5 +46,4 @@ def dar_baja_producto(matriz_productos):
     else:
         print("Operación cancelada. El producto no fue dado de baja.")
         enter=input("Presione Enter para continuar y volver al menu")
-    return matriz_productos    
-        
+    return matriz_productos

@@ -1,4 +1,6 @@
-from .funciones_generales import menu_principal
+from .menu_p import menu_principal
+from .datos_de_prueba import matriz_login, matriz_clientes, matriz_productos, matriz_recetas, matriz_ventas, matriz_detalle_ventas
+
     
 def login(matriz_login):
     print("Bienvenido al sistema de gestión de farmacia.")

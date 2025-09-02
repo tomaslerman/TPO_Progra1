@@ -1,11 +1,11 @@
-import funciones_generales
-import datos_de_prueba
+from .funciones_generales import mostrar_encabezado, validar_opcion, dar_baja_elementos, mostrar_matriz, buscar_id, ingresar_id_obra_social
+from .datos_de_prueba import matriz_clientes, matriz_recetas, matriz_ventas, matriz_detalle_ventas, encabezados_submenu_clientes, matriz_obras_sociales, encabezados_obras_sociales
 
 def agregar_cliente(matriz):
     cliente = []
     nombre = input("Ingrese el nombre: ")
     edad = int(input("Ingrese edad: "))
-    obra_social = funciones_generales.ingresar_id_obra_social(datos_de_prueba.matriz_obras_sociales,datos_de_prueba.encabezados_obras_sociales)#funcion para pedir obra social
+    obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
     telefono = int(input("Ingrese un número de teléfono:"))
     id_cliente = len(matriz) + 1  
     cliente.append(id_cliente, obra_social, nombre, edad, telefono)
@@ -13,14 +13,14 @@ def agregar_cliente(matriz):
 
 def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales):
     id_cliente = int(input("Ingrese el ID del cliente a modificar: "))
-    pos = funciones_generales.buscar_id(matriz_clientes, id_cliente)
+    pos = buscar_id(matriz_clientes, id_cliente)
     while pos == -1:
         print("El ID del cliente es inválido")
         id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
-        pos = funciones_generales.buscar_id(matriz_clientes, id_cliente)
+        pos = buscar_id(matriz_clientes, id_cliente)
     nombre = input("Ingrese el nuevo nombre del cliente: ")
     edad = int(input("Ingrese la nueva edad del cliente: "))
-    obra_social = funciones_generales.ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)  # función para ingresar ID de obra social
+    obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)  # función para ingresar ID de obra social
     telefono = int(input("Ingrese el nuevo número de teléfono del cliente: "))  
     matriz_clientes[pos][2] = nombre
     matriz_clientes[pos][3] = edad
@@ -32,17 +32,17 @@ def submenu_clientes():
     opcion = 0
     while opcion != -1:
         print("Submenú Clientes")
-        funciones_generales.mostrar_encabezado(datos_de_prueba.encabezados_submenu_clientes)
+        mostrar_encabezado(encabezados_submenu_clientes)
         opcion = int(input("Seleccione una opción: "))
-        opcion = funciones_generales.validar_opcion(opcion, 1, 4, datos_de_prueba.encabezados_submenu_clientes)
+        opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
-            agregar_cliente(datos_de_prueba.matriz_clientes)
+            agregar_cliente(matriz_clientes)
         elif opcion == 2:  # Modificar cliente
-            modificar_cliente(datos_de_prueba.matriz_clientes)
+            modificar_cliente(matriz_clientes)
         elif opcion == 3:  # Dar baja cliente
-            funciones_generales.dar_baja_elementos(datos_de_prueba.matriz_clientes)
+            dar_baja_elementos(matriz_clientes)
         elif opcion == 4:  # Mostrar lista completa
-            funciones_generales.mostrar_matriz(datos_de_prueba.matriz_clientes)
+            mostrar_matriz(matriz_clientes)
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
         else:
