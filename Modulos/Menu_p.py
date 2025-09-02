@@ -3,6 +3,7 @@ from .productos import agregar_producto, modificar_producto, dar_baja_producto
 from .cliente import submenu_clientes
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_cuadro
 from .datos_de_prueba import encabezados_menu, encabezados_productos, encabezados_submenu_inventario
+from .estadisticas import submenu_reportes
 
 def menu_principal():
     opcion = 0

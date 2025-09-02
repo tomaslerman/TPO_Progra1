@@ -1,5 +1,5 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, dar_baja_elementos, mostrar_matriz, fechaYvalidacion, buscar_id
-from .datos_de_prueba import encabezados_submenu_ventas, matriz_ventas, matriz_detalle_ventas, matriz_clientes
+from .datos_de_prueba import encabezados_submenu_ventas, matriz_ventas, matriz_detalle_ventas, matriz_clientes, matriz_productos
 
 def submenu_ventas():
     opcion = 0
@@ -31,10 +31,29 @@ def agregar_venta_y_detalle(matriz):
         print("Error! El ID del cliente es inválido")
         id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
         pos_cliente = buscar_id(matriz_clientes, id_cliente)
-    total = int(input("Ingrese el total de la venta: "))
+        print ("Ingresando a detalle de venta...")
+    total = agregar_detalle_de_venta(id_venta, matriz_detalle_ventas)
     venta.append(id_venta, fecha, id_cliente, total)
     matriz.append(venta)
-    
+
+def agregar_detalle_de_venta(id_venta, matriz):
+    cantidad_productos = int(input("Ingrese la cantidad de productos: "))
+    total = 0
+    for i in range(cantidad_productos):
+        id_producto = int(input(f"Ingrese el ID del producto {i + 1}: "))
+        pos_producto = buscar_id(matriz_productos, id_producto)
+        while pos_producto == -1:
+            print("Error! El ID del producto es inválido")
+            id_producto = int(input(f"Vuelva a ingresar el ID del producto {i + 1}: "))
+            pos_producto = buscar_id(matriz_productos, id_producto)
+        cantidad = int(input(f"Ingrese la cantidad del producto {i + 1}: "))
+        subtotal = matriz_productos[pos_producto][3] * cantidad
+        matriz.append([id_venta, id_producto, cantidad])
+        total += subtotal
+    print("Detalles de la venta agregados correctamente.")
+    print(f"Total de la venta: ${total}")
+    return total
+
 def modificar_venta(matriz):
     id_venta = int(input("Ingrese el ID de la venta a modificar: "))
     pos = buscar_id(matriz, id_venta)
