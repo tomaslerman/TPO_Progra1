@@ -1,5 +1,6 @@
 from .datos_de_prueba import  matriz_productos
 from .funciones_generales import validar_mayor_que,buscar_id,stock_por_agotar
+import re
 
 def agregar_producto(matriz_productos):
     producto = []
@@ -47,3 +48,18 @@ def dar_baja_producto(matriz_productos):
         print("Operación cancelada. El producto no fue dado de baja.")
         enter=input("Presione Enter para continuar y volver al menu")
     return matriz_productos
+
+def detalle_medicamento(matriz_prouctos):
+    id_med = int(input("Ingrese id del medicamento a saber su detalle: "))
+    pos_id = buscar_id(matriz_productos, id_med)
+
+    while pos_id == -1:
+        id_med = int(input("Error. Ingrese id del medicamento a saber su detalle: "))
+        pos_id = buscar_id(matriz_productos, id_med)
+
+    if re.findall("^zina", matriz_productos[pos_id][1]):
+        print("Es un producto quimico ")
+    elif re.findall("^mol", matriz_productos[pos_id][1]):
+        print("Es un medicamento micromolecular")
+    else:
+        print("No se puede saber especificamente su tipo")
