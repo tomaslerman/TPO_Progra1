@@ -42,6 +42,5 @@ def submenu_inventario(matriz_productos):
         elif opcion == -1:  # Volver al menú principal
             print("Volviendo al menú principal.")
             menu_principal()
-    
         else:
             print("Opción no válida. Intente nuevamente.")
