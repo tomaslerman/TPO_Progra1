@@ -1,4 +1,4 @@
-from .Funciones_generales import menu_principal
+from .funciones_generales import menu_principal
     
 def login(matriz_login):
     print("Bienvenido al sistema de gestión de farmacia.")

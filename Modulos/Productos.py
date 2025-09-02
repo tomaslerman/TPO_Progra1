@@ -1,5 +1,5 @@
 
-from.Funciones_generales import validar_mayor_que,buscar_id
+from.funciones_generales import validar_mayor_que,buscar_id
 
 def agregar_producto(matriz_productos):
     producto = []

@@ -1,1 +1,1 @@
-import Cliente, Estadisticas, Funciones_generales, Productos, Recetas, Ventas
+import cliente, estadisticas, funciones_generales, productos, recetas, ventas
