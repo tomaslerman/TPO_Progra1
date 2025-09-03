@@ -20,6 +20,18 @@ def mostrar_matriz(titulos,matriz):
             print(matriz[fila][columna],end="\t")
         print()
 
+def mostrar_matriz_clientes(titulos,matriz):
+    filas=len(matriz)
+    columnas=len(matriz[0])
+    for titulo in titulos:
+        print(titulo,end="\t")
+    print()
+    for fila in range (filas):
+        if matriz[fila][5] == "Active":
+            for columna in range (columnas):
+                print(matriz[fila][columna],end="\t")
+            print()
+
 def mostrar_matriz_cuadro(encabezados, matriz):
     for i in range(len(encabezados)):
         print(f"{encabezados[i]:<20}", end="")
@@ -106,9 +118,9 @@ def dar_baja_elementos(matriz):
         print("Cancelando operación")
         enter = input("Volviendo a menu...")
     
-    def stock_por_agotar(matriz_productos):
-    productos_agotarse=[fila for fila in matriz_productos if (fila[2])<=2]
-    ordenar_stock=sorted(productos_agotarse,key=lambda fila: (fila[2]))
+def stock_por_agotar(matriz):
+    productos_agotarse = [fila for fila in matriz if (fila[2])<=2]
+    ordenar_stock = sorted(productos_agotarse, key=lambda fila: (fila[2]))
     print("Productos de stock proximos a agotarse :")
     print(f"{'ID':<5} {'Descripcion':<10}    {'Stock':<10}   {'Precio_Unitario':<10}       {'Disponibilidad':<5}")
     for p in ordenar_stock:

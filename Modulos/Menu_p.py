@@ -33,14 +33,13 @@ def submenu_inventario(matriz_productos):
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_inventario)
         if opcion == 1:  # Agregar producto
             agregar_producto(matriz_productos)
+            enter = input("Producto agregado exitosamente. Volviendo a menu...")
         elif opcion == 2:  # Modificar Producto
             modificar_producto(matriz_productos)
+            enter = input("Producto modificado exitosamente. Volviendo a menu...")
         elif opcion == 3:  # Dar baja producto
             dar_baja_producto(matriz_productos)
-        elif opcion == 4:  # Mostrar lista completa
+            enter = input("Producto eliminado exitosamente. Volviendo a menu...")
+        else:  # Mostrar lista completa
             mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
-        elif opcion == -1:  # Volver al menú principal
-            print("Volviendo al menú principal.")
-            menu_principal()
-        else:
-            print("Opción no válida. Intente nuevamente.")
+    enter = input("Volviendo a menu...")
