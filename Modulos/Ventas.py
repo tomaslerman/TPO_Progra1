@@ -35,6 +35,7 @@ def agregar_venta_y_detalle(matriz):
         id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
         pos_cliente = buscar_id(matriz_clientes, id_cliente)
         print ("Ingresando a detalle de venta...")
+        agregar_detalle_de_venta(id_cliente, id_venta, matriz_detalle_ventas)
         enter = input("Presione Enter para continuar...")
     total = agregar_detalle_de_venta(id_cliente, id_venta, matriz_detalle_ventas)
     venta.append(id_venta, fecha, id_cliente, total)
