@@ -7,6 +7,6 @@ def agregar_receta(id_producto,matriz_recetas):
     fecha = fechaYvalidacion()
     medico = input("Ingrese el nombre completo del médico: ")
     cantidad = int(input("Ingrese la cantidad de medicamento: "))
-    receta.append(codigo,id_producto,fecha,medico,cantidad)
+    receta = [codigo, id_producto, fecha, medico, cantidad]
     matriz_recetas.append(receta)
     return codigo, cantidad
