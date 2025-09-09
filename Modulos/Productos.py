@@ -53,20 +53,24 @@ def dar_baja_producto(matriz_productos):
     return matriz_productos
 
 def detalle_medicamento(matriz):
+    print("Listado de medicamentos:")
+    print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
     id_med = int(input("Ingrese ID del medicamento a saber su detalle: "))
     pos_id = buscar_id(matriz, id_med)
-    print(pos_id)
+    #print(pos_id)
     while pos_id == -1:
         id_med = int(input("Error. Ingrese ID del medicamento a saber su detalle: "))
         pos_id = buscar_id(matriz, id_med)
-    print(matriz[pos_id][1])
+    print("Medicamento seleccionado :",matriz[pos_id][1])
     if re.findall("zina$", matriz[pos_id][1].lower()):
-        print("Medicamento antihistamínico de segunda generacion,uso para sintomas de alergias") 
+        print("Medicamento antihistamínico de segunda generacion,uso para sintomas de alergias.") 
     elif re.findall("mol$", matriz[pos_id][1].lower()):
-        print("Medicamento analgesico y antipiretico,uso para dolor leve a moderado y fiebre")
+        print("Medicamento analgesico y antipiretico,uso para dolor leve a moderado y fiebre.")
     elif re.findall("eno$", matriz[pos_id][1].lower()):
-        print("Medicamento reduce la inflamacion en tejidos ")
+        print("Medicamento reduce la inflamacion en tejidos. ")
     elif re.findall("zol$", matriz[pos_id][1].lower()):
-        print("Medicamento para reducir la produccion de acido en el estomago")
+        print("Medicamento para reducir la produccion de acido en el estomago.")
+    elif re.findall("lina$", matriz[pos_id][1].lower()):
+        print("Medicamento para tratar infecciones bacterianas.")
     else:
         print("No se puede saber especificamente su tipo")
