@@ -1,5 +1,5 @@
 from .ventas import submenu_ventas
-from .productos import agregar_producto, modificar_producto, dar_baja_producto, detalle_medicamento
+from .productos import agregar_producto, modificar_producto, dar_baja_producto, stock_por_agotar, detalle_medicamento
 from .cliente import submenu_clientes
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_cuadro, stock_por_agotar
 from .estadisticas import submenu_reportes
