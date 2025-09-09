@@ -30,7 +30,6 @@ def modificar_producto(matriz_productos):
     matriz_productos[pos][1] = descripcion
     matriz_productos[pos][2] = cant_stock
     matriz_productos[pos][3] = precio_unit
-    print("Producto modificado correctamente.")
 
 def dar_baja_producto(matriz_productos):
     id_producto=int(input("Ingrese el ID del producto a dar de baja, si no recuerda ID presione 1 : "))

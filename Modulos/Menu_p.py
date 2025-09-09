@@ -12,18 +12,17 @@ def menu_principal():
         print("Menu Principal")
         mostrar_encabezado(encabezados_menu)
         opcion = int(input("Seleccione una opción: "))
+        opcion = validar_opcion(opcion, 1, 4, encabezados_menu)
         if opcion == 1:  # ventas
             submenu_ventas()
         elif opcion == 2:  # Inventario
             submenu_inventario()
         elif opcion == 3:  # clientes
             submenu_clientes()
-        elif opcion == 4:  # Reportes
+        else:  # Reportes
             submenu_reportes()
-        elif opcion == -1:  # Terminar programa
-            print("Programa finalizado.")
-        else:
-            print("Opción no válida. Intente nuevamente.")
+    print("Programa finalizado.")
+
 
 def submenu_inventario():
     opcion = 0
@@ -34,17 +33,18 @@ def submenu_inventario():
         opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_inventario)
         if opcion == 1:  # Agregar producto
             agregar_producto(matriz_productos)
+            enter = input("Producto agregado exitosamente. Volviendo a menu...")
         elif opcion == 2:  # Modificar Producto
             modificar_producto(matriz_productos)
+            enter = input("Producto modificado exitosamente. Volviendo a menu...")
         elif opcion == 3:  # Dar baja producto
             dar_baja_producto(matriz_productos)
+            enter = input("Producto eliminado exitosamente. Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
             stock_por_agotar(matriz_productos)
-        elif opcion == 5:
-            detalle_medicamento(matriz_productos)
-        elif opcion == -1:  # Volver al menú principal
-            print("Volviendo al menú principal.")
-            menu_principal()
         else:
-            print("Opción no válida. Intente nuevamente.")
+            detalle_medicamento(matriz_productos)
+    print("Volviendo al menú principal.")
+    menu_principal()
+

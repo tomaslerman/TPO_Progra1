@@ -1,5 +1,5 @@
-from .funciones_generales import mostrar_encabezado, validar_opcion, dar_baja_elementos, mostrar_matriz, buscar_id, ingresar_id_obra_social
-from .datos_de_prueba import matriz_clientes, matriz_recetas, matriz_ventas, matriz_detalle_ventas, encabezados_submenu_clientes, matriz_obras_sociales, encabezados_obras_sociales
+from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, buscar_id, ingresar_id_obra_social
+from .datos_de_prueba import matriz_clientes, encabezados_submenu_clientes, matriz_obras_sociales, encabezados_obras_sociales
 
 def agregar_cliente(matriz):
     cliente = []
@@ -28,6 +28,16 @@ def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_
     matriz_clientes[pos][4] = telefono
     print("Cliente modificado correctamente.")
 
+def baja_cliente(matriz_clientes):
+    id_cliente = int(input("Ingrese el ID del cliente a dar de baja: "))
+    pos = buscar_id(matriz_clientes, id_cliente)
+    while pos == -1:
+        print("El ID del cliente es inválido")
+        id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
+        pos = buscar_id(matriz_clientes, id_cliente)
+    matriz_clientes[pos][5] = "Inactive"
+
+
 def submenu_clientes():
     opcion = 0
     while opcion != -1:
@@ -37,13 +47,13 @@ def submenu_clientes():
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
             agregar_cliente(matriz_clientes)
+            enter = input("Cliente agregado exitosamente. Volviendo a menu...")
         elif opcion == 2:  # Modificar cliente
             modificar_cliente(matriz_clientes)
+            enter = input("Cliente modificado exitosamente. Volviendo a menu...")
         elif opcion == 3:  # Dar baja cliente
-            dar_baja_elementos(matriz_clientes)
-        elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz(matriz_clientes)
-        elif opcion == -1:  # Volver al menú principal
-            print("Volviendo al menú principal.")
-        else:
-            print("Opción no válida. Intente nuevamente.")
+            baja_cliente(matriz_clientes)
+            enter = input("Cliente eliminado exitosamente. Volviendo a menu...")
+        else:  # Mostrar lista completa
+            mostrar_matriz_clientes(matriz_clientes)
+    enter = input(" Volviendo a menu...")

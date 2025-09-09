@@ -29,13 +29,13 @@ matriz_recetas = [
     [4, 4, "2023-10-04", "Dr. Martinez", 1],
     [5, 5, "2023-10-05", "Dr. Fernandez", 4]
 ]
-encabezados_clientes = ["id_cliente","id_obra_social", "nombre","edad", "telefono"]
+encabezados_clientes = ["id_cliente","id_obra_social", "nombre","edad", "telefono", "estado"]
 matriz_clientes = [
-    [1, 1, "Juan Perez", 30, "123456789"],
-    [2, 2, "Maria Gomez", 25, "987654321"],
-    [3, 3, "Carlos Lopez", 40, "456789123"],
-    [4, 4, "Ana Martinez", 35, "321654987"],
-    [5, 5, "Luis Fernandez", 28, "159753486"]
+    [1, 1, "Juan Perez", 30, "123456789", "Active"],
+    [2, 2, "Maria Gomez", 25, "987654321", "Inactive"],
+    [3, 3, "Carlos Lopez", 40, "456789123", "Active"],
+    [4, 4, "Ana Martinez", 35, "321654987", "Inactive"],
+    [5, 5, "Luis Fernandez", 28, "159753486", "Active"]
 ]
 encabezados_detalle_ventas = ["id_venta", "id_receta",  "subtotal"]
 matriz_detalle_ventas = [

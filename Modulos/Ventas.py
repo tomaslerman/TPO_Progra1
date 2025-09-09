@@ -1,5 +1,6 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, dar_baja_elementos, mostrar_matriz, fechaYvalidacion, buscar_id
 from .datos_de_prueba import encabezados_submenu_ventas, matriz_ventas, matriz_detalle_ventas, matriz_clientes, matriz_productos
+from .recetas import agregar_receta
 
 def submenu_ventas():
     opcion = 0
@@ -10,16 +11,18 @@ def submenu_ventas():
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_ventas)
         if opcion == 1:  # Agregar venta
             agregar_venta_y_detalle(matriz_ventas)
+            enter = input("Venta agregada exitosamente. Volviendo a menu...")
         elif opcion == 2:  # Modificar detalle de venta
             modificar_venta(matriz_detalle_ventas)
+            enter = input("Venta modificada exitosamente. Volviendo a menu...")
         elif opcion == 3:  # Dar baja venta
             dar_baja_elementos(matriz_ventas)
-        elif opcion == 4:  # Mostrar lista completa
+            enter = input("Venta dada de baja exitosamente. Volviendo a menu...")
+        else:  # Mostrar lista completa
             mostrar_matriz(matriz_ventas)
-        elif opcion == -1:  # Volver al menú principal
-            print("Volviendo al menú principal.")
-        else:
-            print("Opción no válida. Intente nuevamente.")
+            enter = input("Presione Enter para continuar...")
+
+    print("Volviendo al menú principal.")
 
 def agregar_venta_y_detalle(matriz):
     venta = []
@@ -32,24 +35,47 @@ def agregar_venta_y_detalle(matriz):
         id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
         pos_cliente = buscar_id(matriz_clientes, id_cliente)
         print ("Ingresando a detalle de venta...")
-    total = agregar_detalle_de_venta(id_venta, matriz_detalle_ventas)
+        agregar_detalle_de_venta(id_cliente, id_venta, matriz)
+        enter = input("Presione Enter para continuar...")
+    total = agregar_detalle_de_venta(id_cliente, id_venta, matriz)
     venta = [id_venta, fecha, id_cliente, total]
     matriz.append(venta)
 
-def agregar_detalle_de_venta(id_venta, matriz):
-    cantidad_productos = int(input("Ingrese la cantidad de productos: "))
+def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
+    detalle_venta = []
     total = 0
-    for i in range(cantidad_productos):
-        id_producto = int(input(f"Ingrese el ID del producto {i + 1}: "))
-        pos_producto = buscar_id(matriz_productos, id_producto)
-        while pos_producto == -1:
-            print("Error! El ID del producto es inválido")
-            id_producto = int(input(f"Vuelva a ingresar el ID del producto {i + 1}: "))
-            pos_producto = buscar_id(matriz_productos, id_producto)
-        cantidad = int(input(f"Ingrese la cantidad del producto {i + 1}: "))
-        subtotal = matriz_productos[pos_producto][3] * cantidad
-        matriz.append([id_venta, id_producto, cantidad])
-        total += subtotal
+    producto = int(input("Ingrese el código del producto o -1 para dejar de agregar recetas: "))
+    while (producto <1 or producto > len(matriz_productos)) and producto != -1:
+        print("Error! El código del producto es inválido.")
+        producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar recetas: "))
+    while producto != -1:
+        receta = input("¿El cliente tiene receta? (s/n): ").lower()
+        while receta not in ['s', 'n']:
+            print("Error! Opción inválida.")
+            receta = input("¿El cliente tiene receta? (s/n): ").lower()
+        if receta == 's':
+            id_receta, cantidad = agregar_receta(id_cliente,matriz_productos)
+            subtotal = matriz_productos[producto][3] * cantidad
+            detalle_venta = [id_venta, id_receta, subtotal]
+            matriz.append(detalle_venta)
+            total += subtotal
+            producto = int(input("Ingrese el código del producto o -1 para dejar de agregar recetas: "))
+            while producto <1 or producto > len(matriz_productos) and producto != -1:
+                print("Error! El código del producto es inválido.")
+                producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar recetas: "))
+        else:
+            cantidad = int(input("Ingrese la cantidad del producto: "))
+            while cantidad > matriz_productos[producto][2]:
+                print(f"Error! Sólo hay {matriz_productos[producto][2]} unidades disponibles.")
+                cantidad = int(input("Vuelva a ingresar la cantidad del producto: "))
+            subtotal = matriz_productos[producto][3] * cantidad
+            detalle_venta = [id_venta, "VL", subtotal]
+            matriz.append(detalle_venta)
+            total += subtotal
+            producto = int(input("Ingrese el código del producto o -1 para dejar de agregar recetas: "))
+            while (producto <1 or producto > len(matriz_productos)) and producto != -1:
+                print("Error! El código del producto es inválido.")
+                producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar recetas: "))
     print("Detalles de la venta agregados correctamente.")
     print(f"Total de la venta: ${total}")
     return total
@@ -65,14 +91,3 @@ def modificar_venta(matriz):
     total = int(input("Ingrese el nuevo total de la venta: "))
     matriz[pos][1] = fecha
     matriz[pos][3] = total
-    print("Venta modificada correctamente.")
-
-def estadisticas_ventas(matriz_ventas):
-    total_ventas = len(matriz_ventas)
-    suma_total = sum([venta[3] for venta in matriz_ventas])
-    promedio = suma_total / total_ventas if total_ventas > 0 else 0
-    print(f"Cantidad de ventas: {total_ventas}")
-    print(f"Total vendido: ${suma_total}")
-    print(f"Promedio por venta: ${promedio:.2f}")
-
-
