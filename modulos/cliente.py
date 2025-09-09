@@ -54,6 +54,6 @@ def submenu_clientes():
         elif opcion == 3:  # Dar baja cliente
             baja_cliente(matriz_clientes)
             enter = input("Cliente eliminado exitosamente. Volviendo a menu...")
-        else:  # Mostrar lista completa
-            mostrar_matriz_clientes(matriz_clientes)
+        elif opcion == 4:  # Mostrar lista completa
+            mostrar_matriz_clientes(encabezados_submenu_clientes,matriz_clientes)
     enter = input(" Volviendo a menu...")

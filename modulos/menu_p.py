@@ -19,9 +19,10 @@ def menu_principal():
             submenu_inventario()
         elif opcion == 3:  # clientes
             submenu_clientes()
-        else:  # Reportes
+        elif opcion == 4:  # Reportes
             submenu_reportes()
-    print("Programa finalizado.")
+    
+    print("Programa finalizado")
 
 
 def submenu_inventario():
@@ -43,7 +44,7 @@ def submenu_inventario():
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
             stock_por_agotar(matriz_productos)
-        else:
+        elif opcion == 5:  # Detalle medicamento
             detalle_medicamento(matriz_productos)
-    print("Volviendo al menú principal.")
+    enter = input("Volviendo al menú principal.")
     menu_principal()

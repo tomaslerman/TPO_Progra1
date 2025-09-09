@@ -18,11 +18,9 @@ def submenu_ventas():
         elif opcion == 3:  # Dar baja venta
             dar_baja_elementos(matriz_ventas)
             enter = input("Venta dada de baja exitosamente. Volviendo a menu...")
-        else:  # Mostrar lista completa
-            mostrar_matriz(matriz_ventas)
-            enter = input("Presione Enter para continuar...")
-
-    print("Volviendo al menú principal.")
+        elif opcion == 4:  # Mostrar lista completa
+            mostrar_matriz(encabezados_submenu_ventas, matriz_ventas)
+    enter = input("Volviendo al menú principal...")
 
 def agregar_venta_y_detalle(matriz):
     venta = []
