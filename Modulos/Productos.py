@@ -32,9 +32,10 @@ def modificar_producto(matriz_productos):
     matriz_productos[pos][3] = precio_unit
 
 def dar_baja_producto(matriz_productos):
-    id_producto=int(input("Ingrese el ID del producto a dar de baja, si no recuerda ID presione 1 : "))
-    if id_producto==1:
-        print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
+    
+    print("Producto a eliminar:")
+    print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
+    id_producto=int(input("Ingrese el ID del producto a dar de baja : "))
     pos=buscar_id(matriz_productos,id_producto)
     while pos==-1:
         print("Error el ID ingresado no es valido")
@@ -43,11 +44,11 @@ def dar_baja_producto(matriz_productos):
     for i in range(len(matriz_productos[0])):
         print(matriz_productos[pos][i], end="\t")
     print()
-    confirmacion = input("¿Está seguro que desea dar de baja este producto? 1 para si o 2 para no: ")
+    confirmacion = int(input("¿Está seguro que desea dar de baja este producto? 1 para si o 2 para no: "))
     if confirmacion==1:
         matriz_productos.pop(pos)
         enter=input("Presione Enter para continuar y volver al menu")
-    else:
+    elif confirmacion==2:
         print("Operación cancelada. El producto no fue dado de baja.")
         enter=input("Presione Enter para continuar y volver al menu")
     return matriz_productos
