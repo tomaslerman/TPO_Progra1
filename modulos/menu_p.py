@@ -13,11 +13,11 @@ def menu_principal():
         mostrar_encabezado(encabezados_menu)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_menu)
-        if opcion == 1:  # ventas
+        if opcion == 1:  # Ventas
             submenu_ventas()
         elif opcion == 2:  # Inventario
             submenu_inventario()
-        elif opcion == 3:  # clientes
+        elif opcion == 3:  # Clientes
             submenu_clientes()
         elif opcion == 4:  # Reportes
             submenu_reportes()
