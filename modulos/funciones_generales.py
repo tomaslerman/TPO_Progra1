@@ -41,15 +41,15 @@ def mostrar_matriz_cuadro(encabezados, matriz):
             print(f"{elemento:<20}", end="")
         print()
 
-def ingresar_id_obra_social(tupla_obras_sociales,encabezados_obras_sociales):
+def ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales):
     print("Obras sociales disponibles:")
-    mostrar_matriz_cuadro(encabezados_obras_sociales, tupla_obras_sociales)
+    mostrar_matriz_cuadro(encabezados_obras_sociales, matriz_obras_sociales)
     id_obra_social = int(input("Ingrese el ID de la obra social: "))
-    existe = id_obra_social in [fila[0] for fila in tupla_obras_sociales]
+    existe = id_obra_social in [fila[0] for fila in matriz_obras_sociales]
     while not existe:
         print("El ID de la obra social es inválido")
         id_obra_social = int(input("Vuelva a ingresar el ID de la obra social: "))
-        existe = id_obra_social in [fila[0] for fila in tupla_obras_sociales]
+        existe = id_obra_social in [fila[0] for fila in matriz_obras_sociales]
     return id_obra_social
 
 def validar_mayor_que(valor, minimo):

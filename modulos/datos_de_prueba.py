@@ -11,19 +11,19 @@ diccionario_login = {
     "matias": "uade3030",
     "lourdes": "uade4040"
 }
-encabezados_ventas = ["id_venta","fecha","id_cliente","total"]
+encabezados_ventas = ("id_venta","fecha","id_cliente","total")
 matriz_ventas = [[1, "2023-10-01", 1, 150],
                  [2, "2023-10-02", 2, 200],
                  [3, "2023-10-03", 1, 300],
                  [4, "2023-10-04", 3, 250],
                  [5, "2023-10-05", 2, 400]]
-encabezados_productos = ["id_producto", "descripcion", "stock", "precio_unitario"]
+encabezados_productos = ("id_producto", "descripcion", "stock", "precio_unitario")
 matriz_productos = [[1, "Paracetamol", 1, 10],
                     [2, "Ibuprofeno", 3, 15],
                     [3, "Amoxicilina", 2, 20],
                     [4, "Omeprazol", 5, 25],
                     [5, "Cetirizina", 4, 30]]
-encabezados_recetas = ["id_receta", "id_producto", "fecha", "medico","cantidad"]
+encabezados_recetas = ("id_receta", "id_producto", "fecha", "medico","cantidad")
 matriz_recetas = [
     [1, 1, "2023-10-01", "Dr. Perez", 2],
     [2, 2, "2023-10-02", "Dr. Gomez", 1],
@@ -31,7 +31,7 @@ matriz_recetas = [
     [4, 4, "2023-10-04", "Dr. Martinez", 1],
     [5, 5, "2023-10-05", "Dr. Fernandez", 4]
 ]
-encabezados_clientes = ["id_cliente","id_obra_social", "nombre","edad", "telefono", "estado"]
+encabezados_clientes = ("id_cliente","id_obra_social", "nombre","edad", "telefono", "estado")
 matriz_clientes = [
     [1, 1, "Juan Perez", 30, "123456789", "Active"],
     [2, 2, "Maria Gomez", 25, "987654321", "Inactive"],
@@ -39,7 +39,7 @@ matriz_clientes = [
     [4, 4, "Ana Martinez", 35, "321654987", "Inactive"],
     [5, 5, "Luis Fernandez", 28, "159753486", "Active"]
 ]
-encabezados_detalle_ventas = ["id_venta", "id_receta",  "subtotal"]
+encabezados_detalle_ventas = ("id_venta", "id_receta",  "subtotal")
 matriz_detalle_ventas = [
     [1, 1, 100],
     [1, 2, 150],
@@ -47,11 +47,11 @@ matriz_detalle_ventas = [
     [4, 4, 250],
     [5, 5, 300]
     ]
-encabezados_obras_sociales = ["id_obra_social", "nombre", "descuento"]
-tupla_obras_sociales = (
+encabezados_obras_sociales = ("id_obra_social", "nombre", "descuento")
+matriz_obras_sociales = [
     [1, "Osde", 10],
     [2, "Hospital italiano", 15],
     [3, "Medife", 20],
     [4, "Omint", 5],
     [5, "Osecac", 12]
-)
+]
