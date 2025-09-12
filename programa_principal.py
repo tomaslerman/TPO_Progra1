@@ -1,3 +1,3 @@
 import modulos
-modulos.login(modulos.matriz_login)
+modulos.login(modulos.diccionario_login)
 modulos.menu_principal()

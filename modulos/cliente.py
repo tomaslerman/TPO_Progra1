@@ -57,3 +57,9 @@ def submenu_clientes():
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_clientes(encabezados_submenu_clientes,matriz_clientes)
     enter = input(" Volviendo a menu...")
+
+def ordenar_clientes_por_nombre(matriz_clientes):
+    clientes_ordenados = sorted(matriz_clientes, key=lambda fila: fila[2].lower())
+    print("Clientes ordenados por nombre:")
+    for cliente in clientes_ordenados:
+         print(cliente[2])
