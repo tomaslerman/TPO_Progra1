@@ -4,7 +4,6 @@ from .datos_de_prueba import encabezados_productos, matriz_productos
 import re
 
 def agregar_producto(matriz_productos):
-
     codigo = (len(matriz_productos) + 1)
     descripcion = input("Ingrese el nombre del medicamento: ")
     cant_stock = int(input("Ingrese cantidad en stock: "))#funcion para validar mayores que que un numero(0)
@@ -33,7 +32,6 @@ def modificar_producto(matriz_productos):
     matriz_productos[pos][3] = precio_unit
 
 def dar_baja_producto(matriz_productos):
-    
     print("Producto a eliminar:")
     print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
     id_producto=int(input("Ingrese el ID del producto a dar de baja : "))

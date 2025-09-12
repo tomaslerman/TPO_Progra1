@@ -1,5 +1,5 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, dar_baja_elementos, mostrar_matriz, fechaYvalidacion, buscar_id
-from .datos_de_prueba import encabezados_submenu_ventas, matriz_ventas, matriz_detalle_ventas, matriz_clientes, matriz_productos
+from .datos_de_prueba import *
 from .recetas import agregar_receta
 
 def submenu_ventas():
@@ -19,7 +19,7 @@ def submenu_ventas():
             dar_baja_elementos(matriz_ventas)
             enter = input("Venta dada de baja exitosamente. Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz(encabezados_submenu_ventas, matriz_ventas)
+            mostrar_matriz(encabezados_ventas, matriz_ventas)
     enter = input("Volviendo al menú principal...")
 
 def agregar_venta_y_detalle(matriz):
@@ -35,6 +35,10 @@ def agregar_venta_y_detalle(matriz):
     print ("Ingresando a detalle de venta...")
     enter = input("Presione Enter para continuar...")
     total = agregar_detalle_de_venta(id_cliente, id_venta, matriz)
+    descuento = buscar_descuento_obra_social(id_cliente)
+    if descuento != 0:  # Si tiene obra social con descuento
+        total = total - (total * (descuento / 100))
+        print(f"Se aplicó un descuento del {descuento}%. Total con descuento: ${total}")
     venta = [id_venta, fecha, id_cliente, total]
     matriz.append(venta)
 
@@ -76,6 +80,15 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
     print("Detalles de la venta agregados correctamente.")
     print(f"Total de la venta: ${total}")
     return total
+
+def buscar_descuento_obra_social(id_cliente):
+    pos_cliente = buscar_id(matriz_clientes, id_cliente)
+    if pos_cliente != -1:
+        id_obra_social = matriz_clientes[pos_cliente][1]
+        pos_obra_social = buscar_id(matriz_obras_sociales, id_obra_social)
+        if pos_obra_social != -1:
+            return matriz_obras_sociales[pos_obra_social][2]  # Retorna el porcentaje de descuento
+    return 0  # Si no tiene obra social o no se encuentra, no hay descuento
 
 def modificar_venta(matriz):
     id_venta = int(input("Ingrese el ID de la venta a modificar: "))

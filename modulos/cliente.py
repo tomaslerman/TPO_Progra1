@@ -1,5 +1,5 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, buscar_id, ingresar_id_obra_social
-from .datos_de_prueba import matriz_clientes, encabezados_submenu_clientes, matriz_obras_sociales, encabezados_obras_sociales
+from .datos_de_prueba import matriz_clientes, encabezados_submenu_clientes, matriz_obras_sociales, encabezados_obras_sociales, encabezados_clientes
 
 def agregar_cliente(matriz):
     cliente = []
@@ -55,7 +55,7 @@ def submenu_clientes():
             baja_cliente(matriz_clientes)
             enter = input("Cliente eliminado exitosamente. Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz_clientes(encabezados_submenu_clientes,matriz_clientes)
+            mostrar_matriz_clientes(encabezados_clientes,matriz_clientes)
     enter = input(" Volviendo a menu...")
 
 def ordenar_clientes_por_nombre(matriz_clientes):

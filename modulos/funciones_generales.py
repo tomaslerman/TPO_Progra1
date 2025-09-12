@@ -9,27 +9,29 @@ def mostrar_encabezado(encabezado):
     for i in range(len(encabezado)):
         print(encabezado[i])
 
-def mostrar_matriz(titulos,matriz):
-    filas=len(matriz)
-    columnas=len(matriz[0])
-    for titulo in titulos:
-        print(titulo,end="\t")
+def mostrar_matriz(titulos, matriz):
+    # calculamos anchos de columna en base a lo más largo
+    anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
+    # imprimir títulos
+    for i, titulo in enumerate(titulos):
+        print(f"{titulo:<{anchos[i]}}", end="  ")
     print()
-    for fila in range (filas):
-        for columna in range (columnas):
-            print(matriz[fila][columna],end="\t")
+    print("-" * (sum(anchos) + 2 * (len(titulos) - 1)))  # línea separadora
+    # imprimir filas
+    for fila in matriz:
+        for i, valor in enumerate(fila):
+            print(f"{valor:<{anchos[i]}}", end="  ")
         print()
 
 def mostrar_matriz_clientes(titulos,matriz):
-    filas=len(matriz)
-    columnas=len(matriz[0])
-    for titulo in titulos:
-        print(titulo,end="\t")
+    anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
+    for i, titulo in enumerate(titulos):
+        print(f"{titulo:<{anchos[i]}}", end="  ")
     print()
-    for fila in range (filas):
+    for fila in range (len(matriz)):
         if matriz[fila][5] == "Active":
-            for columna in range (columnas):
-                print(matriz[fila][columna],end="\t")
+            for columna in range (len(matriz[fila])):
+                print(f"{matriz[fila][columna]:<{anchos[columna]}}", end="  ")
             print()
 
 def mostrar_matriz_cuadro(encabezados, matriz):
