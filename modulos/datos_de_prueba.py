@@ -5,10 +5,12 @@ encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto",
 encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa", "-1. Volver a menu"]
 encabezados_sub_menu_reportes = ["Estadística de ventas", "-1. Volver a menu"]
 encabezados_ventas = ["id_venta","fecha","id_cliente","total"]
-matriz_login=[["stephy","uade1010"],
-              ["tomas","uade2020"],
-              ["matias","uade3030"],
-              ["lourdes","uade4040"]]
+diccionario_login = {
+    "stephy": "uade1010",
+    "tomas": "uade2020",
+    "matias": "uade3030",
+    "lourdes": "uade4040"
+}
 encabezados_ventas = ["id_venta","fecha","id_cliente","total"]
 matriz_ventas = [[1, "2023-10-01", 1, 150],
                  [2, "2023-10-02", 2, 200],

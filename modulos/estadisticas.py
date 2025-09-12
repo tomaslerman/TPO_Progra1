@@ -20,3 +20,4 @@ def estadisticas_ventas(matriz):
     print(f"Cantidad de ventas: {total_ventas}")
     print(f"Total vendido: ${suma_total}")
     print(f"Promedio por venta: ${promedio:.2f}")
+
