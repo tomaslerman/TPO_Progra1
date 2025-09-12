@@ -46,10 +46,10 @@ matriz_detalle_ventas = [
     [5, 5, 300]
     ]
 encabezados_obras_sociales = ["id_obra_social", "nombre", "descuento"]
-matriz_obras_sociales = [
+tupla_obras_sociales = (
     [1, "Osde", 10],
     [2, "Hospital italiano", 15],
     [3, "Medife", 20],
     [4, "Omint", 5],
     [5, "Osecac", 12]
-]
+)
