@@ -5,7 +5,9 @@ from .recetas import agregar_receta
 def submenu_ventas():
     opcion = 0
     while opcion != -1:
+        print("---"* 10)
         print("Submenú Ventas")
+        print("---"* 10)
         mostrar_encabezado(encabezados_submenu_ventas)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_ventas)

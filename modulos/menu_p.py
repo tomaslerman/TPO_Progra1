@@ -9,7 +9,9 @@ from .estadisticas import submenu_reportes
 def menu_principal():
     opcion = 0
     while opcion != -1:
+        print("---"* 10)
         print("Menu Principal")
+        print("---"* 10)
         mostrar_encabezado(encabezados_menu)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_menu)
@@ -28,7 +30,9 @@ def menu_principal():
 def submenu_inventario():
     opcion = 0
     while opcion != -1:
+        print("---"* 10)
         print("Submenú Inventario")
+        print("---"* 10)
         mostrar_encabezado(encabezados_submenu_inventario)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_inventario)

@@ -43,7 +43,9 @@ def baja_cliente(matriz_clientes):
 def submenu_clientes():
     opcion = 0
     while opcion != -1:
+        print("---"* 10)
         print("Submenú Clientes")
+        print("---"* 10)
         mostrar_encabezado(encabezados_submenu_clientes)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)

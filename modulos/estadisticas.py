@@ -4,7 +4,9 @@ from .datos_de_prueba import encabezados_sub_menu_reportes
 def submenu_reportes():
     opcion = 0
     while opcion != -1:
+        print("---"* 10)
         print("Submenú Reportes")
+        print("---"* 10)
         mostrar_encabezado(encabezados_sub_menu_reportes)
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_sub_menu_reportes)
