@@ -10,18 +10,19 @@ def mostrar_encabezado(encabezado):
         print(encabezado[i])
 
 def mostrar_matriz(titulos, matriz):
-    # calculamos anchos de columna en base a lo más largo
+    #calculamos anchos de columna en base a lo más largo
     anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
-    # imprimir títulos
+    #imprimir títulos
     for i, titulo in enumerate(titulos):
         print(f"{titulo:<{anchos[i]}}", end="  ")
     print()
     print("-" * (sum(anchos) + 2 * (len(titulos) - 1)))  # línea separadora
-    # imprimir filas
+    #imprimir filas
     for fila in matriz:
         for i, valor in enumerate(fila):
             print(f"{valor:<{anchos[i]}}", end="  ")
         print()
+        
 
 def mostrar_matriz_clientes(titulos,matriz):
     anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
@@ -92,12 +93,14 @@ def buscar_por_nombre(matriz, nombre, columna, encabezados):
     else:
         print("No se encontraron coincidencias.")
 
+
+
 def buscar_id(matriz,dato):
     i=0
     pos = -1
     encontro=False
     while i < len(matriz) and encontro==False:
-        if matriz[i][0]==dato:
+        if str (matriz[i][0])== str(dato):
             encontro=True
             pos = i
         i+=1    

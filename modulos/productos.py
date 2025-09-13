@@ -57,7 +57,7 @@ def detalle_medicamento(matriz):
     print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
     id_med = int(input("Ingrese ID del medicamento a saber su detalle: "))
     pos_id = buscar_id(matriz, id_med)
-    #print(pos_id)
+
     while pos_id == -1:
         id_med = int(input("Error. Ingrese ID del medicamento a saber su detalle: "))
         pos_id = buscar_id(matriz, id_med)

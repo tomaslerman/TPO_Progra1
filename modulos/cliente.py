@@ -1,15 +1,17 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, buscar_id, ingresar_id_obra_social
 from .datos_de_prueba import matriz_clientes, encabezados_submenu_clientes, matriz_obras_sociales, encabezados_obras_sociales, encabezados_clientes
 
+    
 def agregar_cliente(matriz):
-    cliente = []
+    id_cliente = len(matriz) + 1  
     nombre = input("Ingrese el nombre: ")
     edad = int(input("Ingrese edad: "))
     obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
     telefono = int(input("Ingrese un número de teléfono:"))
-    id_cliente = len(matriz) + 1  
-    cliente.append(id_cliente, obra_social, nombre, edad, telefono)
+    cliente = [id_cliente, obra_social, nombre, edad, telefono, "Active"]
     matriz.append(cliente)
+    print("Cliente agregado correctamente.")
+    return matriz
 
 def modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales):
     id_cliente = int(input("Ingrese el ID del cliente a modificar: "))
@@ -49,7 +51,7 @@ def submenu_clientes():
             agregar_cliente(matriz_clientes)
             enter = input("Cliente agregado exitosamente. Volviendo a menu...")
         elif opcion == 2:  # Modificar cliente
-            modificar_cliente(matriz_clientes)
+            modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales)
             enter = input("Cliente modificado exitosamente. Volviendo a menu...")
         elif opcion == 3:  # Dar baja cliente
             baja_cliente(matriz_clientes)

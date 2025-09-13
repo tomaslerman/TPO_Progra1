@@ -19,7 +19,8 @@ def submenu_ventas():
             dar_baja_elementos(matriz_ventas)
             enter = input("Venta dada de baja exitosamente. Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz(encabezados_ventas, matriz_ventas)
+            mostrar_matriz(encabezados_ventas , matriz_ventas)#####
+           # mostrar_matriz(encabezados_ventas, matriz_ventas)
     enter = input("Volviendo al menú principal...")
 
 def agregar_venta_y_detalle(matriz):
@@ -46,7 +47,7 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
     detalle_venta = []
     total = 0
     producto = int(input("Ingrese el código del producto: "))
-    while (producto <1 or producto > len(matriz_productos)) and producto != -1:
+    while (producto!=-1) and (producto <1 or producto > len(matriz_productos)):
         print("Error! El código del producto es inválido.")
         producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar productos: "))
     while producto != -1:
@@ -61,7 +62,7 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
             matriz.append(detalle_venta)
             total += subtotal
             producto = int(input("Ingrese el código del producto o -1 para dejar de agregar productos: "))
-            while producto <1 or producto > len(matriz_productos) and producto != -1:
+            while (producto!=-1) and (producto <1 or producto > len(matriz_productos)):
                 print("Error! El código del producto es inválido.")
                 producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar productos: "))
         else:
@@ -74,7 +75,7 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
             matriz.append(detalle_venta)
             total += subtotal
             producto = int(input("Ingrese el código del producto o -1 para dejar de agregar productos: "))
-            while (producto <1 or producto > len(matriz_productos)) and producto != -1:
+            while (producto!=-1) and (producto <1 or producto > len(matriz_productos)):
                 print("Error! El código del producto es inválido.")
                 producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar productos: "))
     print("Detalles de la venta agregados correctamente.")
