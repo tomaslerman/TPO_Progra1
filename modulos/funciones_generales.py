@@ -61,29 +61,47 @@ def validar_mayor_que(valor, minimo):
         valor = int(input(f"Ingrese un valor mayor que {minimo}: "))
     return valor
 
+
+
 def fechaYvalidacion():
-    anio = int(input("Ingrese año: "))
-    while anio<=0 or anio>2025:
-        print("Error! El año ingresado no es válido")
-        anio = int(input("Vuelva a ingrese año: "))
-    mes = int(input("Ingrese mes: "))
-    while mes<1 or mes>12:
-        print("Error! El mes ingresado no es válido")
-        mes = int(input("Vuelva a ingresar el mes:"))
-    dia = int(input("Ingrese día: "))
-    if mes==2:
-        while dia<1 or dia>29:
-            print("Error! El día ingresado no es válido")
-            dia = int(input("Vuelva a ingresar el día:"))
-    elif mes==1 or mes==3 or mes==5 or mes==7 or mes==8 or mes==10 or mes==12:
-        while dia<1 or dia>31:
-            print("Error! El día ingresado no es válido")
-            dia = int(input("Vuelva a ingresar el día:"))
-    else:
-        while dia<1 or dia>30:
-            print("Error! El día ingresado no es válido")
-            dia = int(input("Vuelva a ingresar el día:"))
-    fecha = (dia,"/",mes,"/",anio)
+    while True:
+        try:
+            anio = int(input("Ingrese año: "))
+            assert 0 < anio <= 2025, "El año ingresado no es válido"
+            break
+        except ValueError:
+            print("Error! Debe ingresar un número entero para el año.")
+        except AssertionError as error:
+            print(error)
+
+    while True:
+        try:
+            mes = int(input("Ingrese mes: "))
+            assert 1 <= mes <= 12, " El mes ingresado no es válido"
+            break
+        except ValueError:
+            print(" Error! Debe ingresar un número entero para el mes.")
+        except AssertionError as error:
+            print(error)
+
+    while True:
+        try:
+            dia = int(input("Ingrese día: "))
+
+            if mes == 2:
+                assert 1 <= dia <= 29, " El día ingresado no es válido para febrero,febrero tiene 28 dias."
+            elif mes in [1, 3, 5, 7, 8, 10, 12]:
+                assert 1 <= dia <= 31, " El día ingresado no es válido para este mes"
+            else:
+                assert 1 <= dia <= 30, " El día ingresado no es válido para este mes"
+
+            break
+        except ValueError:
+            print("Error! Debe ingresar un número entero para el día.")
+        except AssertionError as error:
+            print(error)
+
+    fecha = f"{dia}/{mes}/{anio}"
     return fecha
 
 def buscar_por_nombre(matriz, nombre, columna, encabezados):

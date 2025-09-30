@@ -13,7 +13,7 @@ def login(diccionario_login):
         contrasena = pedir_contrasena()
 
     print("Login ingresado correctamente para el usuario:", usuario)
-    menu_principal()
+
 
 def pedir_usuario():
     usuario = input("Ingrese usuario: ").strip()
