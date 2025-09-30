@@ -1,14 +1,14 @@
 from .menu_p import menu_principal
-from .datos_de_prueba import matriz_login, matriz_clientes, matriz_productos, matriz_recetas, matriz_ventas, matriz_detalle_ventas
+from .datos_de_prueba import diccionario_login, matriz_clientes, matriz_productos, matriz_recetas, matriz_ventas, matriz_detalle_ventas
 
-def login(matriz_login):
+def login(diccionario_login):
     print("Bienvenido al sistema de gestión de farmacia.")
     while True:  # loop hasta que logre loguearse
         try:
             usuario = pedir_usuario()
             contrasena = pedir_contrasena()
-            validar_credenciales(usuario, contrasena, matriz_login)
-            print("Login ingresado correctamente para el usuario:", usuario)
+            validar_credenciales(usuario, contrasena, diccionario_login)
+            print(f"Login ingresado correctamente para el usuario: {usuario}")
             menu_principal()
             break  # corta el loop si el login fue correcto
         except ValueError as e:
@@ -35,8 +35,7 @@ def pedir_contrasena():
         except ValueError as e:
             print(e)
 
-def validar_credenciales(usuario, contrasena, matriz_login):
-    """Valida usuario y contraseña contra la matriz de logins."""
-    lista_contra = [dato for dato in matriz_login if dato[0] == usuario and dato[1] == contrasena]
-    if len(lista_contra) == 0:
+def validar_credenciales(usuario, contrasena, diccionario_login):
+    """Valida usuario y contraseña usando un diccionario."""
+    if usuario not in diccionario_login or diccionario_login[usuario] != contrasena:
         raise ValueError("Error: Usuario o contraseña incorrectos.")
