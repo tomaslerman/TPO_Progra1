@@ -10,19 +10,14 @@ def mostrar_encabezado(encabezado):
         print(encabezado[i])
 
 def mostrar_matriz(titulos, matriz):
-    #calculamos anchos de columna en base a lo más largo
-    anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
-    #imprimir títulos
-    for i, titulo in enumerate(titulos):
-        print(f"{titulo:<{anchos[i]}}", end="  ")
-    print()
-    print("-" * (sum(anchos) + 2 * (len(titulos) - 1)))  # línea separadora
-    #imprimir filas
+    print(" | ".join(titulos))
+    print("-" * 40)  
+    
     for fila in matriz:
-        for i, valor in enumerate(fila):
-            print(f"{valor:<{anchos[i]}}", end="  ")
-        print()
-        
+        fila_completa = fila + [""] * (len(titulos) - len(fila))
+        print(" | ".join(str(valor) for valor in fila_completa))
+
+       
 
 def mostrar_matriz_clientes(titulos,matriz):
     anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
