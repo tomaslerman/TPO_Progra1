@@ -21,7 +21,8 @@ def submenu_ventas():
             dar_baja_elementos(matriz_ventas)
             enter = input("Venta dada de baja exitosamente. Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz(encabezados_ventas , matriz_ventas)#####
+            mostrar_matriz(encabezados_ventas , matriz_ventas)
+            enter = input("Presione Enter para continuar...")
            # mostrar_matriz(encabezados_ventas, matriz_ventas)
     enter = input("Volviendo al menú principal...")
 
@@ -37,7 +38,7 @@ def agregar_venta_y_detalle(matriz):
         pos_cliente = buscar_id(matriz_clientes, id_cliente)
     print ("Ingresando a detalle de venta...")
     enter = input("Presione Enter para continuar...")
-    total = agregar_detalle_de_venta(id_cliente, id_venta, matriz)
+    total = agregar_detalle_de_venta(id_cliente, id_venta, matriz_detalle_ventas)
     descuento = buscar_descuento_obra_social(id_cliente)
     if descuento != 0:  # Si tiene obra social con descuento
         total = total - (total * (descuento / 100))
