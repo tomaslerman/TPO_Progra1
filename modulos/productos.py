@@ -1,7 +1,35 @@
 
-from .funciones_generales import validar_mayor_que,buscar_id,mostrar_matriz_cuadro
-from .datos_de_prueba import encabezados_productos, matriz_productos
+from .funciones_generales import validar_mayor_que,buscar_id,mostrar_matriz_cuadro, mostrar_encabezado, validar_opcion
+from .datos_de_prueba import encabezados_productos, matriz_productos, encabezados_submenu_inventario
 import re
+
+
+def submenu_inventario():
+    opcion = 0
+    while opcion != -1:
+        print("---"* 10)
+        print("Submenú Inventario")
+        print("---"* 10)
+        mostrar_encabezado(encabezados_submenu_inventario)
+        opcion = int(input("Seleccione una opción: "))
+        opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_inventario)
+        if opcion == 1:  # Agregar producto
+            agregar_producto(matriz_productos)
+            enter = input("Producto agregado exitosamente. Volviendo a menu...")
+        elif opcion == 2:  # Modificar Producto
+            modificar_producto(matriz_productos)
+            enter = input("Producto modificado exitosamente. Volviendo a menu...")
+        elif opcion == 3:  # Dar baja producto
+            dar_baja_producto(matriz_productos)
+            enter = input("Producto eliminado exitosamente. Volviendo a menu...")
+        elif opcion == 4:  # Mostrar lista completa
+            mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
+            stock_por_agotar(matriz_productos)
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 5:  # Detalle medicamento
+            detalle_medicamento(matriz_productos)
+            enter = input("Presione Enter para continuar...")
+    enter = input("Volviendo al menú principal.")
 
 def agregar_producto(matriz_productos):
     codigo = (len(matriz_productos) + 1)

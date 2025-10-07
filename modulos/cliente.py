@@ -16,7 +16,7 @@ def agregar_cliente(matriz):
             print("Error dato no valido solo se permite el ingreso de numeros")
             resp=input("Desea volver a ingresa los datos? (s/n):")
             if resp.lower() != "s":
-                raise
+                raise ValueError("Error valor no valido solo se permite numerico")
             print("Vuelva a ingresar el valor")
     obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
     telefono = int(input("Ingrese un número de teléfono:"))
