@@ -5,7 +5,19 @@ from .datos_de_prueba import matriz_clientes, encabezados_submenu_clientes, matr
 def agregar_cliente(matriz):
     id_cliente = len(matriz) + 1  
     nombre = input("Ingrese el nombre: ")
-    edad = int(input("Ingrese edad: "))
+    while not nombre.isalpha():
+        print("Valor no valido")
+        nombre = input("Ingrese el nombre: ")
+    while True:
+        try:
+            edad = int(input("Ingrese edad: "))
+            break
+        except ValueError:
+            print("Error dato no valido solo se permite el ingreso de numeros")
+            resp=input("Desea volver a ingresa los datos? (s/n):")
+            if resp.lower() != "s":
+                raise ValueError("Error valor no valido solo se permite numerico")
+            print("Vuelva a ingresar el valor")
     obra_social = ingresar_id_obra_social(matriz_obras_sociales,encabezados_obras_sociales)#funcion para pedir obra social
     telefono = int(input("Ingrese un número de teléfono:"))
     cliente = [id_cliente, obra_social, nombre, edad, telefono, "Active"]
