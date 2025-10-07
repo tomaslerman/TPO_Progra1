@@ -12,17 +12,21 @@ diccionario_login = {
     "lourdes": "uade4040"
 }
 encabezados_ventas = ("ID Venta","Fecha","ID Cliente","Total")
-matriz_ventas = [[1, "2023-10-01", 1, 150],
-                 [2, "2023-10-02", 2, 200],
-                 [3, "2023-10-03", 1, 300],
-                 [4, "2023-10-04", 3, 250],
-                 [5, "2023-10-05", 2, 400]]
+matriz_ventas = [
+    [1, "2023-10-01", 1, 150],
+    [2, "2023-10-02", 2, 200],
+    [3, "2023-10-03", 1, 300],
+    [4, "2023-10-04", 3, 250],
+    [5, "2023-10-05", 2, 400]
+]
 encabezados_productos = ("ID Producto", "Descripción", "Stock", "Precio Unitario")
-matriz_productos = [[1, "Paracetamol", 1, 10],
-                    [2, "Ibuprofeno", 3, 15],
-                    [3, "Amoxicilina", 2, 20],
-                    [4, "Omeprazol", 5, 25],
-                    [5, "Cetirizina", 4, 30]]
+matriz_productos = [
+    [1, "Paracetamol", 1, 10],
+    [2, "Ibuprofeno", 3, 15],
+    [3, "Amoxicilina", 2, 20],
+    [4, "Omeprazol", 5, 25],
+    [5, "Cetirizina", 4, 30]
+]
 encabezados_recetas = ("ID Receta", "ID Producto", "Fecha", "Médico", "Cantidad")
 matriz_recetas = [
     [1, 1, "2023-10-01", "Dr. Perez", 2],
@@ -46,7 +50,7 @@ matriz_detalle_ventas = [
     [3, 3, 200],
     [4, 4, 250],
     [5, 5, 300]
-    ]
+]
 encabezados_obras_sociales = ("ID Obra Social", "Nombre", "Descuento")
 matriz_obras_sociales = [
     [1, "Osde", 10],

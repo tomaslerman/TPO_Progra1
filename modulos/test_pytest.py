@@ -1,5 +1,6 @@
 from .datos_de_prueba import *
 from .funciones_generales import buscar_id
+
 def test_buscar_id():
     # Caso válido
     assert buscar_id(matriz_productos, 2) == 1, "Debería devolver índice 1 para ID 2"
@@ -7,6 +8,7 @@ def test_buscar_id():
     assert buscar_id(matriz_productos, 99) == -1, "Debería devolver -1 para un ID inexistente"
     # Caso string
     assert buscar_id(matriz_productos, "3") == 2, "Debería funcionar también con ID como string"
+
 def stock_por_agotar(matriz_productos):
     productos_agotarse=[fila for fila in matriz_productos if (fila[2])<=2]
     return productos_agotarse # Retorna la lista de productos con stock menor al umbral. Con los datos actuales, debería retornar Paracetamol y Amoxicilina.
