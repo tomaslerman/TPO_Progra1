@@ -51,6 +51,11 @@ matriz_detalle_ventas = [
     [4, 4, 250],
     [5, 5, 300]
 ]
+opciones_modificacion_ventas = {
+        1: "Fecha",
+        2: "Cliente",
+        3: "Producto/Receta"
+    }
 encabezados_obras_sociales = ("ID Obra Social", "Nombre", "Descuento")
 matriz_obras_sociales = [
     [1, "Osde", 10],
