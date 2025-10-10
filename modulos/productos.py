@@ -41,7 +41,6 @@ def agregar_producto(matriz_productos):
     producto=[codigo,descripcion,cant_stock,precio_unit]
     matriz_productos.append(producto)
     print("Producto agregado correctamente.")
-    return matriz_productos
 
 def modificar_producto(matriz_productos):
     id=int(input("Ingrese el código del producto a modificar: "))
