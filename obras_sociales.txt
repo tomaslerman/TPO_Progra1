@@ -1,0 +1,5 @@
+1;Osde;10
+2;Hospitalitaliano;15
+3;Medife;20
+4;Omint;5
+5;Osecac;12

@@ -1,0 +1,5 @@
+1;Paracetamol;1;10
+2;Ibuprofeno;3;15
+3;Amoxicilina;2;20
+4;Omeprazol;5;25
+5;Cetirizina;4;30
