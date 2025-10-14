@@ -12,29 +12,12 @@ diccionario_login = {
     "lourdes": "uade4040"
 }
 encabezados_ventas = ("ID Venta","Fecha","ID Cliente","Total")
-matriz_ventas = [
-    [1, "2023-10-01", 1, 150],
-    [2, "2023-10-02", 2, 200],
-    [3, "2023-10-03", 1, 300],
-    [4, "2023-10-04", 3, 250],
-    [5, "2023-10-05", 2, 400]
-]
+
 encabezados_productos = ("ID Producto", "Descripción", "Stock", "Precio Unitario")
-matriz_productos = [
-    [1, "Paracetamol", 1, 10],
-    [2, "Ibuprofeno", 3, 15],
-    [3, "Amoxicilina", 2, 20],
-    [4, "Omeprazol", 5, 25],
-    [5, "Cetirizina", 4, 30]
-]
+
 encabezados_recetas = ("ID Receta", "ID Producto", "Fecha", "Médico", "Cantidad")
-matriz_recetas = [
-    [1, 1, "2023-10-01", "Dr. Perez", 2],
-    [2, 2, "2023-10-02", "Dr. Gomez", 1],
-    [3, 3, "2023-10-03", "Dr. Lopez", 3],
-    [4, 4, "2023-10-04", "Dr. Martinez", 1],
-    [5, 5, "2023-10-05", "Dr. Fernandez", 4]
-]
+
+
 encabezados_clientes = ("ID Cliente","ID Obra Social", "Nombre","Edad", "Teléfono", "Estado")
 matriz_clientes = [
     [1, 1, "Juan Perez", 30, "123456789", "Active"],
@@ -44,23 +27,10 @@ matriz_clientes = [
     [5, 5, "Luis Fernandez", 28, "159753486", "Active"]
 ]
 encabezados_detalle_ventas = ("ID Venta", "ID Receta",  "Subtotal")
-matriz_detalle_ventas = [
-    [1, 1, 100],
-    [1, 2, 150],
-    [3, 3, 200],
-    [4, 4, 250],
-    [5, 5, 300]
-]
+
 opciones_modificacion_ventas = {
         1: "Fecha",
         2: "Cliente",
         3: "Producto/Receta"
     }
 encabezados_obras_sociales = ("ID Obra Social", "Nombre", "Descuento")
-matriz_obras_sociales = [
-    [1, "Osde", 10],
-    [2, "Hospital italiano", 15],
-    [3, "Medife", 20],
-    [4, "Omint", 5],
-    [5, "Osecac", 12]
-]
