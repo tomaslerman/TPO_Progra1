@@ -106,8 +106,6 @@ def buscar_por_nombre(matriz, nombre, columna, encabezados):
     else:
         print("No se encontraron coincidencias.")
 
-
-
 def buscar_id(matriz,dato):
     i=0
     pos = -1

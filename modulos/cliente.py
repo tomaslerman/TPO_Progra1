@@ -1,7 +1,6 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, buscar_id, ingresar_id_obra_social
 from .datos_de_prueba import matriz_clientes, encabezados_submenu_clientes, matriz_obras_sociales, encabezados_obras_sociales, encabezados_clientes
-
-    
+  
 def agregar_cliente(matriz):
     id_cliente = len(matriz) + 1  
     nombre = input("Ingrese el nombre: ")
