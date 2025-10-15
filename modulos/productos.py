@@ -1,6 +1,6 @@
 
 from .funciones_generales import validar_mayor_que,buscar_id,mostrar_matriz_cuadro, mostrar_encabezado, validar_opcion
-from .datos_de_prueba import encabezados_productos, matriz_productos, encabezados_submenu_inventario
+from .datos_de_prueba import encabezados_productos, encabezados_submenu_inventario
 import re
 
 
@@ -14,13 +14,13 @@ def submenu_inventario():
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_inventario)
         if opcion == 1:  # Agregar producto
-            agregar_producto(matriz_productos)
+            agregar_productos("productos.txt")
             enter = input("Producto agregado exitosamente. Volviendo a menu...")
         elif opcion == 2:  # Modificar Producto
-            modificar_producto(matriz_productos)
+            modificar_productos("productos.txt")
             enter = input("Producto modificado exitosamente. Volviendo a menu...")
         elif opcion == 3:  # Dar baja producto
-            dar_baja_producto(matriz_productos)
+            dar_baja_productos("productos.txt")
             enter = input("Producto eliminado exitosamente. Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
@@ -31,53 +31,161 @@ def submenu_inventario():
             enter = input("Presione Enter para continuar...")
     enter = input("Volviendo al menú principal.")
 
-def agregar_producto(matriz_productos):
-    codigo = (len(matriz_productos) + 1)
-    descripcion = input("Ingrese el nombre del medicamento: ")
-    cant_stock = int(input("Ingrese cantidad en stock: "))#funcion para validar mayores que que un numero(0)
-    cant_stock=validar_mayor_que(cant_stock,0)
-    precio_unit = int(input("Ingrese el precio unitario: $"))#funcion para validar mayores que un numero(1)
-    precio_unit=validar_mayor_que(precio_unit,1)
-    producto=[codigo,descripcion,cant_stock,precio_unit]
-    matriz_productos.append(producto)
-    print("Producto agregado correctamente.")
 
-def modificar_producto(matriz_productos):
-    id=int(input("Ingrese el código del producto a modificar: "))
-    pos = buscar_id(matriz_productos,id)
-    while pos==-1:
-        print(" El código del producto es inválido")
-        id = int(input("Vuelva a ingresar el código del producto: "))
-        pos = buscar_id(matriz_productos,id)
-    descripcion = input("Ingrese la nueva descripción del producto: ")
-    cant_stock = int(input("Ingrese la nueva cantidad en stock: "))
-    cant_stock=validar_mayor_que(cant_stock,0)#funcion para validar mayores que que un numero(0)
-    precio_unit = int(input("Ingrese el nuevo precio unitario: $"))
-    precio_unit=validar_mayor_que(precio_unit,1)#funcion para validar mayores que un numero(1)
-    matriz_productos[pos][1] = descripcion
-    matriz_productos[pos][2] = cant_stock
-    matriz_productos[pos][3] = precio_unit
 
-def dar_baja_producto(matriz_productos):
-    print("Producto a eliminar:")
-    print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
-    id_producto=int(input("Ingrese el ID del producto a dar de baja : "))
-    pos=buscar_id(matriz_productos,id_producto)
-    while pos==-1:
-        print("Error el ID ingresado no es valido")
-        id_producto = int(input("Vuelva a ingresar el ID del producto: "))
-        pos = buscar_id(matriz_productos,id_producto)
-    for i in range(len(matriz_productos[0])):
-        print(matriz_productos[pos][i], end="\t")
-    print()
-    confirmacion = int(input("¿Está seguro que desea dar de baja este producto? 1 para si o 2 para no: "))
-    if confirmacion==1:
-        matriz_productos.pop(pos)
-        enter=input("Presione Enter para continuar y volver al menu")
-    elif confirmacion==2:
-        print("Operación cancelada. El producto no fue dado de baja.")
-        enter=input("Presione Enter para continuar y volver al menu")
-    return matriz_productos
+def agregar_productos(archivo):
+    try:
+        # Leer los datos existentes
+        productos = []
+        try:
+            with open(archivo, "r", encoding="utf-8") as arch:
+                for linea in arch:
+                    codigo, nombre, stock, precio = linea.strip().split(";")
+                    productos.append([codigo, nombre, stock, precio])
+        except FileNotFoundError:
+            pass  # si el archivo no existe, se creará más adelante
+        
+        while True:
+            codigo = input("Ingrese el código del producto (Enter para terminar): ")
+            if codigo == "":
+                break
+
+            existe = False
+            for p in productos:
+                if p[0] == codigo:
+                    existe = True
+                    break
+            if existe:
+                print("El código ya existe. Ingrese  otro codigo.\n")
+                continue
+
+            producto = input("Ingrese el nombre del medicamento: ")
+            stock = input("Ingrese la cantidad en stock: ")
+            precio = input("Ingrese el precio unitario: $")
+
+            productos.append([codigo, producto, stock, precio])
+            print("Producto agregado temporalmente.\n")
+
+        # Ordenar por código antes de guardar
+        productos.sort(key=lambda x: int(x[0]))
+
+        with open(archivo, "w", encoding="utf-8") as arch:
+            for p in productos:
+                arch.write(";".join(p) + "\n")
+
+        print("Archivo actualizado correctamente.\n")
+    except FileNotFoundError:
+        print("El archivo no existe.")
+    except OSError as mensaje:
+        print(" Error al abrir o escribir en el archivo:", mensaje)
+
+def modificar_productos(archivo):
+    try:
+        # Leer los productos existentes
+        with open(archivo, "r", encoding="utf-8") as arch:
+            productos = [linea.strip().split(";") for linea in arch]
+
+        if not productos:
+            print(" No hay productos en el archivo.\n")
+            return
+
+        codigo_modificar = input("Ingrese el código del producto a modificar: ")
+
+        # Buscar producto con filter + lambda
+        encontrados = list(filter(lambda p: p[0] == codigo_modificar, productos))
+
+        if not encontrados:
+            print(" Producto no encontrado.\n")
+            return
+
+        producto_actual = encontrados[0]
+        print(f"Producto actual: Nombre: {producto_actual[1]}, Stock: {producto_actual[2]}, Precio: {producto_actual[3]}")
+
+        nuevo_nombre = input("Ingrese nombre del producto (Enter para dejar igual): ")
+        nuevo_stock = input(" Ingrese nuevo stock (Enter para dejar igual): ")
+        nuevo_precio = input(" Ingrese nuevo precio (Enter para dejar igual): $")
+
+        # Reemplazar valores solo si se ingresó dato nuevo
+        producto_actual[1] = nuevo_nombre if nuevo_nombre != "" else producto_actual[1]
+        producto_actual[2] = nuevo_stock if nuevo_stock != "" else producto_actual[2]
+        producto_actual[3] = nuevo_precio if nuevo_precio != "" else producto_actual[3]
+
+        # Reemplazar el producto modificado en la lista completa usando map + lambda
+        productos = list(map(lambda p: producto_actual if p[0] == codigo_modificar else p, productos))
+
+        # Ordenar por código
+        productos.sort(key=lambda x: int(x[0]))
+
+        # Guardar nuevamente en el archivo
+        with open(archivo, "w", encoding="utf-8") as arch:
+            for p in productos:
+                arch.write(";".join(p) + "\n")
+
+        print("Producto modificado correctamente.\n")
+
+    except FileNotFoundError:
+        print("El archivo no existe.")
+    except OSError as mensaje:
+        print("Error al abrir o escribir en el archivo:", mensaje)
+
+            
+def dar_baja_productos(archivo):
+    try:
+        with open(archivo, "r", encoding="utf-8") as arch:
+            lineas = arch.readlines()
+        productos=[linea.strip().split(";") for linea in lineas]
+        while True:
+            print("\n Lista actual de productos:")
+            print("-"*50)
+            for prod in productos:
+                print(f"Código: {prod[0]}, Medicamento: {prod[1]}, Stock: {prod[2]}, Precio Unitario: ${prod[3]}")
+                print("-"*50)
+            codigo=input("\nIngrese el código del producto a dar de baja (o enter para terminar): ")
+            if codigo == " ":
+                break
+            encontrado=False
+            for prod in productos:
+                if prod[0]== codigo:
+                    encontrado=True
+                    confirmar=input(f"¿Está seguro que desea dar de baja el producto {prod[1]}? (s/n): ")
+                    if confirmar.lower() == 's':
+                        productos.remove(prod)
+                        print("Producto dado de baja correctamente.\n")
+                    else:
+                        print("Operación cancelada.\n")
+                    break
+            if not encontrado:
+                print("Código no encontrado. Intente nuevamente.\n")
+        with open(archivo, "w", encoding="utf-8") as arch:
+            for prod in productos:
+                arch.write(",".join(prod) + "\n")
+        print("Todos los cambios han sido guardados.")
+    except OSError as mensaje:
+        print(f"Error al abrir o escribir en el archivo: ", mensaje)
+
+
+def buscar_producto(archivo):
+    
+    codigo_buscar = input("Ingrese el código del producto a buscar: ")
+    try:
+        with open(archivo, "r", encoding="utf-8") as arch:
+            encontrado = False
+            for linea in arch:
+                codigo, nombre, stock, precio = linea.strip().split(";")
+                if codigo == codigo_buscar:
+                    print(f" Encontrado: {nombre} | Stock: {stock} | Precio: ${precio}\n")
+                    encontrado = True
+                    break
+            if not encontrado:
+                print(" Producto no encontrado.\n")
+    except FileNotFoundError:
+        print(" El archivo no existe.\n")
+
+
+
+
+
+
 
 def detalle_medicamento(matriz):
     print("Listado de medicamentos:")
