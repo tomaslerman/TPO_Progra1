@@ -1,5 +1,5 @@
-from .funciones_generales import fechaYvalidacion, buscar_id
-from .datos_de_prueba import matriz_productos, matriz_recetas
+from .funciones_generales import fechaYvalidacion
+
 
 def agregar_receta(id_producto,matriz_recetas):
     receta = []
