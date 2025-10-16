@@ -1,5 +1,32 @@
 from .funciones_generales import buscar_id
 
+def submenu_busquedas():
+    opcion = 0
+    while opcion != -1:
+        print("---"* 10)
+        print("Submenú Búsquedas")
+        print("---"* 10)
+        print("1. Ventas de un cliente específico")
+        print("2. Ventas de un producto específico")
+        print("-1. Volver al menú principal")
+        try:
+            opcion = int(input("Seleccione una opción: "))
+        except ValueError:
+            print("Error! Opción inválida.")
+            continue
+        while opcion not in [1, 2, -1]:
+            print("Error! Opción inválida.")
+            opcion = int(input("Seleccione una opción: "))
+        if opcion == 1:
+            id_cliente = int(input("Ingrese el ID del cliente: "))
+            ventas_de_x_cliente(id_cliente)
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 2:
+            id_producto = int(input("Ingrese el ID del producto: "))
+            ventas_de_x_producto(id_producto)
+            enter = input("Presione Enter para continuar...")
+    enter = input("Volviendo al menú principal...")
+
 def ventas_de_x_cliente(id_cliente):
     try:
         arch_clientes = open("clientes.txt", "r", encoding="utf-8")
