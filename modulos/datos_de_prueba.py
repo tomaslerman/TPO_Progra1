@@ -19,13 +19,7 @@ encabezados_recetas = ("ID Receta", "ID Producto", "Fecha", "Médico", "Cantidad
 
 
 encabezados_clientes = ("ID Cliente","ID Obra Social", "Nombre","Edad", "Teléfono", "Estado")
-matriz_clientes = [
-    [1, 1, "Juan Perez", 30, "123456789", "Active"],
-    [2, 2, "Maria Gomez", 25, "987654321", "Inactive"],
-    [3, 3, "Carlos Lopez", 40, "456789123", "Active"],
-    [4, 4, "Ana Martinez", 35, "321654987", "Inactive"],
-    [5, 5, "Luis Fernandez", 28, "159753486", "Active"]
-]
+
 encabezados_detalle_ventas = ("ID Venta", "ID Receta",  "Subtotal")
 
 opciones_modificacion_ventas = {

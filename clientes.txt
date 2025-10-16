@@ -1,0 +1,5 @@
+1;1;JuanPerez;30;123456789;Active
+2;2;MariaGomez;25;987654321;Inactive
+3;3;CarlosLopez;40;456789123;Active
+4;4;AnaMartinez;35;321654987;Inactive
+5;5;LuisFernandez;28;159753486;Active
