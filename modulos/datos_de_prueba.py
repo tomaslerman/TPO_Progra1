@@ -1,5 +1,5 @@
 encabezado_contra=["Usuario","Contraseña"]
-encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Reportes","-1. Terminar programa"]
+encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Busquedas", "5. Reportes","-1. Terminar programa"]
 encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa", "-1. Volver a menu"]
 encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista (sólo activos)","5. Detalle de medicamento", "-1. Volver a menu"]
 encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa", "-1. Volver a menu"]
