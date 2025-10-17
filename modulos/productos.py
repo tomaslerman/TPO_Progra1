@@ -5,31 +5,30 @@ import re
 
 
 def submenu_inventario():
-    opcion = 0
-    while opcion != -1:
+    archivo="productos.txt"
+    while True:
+
         print("---"* 10)
         print("Submenú Inventario")
         print("---"* 10)
         mostrar_encabezado(encabezados_submenu_inventario)
-        opcion = int(input("Seleccione una opción: "))
-        opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_inventario)
-        if opcion == 1:  # Agregar producto
-            agregar_productos("productos.txt")
-            enter = input("Producto agregado exitosamente. Volviendo a menu...")
-        elif opcion == 2:  # Modificar Producto
-            modificar_productos("productos.txt")
-            enter = input("Producto modificado exitosamente. Volviendo a menu...")
-        elif opcion == 3:  # Dar baja producto
-            dar_baja_productos("productos.txt")
-            enter = input("Producto eliminado exitosamente. Volviendo a menu...")
-        elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
-            stock_por_agotar(matriz_productos)
-            enter = input("Presione Enter para continuar...")
-        elif opcion == 5:  # Detalle medicamento
-            detalle_medicamento(matriz_productos)
-            enter = input("Presione Enter para continuar...")
-    enter = input("Volviendo al menú principal.")
+        try:
+            opcion = int(input("Seleccione una opción: "))
+            opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_inventario)
+            if opcion == 1:  # Agregar producto
+                agregar_productos(archvivo)
+                enter = input("Producto agregado exitosamente. Volviendo a menu...")
+            elif opcion == 2:  # Modificar Producto
+                modificar_productos(archvivo)
+                enter = input("Producto modificado exitosamente. Volviendo a menu...")
+            elif opcion == 3:  # Dar baja producto
+                dar_baja_productos(archivo)
+                enter = input("Producto eliminado exitosamente. Volviendo a menu...")
+        except ValueError:
+            print("Error: Debe ingresar un número entero válido.")    
+        finally:
+            print("Volviendo al menú de inventario...\n")
+             
 
 
 
