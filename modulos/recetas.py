@@ -1,6 +1,5 @@
 from .funciones_generales import fechaYvalidacion
 
-
 def agregar_receta(id_producto,matriz_recetas):
     receta = []
     codigo = len(matriz_recetas) + 1

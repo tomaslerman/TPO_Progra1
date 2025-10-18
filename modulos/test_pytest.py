@@ -2,6 +2,12 @@ from .datos_de_prueba import *
 from .funciones_generales import buscar_id
 
 def test_buscar_id():
+    try:
+        arch_productos = open("productos.txt", "r", encoding="utf-8")
+        matriz_productos = [linea.strip().split(";") for linea in arch_productos]
+    except FileNotFoundError:
+        print("Error! El archivo de productos no existe.")
+        return
     # Caso válido
     assert buscar_id(matriz_productos, 2) == 1, "Debería devolver índice 1 para ID 2"
     # Caso inexistente
@@ -14,6 +20,12 @@ def stock_por_agotar(matriz_productos):
     return productos_agotarse # Retorna la lista de productos con stock menor al umbral. Con los datos actuales, debería retornar Paracetamol y Amoxicilina.
 
 def test_stock_por_agotar():
+    try:
+        arch_productos = open("productos.txt", "r", encoding="utf-8")
+        matriz_productos = [linea.strip().split(";") for linea in arch_productos]
+    except FileNotFoundError:
+        print("Error! El archivo de productos no existe.")
+        return
     resultado = stock_por_agotar(matriz_productos)
     esperado = [
         [1, "Paracetamol", 1, 10],
