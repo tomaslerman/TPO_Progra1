@@ -3,4 +3,4 @@
 3;Amoxicilina;2;20
 4;Omeprazol;5;25
 5;Cetirizina;4;30
-
+6;tiarix;3;23
