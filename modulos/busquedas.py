@@ -1,5 +1,5 @@
 from .funciones_generales import buscar_id
-
+import re
 def submenu_busquedas():
     opcion = 0
     while opcion != -1:
@@ -65,7 +65,6 @@ def ventas_de_x_cliente(id_cliente):
     for venta in ventas_cliente:
         print(f"{int(venta[0]):<10}{venta[1]:<15}${float(venta[3]):<10.2f}")
 
-#Hasta acá funciona
 
 def ventas_de_x_producto(id_producto):
     try:
@@ -102,3 +101,35 @@ def ventas_de_x_producto(id_producto):
     print(f"{'ID Venta':<10}{'ID Receta':<10}{'Subtotal':<10}")
     for detalle in ventas_producto:
         print(f"{int(detalle[0]):<10}{detalle[1]:<10}${float(detalle[2]):<10.2f}")
+
+def ventas_de_x_cliente2(id_cliente): #versión 2.0
+    with open("ventas.txt", "r", encoding="utf-8") as f:
+        lineas = f.readlines()
+
+    ventas = list(
+        map(
+            lambda l: l.strip().split(";"),
+            filter(lambda l: l.strip() != "", lineas)
+        )
+    )
+
+    ventas_dict = list(
+        map(
+            lambda v: {
+                "id_venta": v[0],
+                "fecha": v[1],
+                "id_cliente": v[2],
+                "total": float(v[3])
+            },
+            ventas
+        )
+    )
+
+    ventas_cliente = list(filter(lambda v: v["id_cliente"] == id_cliente, ventas_dict))
+    montos = list(map(lambda v: v["total"], ventas_cliente))
+    total_gastado = re.reduce(lambda acc, x: acc + x, montos, 0)
+    ultimas3 = ventas_cliente[-3:]
+    print(f"Cliente {id_cliente} gastó un total de: ${total_gastado:.2f}")
+    print("Últimas 3 ventas:")
+    for v in ultimas3:
+        print(f"ID: {v['id_venta']} | Fecha: {v['fecha']} | Total: ${v['total']:.2f}")
