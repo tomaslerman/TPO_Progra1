@@ -5,33 +5,48 @@ import re
 
 
 def submenu_inventario():
-    opcion = 0
-    while opcion != -1:
-        print("---"* 10)
+    archivo = "producto.txt"
+    while True:
+        print("---" * 10)
         print("Submenú Inventario")
-        print("---"* 10)
-        mostrar_encabezado(encabezados_submenu_inventario)
-        opcion = int(input("Seleccione una opción: "))
-        opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_inventario)
-        if opcion == 1:  # Agregar producto
-            agregar_productos("productos.txt")
-            enter = input("Producto agregado exitosamente. Volviendo a menu...")
-        elif opcion == 2:  # Modificar Producto
-            modificar_productos("productos.txt")
-            enter = input("Producto modificado exitosamente. Volviendo a menu...")
-        elif opcion == 3:  # Dar baja producto
-            dar_baja_productos("productos.txt")
-            enter = input("Producto eliminado exitosamente. Volviendo a menu...")
-        elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz_cuadro(encabezados_productos,matriz_productos)
-            stock_por_agotar(matriz_productos)
-            enter = input("Presione Enter para continuar...")
-        elif opcion == 5:  # Detalle medicamento
-            detalle_medicamento(matriz_productos)
-            enter = input("Presione Enter para continuar...")
-    enter = input("Volviendo al menú principal.")
+        print("---" * 10)
+        print("1. Agregar producto")
+        print("2. Modificar producto")
+        print("3. Dar baja producto")
+        print("4. Volver al menú principal")
 
-
+        try:
+            opcion = int(input("Seleccione una opción: "))
+            if opcion == 1:
+                try:
+                    agregar_productos(archivo)
+                    input("Producto agregado exitosamente . ...")
+                except Exception as e:
+                    print(f"Error al agregar producto: {e}")
+                    input("Presione Enter para continuar...")
+                    
+            elif opcion == 2:
+                try:
+                    modificar_productos(archivo)
+                    input("Producto modificado exitosamente. ...")
+                except Exception as e:
+                    print(f"Error al modificar producto: {e}")
+                    input("Presione Enter para continuar...")
+            elif opcion == 3:
+                try:
+                    dar_baja_productos(archivo)
+                    input("Producto eliminado exitosamente ...")
+                except Exception as e:
+                    print(f"Error al dar de baja el producto: {e}")
+                    input("Presione Enter para continuar...")    
+            elif opcion == 4:
+                print("Volviendo al menú principal...\n")
+                break 
+            else:
+                print("Opción fuera de rango. Intente nuevamente.")
+        except ValueError:
+            print("Error: Debe ingresar un número entero válido.")
+             
 
 def agregar_productos(archivo):
     try:
@@ -44,13 +59,20 @@ def agregar_productos(archivo):
                     productos.append([codigo, nombre, stock, precio])
         except FileNotFoundError:
             pass  # si el archivo no existe, se creará más adelante
-        
+        print("\n--- Agregar productos ---")
+        print("Debe ingresar al menos un producto antes de salir.\n")
+
+        agrego = False  # Bandera para saber si se ingresó al menos un producto
         while True:
             codigo = input("Ingrese el código del producto (Enter para terminar): ")
             if codigo == "":
-                break
+                if agrego:
+                    break
+                else:
+                    print("Debe ingresar al menos un producto.\n")
+                    continue
 
-            existe = False
+            existe = False #validar si el codigo existe
             for p in productos:
                 if p[0] == codigo:
                     existe = True
@@ -64,7 +86,8 @@ def agregar_productos(archivo):
             precio = input("Ingrese el precio unitario: $")
 
             productos.append([codigo, producto, stock, precio])
-            print("Producto agregado temporalmente.\n")
+            agrego=True
+            print("Producto agregado .\n")
 
         # Ordenar por código antes de guardar
         productos.sort(key=lambda x: int(x[0]))
@@ -141,7 +164,7 @@ def dar_baja_productos(archivo):
                 print(f"Código: {prod[0]}, Medicamento: {prod[1]}, Stock: {prod[2]}, Precio Unitario: ${prod[3]}")
                 print("-"*50)
             codigo=input("\nIngrese el código del producto a dar de baja (o enter para terminar): ")
-            if codigo == " ":
+            if codigo == "":
                 break
             encontrado=False
             for prod in productos:
@@ -158,7 +181,7 @@ def dar_baja_productos(archivo):
                 print("Código no encontrado. Intente nuevamente.\n")
         with open(archivo, "w", encoding="utf-8") as arch:
             for prod in productos:
-                arch.write(",".join(prod) + "\n")
+                arch.write(";".join(prod) + "\n")
         print("Todos los cambios han sido guardados.")
     except OSError as mensaje:
         print(f"Error al abrir o escribir en el archivo: ", mensaje)
