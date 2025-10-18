@@ -164,7 +164,7 @@ def dar_baja_productos(archivo):
                 print(f"Código: {prod[0]}, Medicamento: {prod[1]}, Stock: {prod[2]}, Precio Unitario: ${prod[3]}")
                 print("-"*50)
             codigo=input("\nIngrese el código del producto a dar de baja (o enter para terminar): ")
-            if codigo == " ":
+            if codigo == "":
                 break
             encontrado=False
             for prod in productos:
@@ -181,7 +181,7 @@ def dar_baja_productos(archivo):
                 print("Código no encontrado. Intente nuevamente.\n")
         with open(archivo, "w", encoding="utf-8") as arch:
             for prod in productos:
-                arch.write(",".join(prod) + "\n")
+                arch.write(";".join(prod) + "\n")
         print("Todos los cambios han sido guardados.")
     except OSError as mensaje:
         print(f"Error al abrir o escribir en el archivo: ", mensaje)
