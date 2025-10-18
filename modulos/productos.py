@@ -211,6 +211,12 @@ def buscar_producto(archivo):
 
 
 def detalle_medicamento(matriz):
+    try:
+        arch_productos = open("productos.txt", "r", encoding="utf-8")
+        matriz_productos = [linea.strip().split(";") for linea in arch_productos]
+    except FileNotFoundError:
+        print("Error! El archivo de productos no existe.")
+        return
     print("Listado de medicamentos:")
     print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
     id_med = int(input("Ingrese ID del medicamento a saber su detalle: "))
