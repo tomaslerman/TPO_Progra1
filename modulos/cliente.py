@@ -1,6 +1,5 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, extraer_encabezado_submenu_clientes
 import json
-import os
 
 def obtener_ultimo_id(ruta_archivo):
     """Devuelve el siguiente ID disponible según los clientes en el JSON."""
