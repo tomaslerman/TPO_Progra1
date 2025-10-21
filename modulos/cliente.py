@@ -1,5 +1,5 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, buscar_id, ingresar_id_obra_social
-from .datos_de_prueba import encabezados_submenu_clientes, encabezados_obras_sociales, encabezados_clientes
+import json
 import os
 
 

@@ -1,0 +1,37 @@
+{
+    "1": {
+        "obra_social": "1",
+        "nombre": "JuanPerez",
+        "edad": 30,
+        "tel": "123456789",
+        "estado": "Active"
+    },
+    "2": {
+        "obra_social": "2",
+        "nombre": "MariaGomez",
+        "edad": 25,
+        "tel": "987654321",
+        "estado": "Inactive"
+    },
+    "3": {
+        "obra_social": "3",
+        "nombre": "CarlosLopez",
+        "edad": 40,
+        "tel": "456789123",
+        "estado": "Active"
+    },
+    "4": {
+        "obra_social": "4",
+        "nombre": "AnaMartinez",
+        "edad": 35,
+        "tel": "321654987",
+        "estado": "Inactive"
+    },
+    "5": {
+        "obra_social": "5",
+        "nombre": "LuisFernandez",
+        "edad": 28,
+        "tel": "159753486",
+        "estado": "Active"
+    }
+}
