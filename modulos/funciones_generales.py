@@ -1,3 +1,5 @@
+import json
+
 def validar_opcion(opcion,inicio,fin,encabezado):   
     while opcion !=-1 and opcion < inicio or opcion > fin:
         print("Debe ingresar rangos de opcion del ",inicio,"al",fin)
@@ -8,7 +10,6 @@ def validar_opcion(opcion,inicio,fin,encabezado):
 def extraer_encabezado_submenu(key):
     try:
         with open("encabezados_submenus.json", "r") as archivo:
-            import json
             datos = json.load(archivo)
             encabezado = datos[key]
             return encabezado
@@ -19,7 +20,6 @@ def extraer_encabezado_submenu(key):
 def extraer_encabezado(key):
     try:
         with open("encabezados_modulos.json", "r") as archivo:
-            import json
             datos = json.load(archivo)
             encabezado = datos[key]
             return encabezado
@@ -28,8 +28,8 @@ def extraer_encabezado(key):
         return []
 
 def mostrar_encabezado(encabezado):
-    for i in range(len(encabezado)):
-        print(encabezado[i])
+    for k in encabezado:
+        print(f'{k}. {encabezado[k]}')
 
 def mostrar_matriz(titulos, matriz):
     print(" | ".join(titulos))
@@ -39,9 +39,18 @@ def mostrar_matriz(titulos, matriz):
         fila_completa = fila + [""] * (len(titulos) - len(fila))
         print(" | ".join(str(valor) for valor in fila_completa))
 
-       
-
-def mostrar_matriz_clientes(titulos,matriz):
+def mostrar_matriz_clientes(ruta_archivo):
+    try:
+        with open(ruta_archivo, "r") as archivo:
+            clientes = json.load(archivo)
+        titulos = ["ID", "Nombre", "Edad", "Teléfono", "Estado"]
+        matriz = []
+        for cliente in clientes.values():
+            fila = [cliente["id_obra"], cliente["nombre"], cliente["edad"], cliente["telefono"], cliente["estado"]]
+            matriz.append(fila)
+    except FileNotFoundError:
+        print("Error: No se encontró el archivo de clientes.")
+        return
     anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
     for i, titulo in enumerate(titulos):
         print(f"{titulo:<{anchos[i]}}", end="  ")

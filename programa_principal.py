@@ -1,5 +1,5 @@
 import modulos
-modulos.login(modulos.diccionario_login)
+# modulos.login()
 modulos.menu_principal()
 
   

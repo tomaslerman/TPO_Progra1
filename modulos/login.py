@@ -1,7 +1,6 @@
 from .menu_p import menu_principal
-from .datos_de_prueba import diccionario_login
 
-def login(diccionario_login):
+def login():
     print("Bienvenido al sistema de gestión de farmacia.")
     while True:  # loop hasta que logre loguearse
         try:

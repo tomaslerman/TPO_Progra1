@@ -5,7 +5,7 @@ import re
 
 def submenu_inventario():
     opcion = 0
-    encabezados_submenu_inventario = extraer_encabezado("encabezados_submenu_inventario")
+    encabezados_submenu_inventario = extraer_encabezado("inventario")
     archivo = "producto.txt"
     while True:
         print("---" * 10)
@@ -60,7 +60,7 @@ def agregar_productos(archivo):
         print("\n--- Agregar productos ---")
         print("Debe ingresar al menos un producto antes de salir.\n")
 
-        agrego = False  # Bandera para saber si se ingresó al menos un producto
+        agrego = False  # Bandera para saber si se ingresó al menos un producto ####
         while True:
             codigo = input("Ingrese el código del producto (Enter para terminar): ")
             if codigo == "":

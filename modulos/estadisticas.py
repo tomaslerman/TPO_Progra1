@@ -2,7 +2,7 @@ from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar
 
 def submenu_reportes():
     opcion = 0
-    encabezados_sub_menu_reportes = extraer_encabezado("encabezados_submenu_reportes")
+    encabezados_sub_menu_reportes = extraer_encabezado("reportes")
     while opcion != -1:
         print("---"* 10)
         print("Submenú Reportes")

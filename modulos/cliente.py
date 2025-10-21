@@ -160,7 +160,7 @@ def baja_cliente():
 
 def submenu_clientes():
     opcion = 0
-    encabezados_submenu_clientes = extraer_encabezado_submenu("encabezados_submenu_clientes")
+    encabezados_submenu_clientes = extraer_encabezado_submenu("clientes")
     while opcion != -1:
         print("---"* 10)
         print("Submenú Clientes")
