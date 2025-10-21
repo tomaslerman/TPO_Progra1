@@ -1,30 +1,5 @@
-encabezado_contra=["Usuario","Contraseña"]
-encabezados_menu = ["1. Ventas","2. Inventario","3. Clientes","4. Busquedas", "5. Reportes","-1. Terminar programa"]
-encabezados_submenu_ventas = ["1. Agregar venta","2. Modificar venta","3. Dar baja venta","4. Mostrar lista completa", "-1. Volver a menu"]
-encabezados_submenu_inventario = ["1. Agregar producto","2. Modificar Producto","3. Dar baja producto","4. Mostrar lista (sólo activos)","5. Detalle de medicamento", "-1. Volver a menu"]
-encabezados_submenu_clientes = ["1. Agregar cliente","2. Modificar Cliente","3. Dar baja cliente","4. Mostrar lista completa", "-1. Volver a menu"]
-encabezados_sub_menu_reportes = ["Estadística de ventas", "-1. Volver a menu"]
-encabezados_ventas = ["ID","Fecha","ID Cliente","Total"]
-diccionario_login = {
-    "stephy": "uade1010",
-    "tomas": "uade2020",
-    "matias": "uade3030",
-    "lourdes": "uade4040"
-}
-encabezados_ventas = ("ID Venta","Fecha","ID Cliente","Total")
-
-encabezados_productos = ("ID Producto", "Descripción", "Stock", "Precio Unitario")
-
-encabezados_recetas = ("ID Receta", "ID Producto", "Fecha", "Médico", "Cantidad")
-
-
-encabezados_clientes = ("ID Cliente","ID Obra Social", "Nombre","Edad", "Teléfono", "Estado")
-
-encabezados_detalle_ventas = ("ID Venta", "ID Receta",  "Subtotal")
-
 opciones_modificacion_ventas = {
         1: "Fecha",
         2: "Cliente",
         3: "Producto/Receta"
     }
-encabezados_obras_sociales = ("ID Obra Social", "Nombre", "Descuento")

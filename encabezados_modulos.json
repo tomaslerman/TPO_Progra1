@@ -1,0 +1,43 @@
+{
+    "ventas" : {
+        "1": "ID",
+        "2": "Fecha",
+        "3": "ID Cliente",
+        "4": "Total"
+    },
+
+    "productos" : {
+        "1": "ID Producto",
+        "2": "Descripción",
+        "3": "Stock",
+        "4": "Precio Unitario"
+    },
+
+    "recetas" : {
+        "1": "ID Receta",
+        "2": "ID Producto",
+        "3": "Fecha",
+        "4": "Médico",
+        "5": "Cantidad"
+    },
+
+    "clientes" : {
+        "1": "ID Cliente",
+        "2": "ID Obra Social",
+        "3": "Nombre",
+        "4": "Edad",
+        "5": "Teléfono",
+        "6": "Estado"
+    },
+
+    "detalle_ventas" : {
+        "1": "ID Venta",
+        "2": "ID Receta",
+        "3": "Subtotal"
+    },
+    "obras_sociales" : {
+        "1": "ID Obra Social",
+        "2": "Nombre",
+        "3": "Descuento"
+    }
+}
