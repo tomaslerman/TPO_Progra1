@@ -1,19 +1,17 @@
 
-from .funciones_generales import validar_mayor_que,buscar_id,mostrar_matriz_cuadro, mostrar_encabezado, validar_opcion
-from .datos_de_prueba import encabezados_productos, encabezados_submenu_inventario
+from .funciones_generales import validar_mayor_que,buscar_id,mostrar_matriz_cuadro, mostrar_encabezado, validar_opcion, extraer_encabezado
 import re
 
 
 def submenu_inventario():
+    opcion = 0
+    encabezados_submenu_inventario = extraer_encabezado("encabezados_submenu_inventario")
     archivo = "producto.txt"
     while True:
         print("---" * 10)
         print("Submenú Inventario")
         print("---" * 10)
-        print("1. Agregar producto")
-        print("2. Modificar producto")
-        print("3. Dar baja producto")
-        print("4. Volver al menú principal")
+        mostrar_encabezado(encabezados_submenu_inventario)
 
         try:
             opcion = int(input("Seleccione una opción: "))
@@ -150,7 +148,6 @@ def modificar_productos(archivo):
         print("El archivo no existe.")
     except OSError as mensaje:
         print("Error al abrir o escribir en el archivo:", mensaje)
-
             
 def dar_baja_productos(archivo):
     try:
@@ -186,7 +183,6 @@ def dar_baja_productos(archivo):
     except OSError as mensaje:
         print(f"Error al abrir o escribir en el archivo: ", mensaje)
 
-
 def buscar_producto(archivo):
     
     codigo_buscar = input("Ingrese el código del producto a buscar: ")
@@ -203,12 +199,6 @@ def buscar_producto(archivo):
                 print(" Producto no encontrado.\n")
     except FileNotFoundError:
         print(" El archivo no existe.\n")
-
-
-
-
-
-
 
 def detalle_medicamento(matriz):
     try:

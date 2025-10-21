@@ -1,14 +1,14 @@
 from .ventas import submenu_ventas
 from .cliente import submenu_clientes
 from .productos import submenu_inventario
-from .funciones_generales import mostrar_encabezado, validar_opcion
+from .funciones_generales import mostrar_encabezado, validar_opcion, extraer_encabezado
 from .estadisticas import submenu_reportes
-from .datos_de_prueba import encabezados_menu
 from .estadisticas import submenu_reportes
 from .busquedas import submenu_busquedas
 
 def menu_principal():
     opcion = 0
+    encabezados_menu = extraer_encabezado("encabezados_menu_principal")
     while opcion != -1:
         print("---"* 10)
         print("Menu Principal")

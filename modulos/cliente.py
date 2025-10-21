@@ -1,4 +1,4 @@
-from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, extraer_encabezado_submenu_clientes
+from .funciones_generales import extraer_encabezado_submenu, mostrar_encabezado, validar_opcion, mostrar_matriz_clientes
 import json
 
 def obtener_ultimo_id(ruta_archivo):
@@ -160,7 +160,7 @@ def baja_cliente():
 
 def submenu_clientes():
     opcion = 0
-    encabezados_submenu_clientes = extraer_encabezado_submenu_clientes()
+    encabezados_submenu_clientes = extraer_encabezado_submenu("encabezados_submenu_clientes")
     while opcion != -1:
         print("---"* 10)
         print("Submenú Clientes")

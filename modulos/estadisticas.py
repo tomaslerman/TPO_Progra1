@@ -1,8 +1,8 @@
-from .funciones_generales import mostrar_encabezado, validar_opcion
-from .datos_de_prueba import encabezados_sub_menu_reportes
+from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar_opcion
 
 def submenu_reportes():
     opcion = 0
+    encabezados_sub_menu_reportes = extraer_encabezado("encabezados_submenu_reportes")
     while opcion != -1:
         print("---"* 10)
         print("Submenú Reportes")
