@@ -1,34 +1,13 @@
-from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, buscar_id, ingresar_id_obra_social
+from .funciones_generales import mostrar_encabezado, validar_opcion, mostrar_matriz_clientes, extraer_encabezado_submenu_clientes
 import json
 import os
 
-
-DELIM = ";"
 def obtener_ultimo_id(ruta_archivo):
-    arch = None
-    try:
-        arch = open(ruta_archivo, "r")
-        lineas = arch.readlines()
-    except FileNotFoundError:
-        lineas = []
-    except OSError:
-        print("No se pudo abrir el archivo para lectura.")
-        lineas = []
-    finally:
-        try:
-            if arch is not None:
-                arch.close()
-        except:
-            print("No se pudo cerrar el archivo")
-
-    # calcular el próximo id
-    if len(lineas) > 0:
-        ultima = lineas[-1].strip().split(";")
-        try:
-            return int(ultima[0]) + 1
-        except:
-            print("Error al convertir el ID a entero. Se asignará ID 1.")
-            return 1
+    """Devuelve el siguiente ID disponible según los clientes en el JSON."""
+    clientes = leer_json(ruta_archivo)
+    if clientes:
+        ids = [int(k) for k in clientes.keys()]
+        return max(ids) + 1
     else:
         return 1
 
@@ -55,27 +34,30 @@ def pedir_entero(mensaje):
             print("Ingreso cancelado por el usuario.")
             return None
 
-
-def guardar_cliente(ruta_archivo, id_cliente, id_obra, nombre, edad, telefono, estado):
-    
-    arch = None
+def leer_json(ruta_archivo):
+    """Lee un archivo JSON y devuelve un diccionario."""
     try:
-        arch = open(ruta_archivo, "a")
-        linea = f"{id_cliente};{id_obra};{nombre};{edad};{telefono};{estado}\n"
-        arch.write(linea)
-        print("Cliente agregado correctamente.")
+        with open(ruta_archivo, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError:
+        print("Error: el archivo JSON está dañado. Se usará un diccionario vacío.")
+        return {}
+
+def guardar_json(ruta_archivo, data):
+    """Guarda un diccionario en formato JSON."""
+    try:
+        with open(ruta_archivo, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4, ensure_ascii=False)
     except OSError:
-        print("Error al escribir en el archivo.")
-    finally:
-        try:
-            if arch is not None:
-                arch.close()
-        except:
-            print("No se pudo cerrar el archivo")
+        print("Error al escribir en el archivo JSON.")
   
 def agregar_cliente():
     """Controla el alta del cliente, usando las funciones auxiliares."""
-    ruta_archivo = "clientes.txt"
+    ruta_archivo = "clientes.json"
+    clientes = leer_json(ruta_archivo)
+
     id_cliente = obtener_ultimo_id(ruta_archivo)
     nombre = validar_nombre()
     edad = pedir_entero("Ingrese edad: ")
@@ -89,9 +71,16 @@ def agregar_cliente():
         return
 
     estado = "Active"
-    guardar_cliente(ruta_archivo, id_cliente, id_obra, nombre, edad, telefono, estado)
+    clientes[str(id_cliente)] = {
+        "id_obra": id_obra,
+        "nombre": nombre,
+        "edad": edad,
+        "telefono": telefono,
+        "estado": estado
+    }
 
-
+    guardar_json(ruta_archivo, clientes)
+    print("Cliente agregado correctamente.")
 
 def abrir_archivos(ruta_original, ruta_aux):
     """Abre el archivo original en lectura y el auxiliar en escritura."""
@@ -108,168 +97,71 @@ def abrir_archivos(ruta_original, ruta_aux):
         print("Error al abrir los archivos.")
         return None, None
 
-
-
-
-def cerrar_archivos(arch, aux):
-    """Cierra ambos archivos, controlando errores."""
-    try:
-        if arch is not None:
-            arch.close()
-        if aux is not None:
-            aux.close()
-    except:
-        print("Error al cerrar los archivos.")
-
-
-def reemplazar_archivo(ruta_original, ruta_aux):
-    """Elimina el archivo original y renombra el auxiliar."""
-    try:
-        os.remove(ruta_original)
-        os.rename(ruta_aux, ruta_original)
-    except OSError:
-        print("Error al reemplazar el archivo.")
-
-
-def procesar_modificacion(arch, aux, id_buscar):
-    """Copia los registros al auxiliar, modificando solo el que coincide con el ID."""
-    encontrado = False
-
-    for linea in arch:
-        partes = linea.strip().split(DELIM)
-
-        # Si la línea está vacía o incompleta, se copia igual
-        if len(partes) < 6:
-            aux.write(linea)
-            continue
-
-        try:
-            id_cliente = int(partes[0])
-        except ValueError:
-            aux.write(linea)
-            continue
-
-        if id_cliente == id_buscar:
-            encontrado = True
-            print(f"\nCliente encontrado: {partes[2]} (Edad: {partes[3]}, Tel: {partes[4]})")
-
-            # Pedir nuevos datos
-            nuevo_nombre = validar_nombre()
-            nueva_edad = pedir_entero("Ingrese la nueva edad: ")
-            if nueva_edad is None:
-                aux.write(linea)
-                continue
-            nueva_obra = pedir_entero("Ingrese el nuevo ID de obra social: ")
-            if nueva_obra is None:
-                aux.write(linea)
-                continue
-            nuevo_tel = pedir_entero("Ingrese el nuevo número de teléfono: ")
-            if nuevo_tel is None:
-                aux.write(linea)
-                continue
-
-            estado = partes[5]  # se mantiene igual
-            nueva_linea = f"{id_cliente};{nueva_obra};{nuevo_nombre};{nueva_edad};{nuevo_tel};{estado}\n"
-            aux.write(nueva_linea)
-            print("\nRegistro modificado correctamente.")
-        else:
-            aux.write(linea)
-
-    return encontrado
-
 def modificar_cliente():
     """Controla todo el proceso de modificación usando un archivo auxiliar."""
-    ruta_original = "clientes.txt"
-    ruta_aux = "clientes_aux.txt"
+    ruta_archivo = "clientes.json"
+    clientes = leer_json(ruta_archivo)
 
-    arch, aux = abrir_archivos(ruta_original, ruta_aux)
-    if arch is None or aux is None:
+    id_buscar = pedir_entero("Ingrese el ID del cliente a modificar: ")
+    if id_buscar is None:
         return
 
-    try:
-        id_buscar = pedir_entero("Ingrese el ID del cliente a modificar: ")
-        if id_buscar is None:
-            return
+    id_str = str(id_buscar)
+    if id_str not in clientes:
+        print("No se encontró ningún cliente con ese ID.")
+        return
 
-        encontrado = procesar_modificacion(arch, aux, id_buscar)
+    cliente = clientes[id_str]
+    print(f"\nCliente encontrado: {cliente['nombre']} (Edad: {cliente['edad']}, Tel: {cliente['telefono']})")
 
-        if not encontrado:
-            print("\nNo se encontró ningún cliente con ese ID.")
+    nuevo_nombre = validar_nombre()
+    nueva_edad = pedir_entero("Ingrese la nueva edad: ")
+    if nueva_edad is None:
+        return
+    nueva_obra = pedir_entero("Ingrese el nuevo ID de obra social: ")
+    if nueva_obra is None:
+        return
+    nuevo_tel = pedir_entero("Ingrese el nuevo número de teléfono: ")
+    if nuevo_tel is None:
+        return
 
-    finally:
-        cerrar_archivos(arch, aux)
-        reemplazar_archivo(ruta_original, ruta_aux)
+    cliente.update({
+        "nombre": nuevo_nombre,
+        "edad": nueva_edad,
+        "id_obra": nueva_obra,
+        "telefono": nuevo_tel
+    })
 
-
-
-
-
-def procesar_baja(arch, aux, id_buscar):
-    """Copia los registros al auxiliar, marcando como Inactive el ID indicado."""
-    encontrado = False
-
-    for linea in arch:
-        partes = linea.strip().split(DELIM)
-
-        if len(partes) < 6:
-            aux.write(linea)
-            continue
-
-        try:
-            id_cliente = int(partes[0])
-        except ValueError:
-            aux.write(linea)
-            continue
-
-        # Si el ID coincide, marcamos como Inactive
-        if id_cliente == id_buscar:
-            encontrado = True
-            print(f"\nCliente encontrado: {partes[2]} (Estado actual: {partes[5]})")
-
-            if partes[5].strip().lower() == "inactive":
-                print("El cliente ya se encuentra dado de baja.")
-                aux.write(linea)
-                continue
-
-            partes[5] = "Inactive"
-            nueva_linea = f"{partes[0]};{partes[1]};{partes[2]};{partes[3]};{partes[4]};{partes[5]}\n"
-            aux.write(nueva_linea)
-            print("Cliente dado de baja correctamente.")
-        else:
-            aux.write(linea)
-
-    return encontrado
-
-
+    guardar_json(ruta_archivo, clientes)
+    print("\nRegistro modificado correctamente.")
 
 
 def baja_cliente():
     """Controla el proceso de baja usando archivo auxiliar (según PPT)."""
-    ruta_original = "clientes.txt"
-    ruta_aux = "clientes_aux.txt"
+    ruta_archivo = "clientes.json"
+    clientes = leer_json(ruta_archivo)
 
-    arch, aux = abrir_archivos(ruta_original, ruta_aux)
-    if arch is None or aux is None:
+    id_buscar = pedir_entero("Ingrese el ID del cliente a dar de baja: ")
+    if id_buscar is None:
         return
 
-    try:
-        id_buscar = pedir_entero("Ingrese el ID del cliente a dar de baja: ")
-        if id_buscar is None:
-            return
+    id_str = str(id_buscar)
+    if id_str not in clientes:
+        print("No se encontró ningún cliente con ese ID.")
+        return
 
-        encontrado = procesar_baja(arch, aux, id_buscar)
-        if not encontrado:
-            print("\nNo se encontró ningún cliente con ese ID.")
+    cliente = clientes[id_str]
+    if cliente["estado"].lower() == "inactive":
+        print("El cliente ya se encuentra dado de baja.")
+        return
 
-    finally:
-        cerrar_archivos(arch, aux)
-        reemplazar_archivo(ruta_original, ruta_aux)
-
-
-
+    cliente["estado"] = "Inactive"
+    guardar_json(ruta_archivo, clientes)
+    print("Cliente dado de baja correctamente.")
 
 def submenu_clientes():
     opcion = 0
+    encabezados_submenu_clientes = extraer_encabezado_submenu_clientes()
     while opcion != -1:
         print("---"* 10)
         print("Submenú Clientes")
@@ -278,16 +170,16 @@ def submenu_clientes():
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
-            agregar_cliente(matriz_clientes)
+            agregar_cliente()
             enter = input("Cliente agregado exitosamente. Volviendo a menu...")
         elif opcion == 2:  # Modificar cliente
-            modificar_cliente(matriz_clientes, matriz_obras_sociales, encabezados_obras_sociales)
+            modificar_cliente()
             enter = input("Cliente modificado exitosamente. Volviendo a menu...")
         elif opcion == 3:  # Dar baja cliente
-            baja_cliente(matriz_clientes)
+            baja_cliente()
             enter = input("Cliente eliminado exitosamente. Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz_clientes(encabezados_clientes,matriz_clientes)
+            mostrar_matriz_clientes("clientes.json")
     enter = input(" Volviendo a menu...")
 
 def ordenar_clientes_por_nombre(matriz_clientes):

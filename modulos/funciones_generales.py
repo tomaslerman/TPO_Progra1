@@ -5,6 +5,17 @@ def validar_opcion(opcion,inicio,fin,encabezado):
         opcion=int(input("Ingrese nuevamente una opcion: "))
     return opcion
 
+def extraer_encabezado_submenu_clientes():
+    try:
+        with open("encabezados_modulos.json", "r") as archivo:
+            import json
+            datos = json.load(archivo)
+            encabezados_submenu_clientes = datos["encabezados_submenu_clientes"]
+            return encabezados_submenu_clientes
+    except FileNotFoundError:
+        print("Error: No se encontró el archivo de encabezados.")
+        return []
+
 def mostrar_encabezado(encabezado):
     for i in range(len(encabezado)):
         print(encabezado[i])
