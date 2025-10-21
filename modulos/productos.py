@@ -201,6 +201,7 @@ def buscar_producto(archivo):
         print(" El archivo no existe.\n")
 
 def detalle_medicamento(matriz):
+    encabezados_productos = extraer_encabezado("encabezados_productos")
     try:
         arch_productos = open("productos.txt", "r", encoding="utf-8")
         matriz_productos = [linea.strip().split(";") for linea in arch_productos]
