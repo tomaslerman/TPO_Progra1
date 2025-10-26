@@ -1,7 +1,7 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, dar_baja_elementos, mostrar_matriz, fechaYvalidacion, buscar_id
 from .datos_de_prueba import *
 from .recetas import agregar_receta
-
+import json
 def submenu_ventas():
     opcion = 0
     while opcion != -1:
@@ -83,14 +83,74 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
     print(f"Total de la venta: ${total}")
     return total
 
+def obtener_obra_social_cliente(id_cliente):
+    """
+    Devuelve el ID de la obra social asociada a un cliente,
+    leyendo los datos desde clientes.json.
+    """
+    try:
+        with open("clientes.json", "r", encoding="utf-8") as archivo:
+            clientes = json.load(archivo)   # deserialización JSON → dict
+    except FileNotFoundError:
+        print("Error: el archivo de clientes no existe.")
+        return None
+    except json.JSONDecodeError:
+        print("Error: formato JSON inválido en clientes.json.")
+        return None
+    except OSError:
+        print("Error al abrir clientes.json.")
+        return None
+
+    cliente = clientes.get(str(id_cliente))
+    if cliente is None:
+        print("No existe un cliente con ese ID.")
+        return None
+
+    return cliente["obra_social"]
+
+
 def buscar_descuento_obra_social(id_cliente):
-    pos_cliente = buscar_id(matriz_clientes, id_cliente)
-    if pos_cliente != -1:
-        id_obra_social = matriz_clientes[pos_cliente][1]
-        pos_obra_social = buscar_id(matriz_obras_sociales, id_obra_social)
-        if pos_obra_social != -1:
-            return matriz_obras_sociales[pos_obra_social][2]  # Retorna el porcentaje de descuento
-    return 0  # Si no tiene obra social o no se encuentra, no hay descuento
+    """
+    Busca el descuento de la obra social del cliente indicado,
+    leyendo obras_sociales.json y clientes.json.
+    """
+    # 1️⃣ Obtener el ID de la obra social desde clientes.json
+    id_obra_social = obtener_obra_social_cliente(id_cliente)
+    if id_obra_social is None:
+        return 0
+
+    # 2️⃣ Abrir y leer el archivo de obras sociales
+    try:
+        with open("obras_sociales.json", "r", encoding="utf-8") as archivo:
+            obras_sociales = json.load(archivo)   # deserialización JSON → dict
+    except FileNotFoundError:
+        print("Error: el archivo de obras sociales no existe.")
+        return 0
+    except json.JSONDecodeError:
+        print("Error: formato JSON inválido en obras_sociales.json.")
+        return 0
+    except OSError:
+        print("Error al abrir obras_sociales.json.")
+        return 0
+
+    # 3️⃣ Relacionar el ID con el nombre de la obra social
+    # Según el enunciado: 1=Osde, 2=Hospitalitaliano, 3=Medife, 4=Omint, 5=Osecac
+    relacion_id_nombre = {
+        "1": "Osde",
+        "2": "Hospitalitaliano",
+        "3": "Medife",
+        "4": "Omint",
+        "5": "Osecac"
+    }
+
+    nombre_obra = relacion_id_nombre.get(str(id_obra_social))
+    if nombre_obra is None:
+        print("El cliente no tiene una obra social válida.")
+        return 0
+
+    # 4️⃣ Obtener el descuento desde obras_sociales.json
+    descuento = obras_sociales.get(nombre_obra, 0)
+    return descuento
 
 def aplicar_descuento(total, id_cliente, buscar_descuento_obra_social):
     descuento = buscar_descuento_obra_social(id_cliente)
