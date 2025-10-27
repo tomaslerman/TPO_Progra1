@@ -1,0 +1,38 @@
+[
+    {
+        "codigo": 1,
+        "nombre": "Tiarix",
+        "stock": 12,
+        "precio": 2300
+    },
+    {
+        "codigo": 2,
+        "nombre": "Paracetamol",
+        "stock": 50,
+        "precio": 1500
+    },
+    {
+        "codigo": 3,
+        "nombre": "Ibuprofeno",
+        "stock": 30,
+        "precio": 1800
+    },
+    {
+        "codigo": 4,
+        "nombre": "Amoxicilina",
+        "stock": 20,
+        "precio": 2500
+    },
+    {
+        "codigo": 5,
+        "nombre": "Cetirizina",
+        "stock": 40,
+        "precio": 1600
+    },
+    {
+        "codigo": 6,
+        "nombre": "Alplax",
+        "stock": 7,
+        "precio": 5000
+    }
+]

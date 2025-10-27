@@ -148,6 +148,35 @@ def buscar_id(matriz,dato):
         i+=1    
     return pos
 
+def buscar_id_json(archivo, codigo):
+    
+    try:
+        with open(archivo, "r", encoding="UTF-8") as arch:
+            productos = json.load(arch)
+        for i, producto in enumerate(productos):
+            if "codigo" in producto and str(producto["codigo"]) == str (codigo):
+                return i, producto
+        return -1, None
+    except (FileNotFoundError, json.JSONDecodeError):
+        return -1,None
+
+def mostrar_datos(archivo,modo):
+    try:
+        with open (archivo,modo,encoding="UTF-8")as datos:
+            productos=json.load(datos)
+            print("--------------------")
+            print("Datos de Productos:")
+            print("---------------------")
+            print(f'{"|Codigo|":^8}  {"|Medicamento|":^20} {"|Stock|":^10} {"|Precio|":^10}')  
+            for pro in productos:
+                prec=f"${pro["precio"]}" 
+                print(f"{pro["codigo"]:^8}{pro["nombre"]:^20} {pro["stock"]:^15} {prec:^3}")
+    except(FileNotFoundError,OSError) as error:
+        print(f"Error{error}")
+
+
+
+
 def dar_baja_elementos(matriz):
     id_elemento = int(input("Ingrese el ID: "))
     pos = buscar_id(matriz,id_elemento)
