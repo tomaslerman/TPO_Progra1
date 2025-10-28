@@ -17,6 +17,16 @@ def extraer_encabezado_submenu(key):
         print("Error: No se encontró el archivo de encabezados.")
         return []
 
+def extraer_encabezado_busquedas(key):
+    try:
+        with open("encabezados_busquedas.json", "r") as archivo:
+            datos = json.load(archivo)
+            encabezado = datos[key]
+            return encabezado
+    except FileNotFoundError:
+        print("Error: No se encontró el archivo de encabezados.")
+        return []
+
 def extraer_encabezado(key):
     try:
         with open("encabezados_modulos.json", "r") as archivo:

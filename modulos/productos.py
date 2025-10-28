@@ -1,5 +1,5 @@
 
-from .funciones_generales import validar_mayor_que,buscar_id_json,mostrar_matriz_cuadro, mostrar_encabezado,mostrar_datos, validar_opcion, extraer_encabezado_submenu
+from .funciones_generales import buscar_id_json,mostrar_matriz_cuadro, mostrar_encabezado,mostrar_datos, extraer_encabezado_submenu
 import re
 import json
 

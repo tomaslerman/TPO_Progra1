@@ -1,14 +1,17 @@
-from .funciones_generales import buscar_id
+from .funciones_generales import buscar_id, mostrar_encabezado, extraer_encabezado_busquedas
 import re
+from functools import reduce
+
 def submenu_busquedas():
     opcion = 0
     while opcion != -1:
-        print("---"* 10)
+        encabezados_submenu_busquedas = extraer_encabezado_busquedas("busquedas")
+    archivo = "producto.json"
+    while True:
+        print("---" * 10)
         print("Submenú Búsquedas")
-        print("---"* 10)
-        print("1. Ventas de un cliente específico")
-        print("2. Ventas de un producto específico")
-        print("-1. Volver al menú principal")
+        print("---" * 10)
+        mostrar_encabezado(encabezados_submenu_busquedas)
         try:
             opcion = int(input("Seleccione una opción: "))
         except ValueError:
@@ -127,7 +130,7 @@ def ventas_de_x_cliente2(id_cliente): #versión 2.0
 
     ventas_cliente = list(filter(lambda v: v["id_cliente"] == id_cliente, ventas_dict))
     montos = list(map(lambda v: v["total"], ventas_cliente))
-    total_gastado = re.reduce(lambda acc, x: acc + x, montos, 0)
+    total_gastado = reduce(lambda acc, x: acc + x, montos, 0)
     ultimas3 = ventas_cliente[-3:]
     print(f"Cliente {id_cliente} gastó un total de: ${total_gastado:.2f}")
     print("Últimas 3 ventas:")
