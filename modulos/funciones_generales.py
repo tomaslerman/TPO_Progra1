@@ -204,3 +204,37 @@ def dar_baja_elementos(matriz):
         print("Cancelando operación")
         enter = input("Volviendo a menu...")
     
+def open_json_file(archivo):
+    try:
+        with open(archivo, "r", encoding="utf-8") as file:
+            data = json.load(file)
+        return data
+    except FileNotFoundError:
+        print(f" El archivo {archivo} no existe.\n")
+        return []
+    except json.JSONDecodeError:
+        print(f" El archivo {archivo} no tiene un formato válido.\n")
+        return []
+
+
+def leer_ventas():
+    """Lee ventas.txt y devuelve una lista de listas con los datos."""
+    ventas = []
+    try:
+        with open("ventas.txt", "r", encoding="utf-8") as archivo:
+            for linea in archivo:
+                partes = linea.strip().split(";")
+                if len(partes) == 4:
+                    try:
+                        id_venta = int(partes[0])
+                        fecha = partes[1]
+                        id_cliente = int(partes[2])
+                        total = float(partes[3])
+                        ventas.append([id_venta, fecha, id_cliente, total])
+                    except ValueError:
+                        print("Línea con datos no válidos, se omitirá:", linea)
+    except FileNotFoundError:
+        print("Error: no se encontró el archivo ventas.txt.")
+    except OSError:
+        print("Error al abrir ventas.txt.")
+    return ventas

@@ -60,17 +60,6 @@ def submenu_inventario():
             print("Error: Debe ingresar un número entero válido.")
     enter = input("Presione Enter para volver al menu principal...")
 
-def open_json_file(archivo):
-    try:
-        with open(archivo, "r", encoding="utf-8") as file:
-            data = json.load(file)
-        return data
-    except FileNotFoundError:
-        print(f" El archivo {archivo} no existe.\n")
-        return []
-    except json.JSONDecodeError:
-        print(f" El archivo {archivo} no tiene un formato válido.\n")
-        return []
 
 def agregar_productos(archivo):
     productos = open_json_file(archivo)

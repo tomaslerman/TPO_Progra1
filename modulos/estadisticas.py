@@ -1,4 +1,5 @@
-from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar_opcion
+from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar_opcion, open_json_file, leer_ventas
+import json
 
 def submenu_reportes():
     opcion = 0
@@ -23,3 +24,84 @@ def estadisticas_ventas(matriz):
     print(f"Total vendido: ${suma_total}")
     print(f"Promedio por venta: ${promedio:.2f}")
 
+#recursividad: minimo precio de producto 
+
+
+def contar_clientes_activos(clientes, claves=None, i=0):
+    """
+    Cuenta recursivamente la cantidad de clientes activos en el diccionario.
+    """
+    if claves is None:
+        claves = list(clientes.keys())
+
+    # Caso base: cuando llegamos al final de la lista de claves
+    if i == len(claves):
+        return 0
+    else:
+        clave_actual = claves[i]
+        cliente = clientes[clave_actual]
+        activo = 1 if cliente["estado"].lower() == "active" else 0
+        return activo + contar_clientes_activos(clientes, claves, i + 1)
+
+def total_clientes_activos():
+    """
+    Lee el archivo clientes.json y usa la función recursiva para contar los activos.
+    """
+    try:
+        with open("clientes.json", "r", encoding="utf-8") as archivo:
+            clientes = json.load(archivo)   
+    except FileNotFoundError:
+        print("Error: el archivo clientes.json no existe.")
+        return 0
+    except json.JSONDecodeError:
+        print("Error: formato JSON inválido.")
+        return 0
+    except OSError:
+        print("Error al abrir clientes.json.")
+        return 0
+
+    return contar_clientes_activos(clientes)
+
+
+def sumar_totales_cliente(ventas, id_cliente, i=0):
+    """Suma recursivamente los totales de ventas del cliente indicado."""
+    if i == len(ventas):
+        return 0
+    else:
+        venta = ventas[i]
+        total_actual = venta[3] if venta[2] == id_cliente else 0
+        return total_actual + sumar_totales_cliente(ventas, id_cliente, i + 1)
+    
+
+def total_gastado_por_cliente():
+    """Pide un ID, valida que el cliente exista y esté activo, y muestra su total gastado."""
+    clientes = open_json_file(clientes.json)
+    if len(clientes) == 0:
+        print("No hay clientes cargados.")
+        return
+
+    ventas = leer_ventas()
+    if len(ventas) == 0:
+        print("No hay ventas cargadas.")
+        return
+
+    # pedir ID y validar
+    while True:
+        try:
+            id_cliente = int(input("Ingrese el ID del cliente: "))
+            break
+        except ValueError:
+            print("Error: debe ingresar un número entero.")
+
+    cliente = clientes.get(str(id_cliente))
+    if cliente is None:
+        print("El cliente no existe.")
+        return
+
+    if cliente["estado"].lower() != "active":
+        print(f"El cliente {cliente['nombre']} está inactivo. No tiene ventas activas.")
+        return
+
+    total = sumar_totales_cliente(ventas, id_cliente)
+    print(f"El cliente {cliente['nombre']} gastó un total de: ${total:.2f}")
+    return total
