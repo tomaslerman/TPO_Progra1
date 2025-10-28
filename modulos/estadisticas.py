@@ -1,4 +1,4 @@
-from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar_opcion, open_json_file, leer_ventas
+from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar_opcion, open_json_file, leer_ventas, leer_productos 
 import json
 
 def submenu_reportes():
@@ -105,3 +105,30 @@ def total_gastado_por_cliente():
     total = sumar_totales_cliente(ventas, id_cliente)
     print(f"El cliente {cliente['nombre']} gastó un total de: ${total:.2f}")
     return total
+
+#revisar:
+
+def producto_minimo_precio(productos, i=0):
+    """
+    Devuelve el producto con el precio mínimo de forma recursiva.
+    """
+    if i == len(productos) - 1:
+        return productos[i]  # caso base
+
+    minimo_restante = producto_minimo_precio(productos, i + 1)
+
+    if productos[i]["precio"] <= minimo_restante["precio"]:
+        return productos[i]
+    else:
+        return minimo_restante
+
+def buscar_producto_minimo():
+    """Busca el producto con el precio más bajo e imprime los datos."""
+    productos = leer_productos()
+    if len(productos) == 0:
+        print("No hay productos cargados.")
+        return None
+
+    producto_min = producto_minimo_precio(productos)
+    print(f"Producto con menor precio: {producto_min['nombre']} (${producto_min['precio']})")
+    return producto_min["codigo"]

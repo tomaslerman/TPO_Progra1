@@ -238,3 +238,19 @@ def leer_ventas():
     except OSError:
         print("Error al abrir ventas.txt.")
     return ventas
+
+def leer_productos():
+    """Lee producto.json y devuelve la lista de productos."""
+    try:
+        with open("producto.json", "r", encoding="utf-8") as archivo:
+            productos = json.load(archivo)  # deserializa JSON → lista de diccionarios
+            return productos
+    except FileNotFoundError:
+        print("Error: no se encontró el archivo producto.json.")
+        return []
+    except json.JSONDecodeError:
+        print("Error: formato JSON inválido en producto.json.")
+        return []
+    except OSError:
+        print("Error al abrir producto.json.")
+        return []
