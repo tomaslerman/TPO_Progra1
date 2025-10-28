@@ -1,4 +1,4 @@
-from .funciones_generales import buscar_id_json,mostrar_matriz_cuadro, mostrar_encabezado,mostrar_datos, extraer_encabezado_submenu, buscar_id, extraer_encabezado
+from .funciones_generales import mostrar_matriz_cuadro, mostrar_encabezado,mostrar_datos, extraer_encabezado_submenu, buscar_id, extraer_encabezado, open_json_file
 import re
 import json
 
@@ -60,29 +60,26 @@ def submenu_inventario():
             print("Error: Debe ingresar un número entero válido.")
     enter = input("Presione Enter para volver al menu principal...")
 
-def open_json_file(archivo):
-    try:
-        with open(archivo, "r", encoding="utf-8") as file:
-            data = json.load(file)
-        return data
-    except FileNotFoundError:
-        print(f" El archivo {archivo} no existe.\n")
-        return []
-    except json.JSONDecodeError:
-        print(f" El archivo {archivo} no tiene un formato válido.\n")
-        return []
-
 def agregar_productos(archivo):
     productos = open_json_file(archivo)
+    descripciones = [prod['nombre'] for prod in productos]
     id = len(productos) + 1
     try:
         nombre = input(str("Ingrese el nombre del producto: "))
     except ValueError:
         print(" Error: Ingrese un nombre válido.")
-    pos,existe_prod = buscar_id_json(archivo,nombre)
-    if existe_prod:
+    if nombre in descripciones:
+        existe_prod = True
+        pos = descripciones.index(nombre) + 1
+    while existe_prod:
         print(f'El producto ya existe en el inventario, id: {pos}')
-        return
+        try:
+            nombre = input(str("Ingrese el nombre del producto: "))
+        except ValueError:
+            print(" Error: Ingrese un nombre válido.")
+        if nombre in descripciones:
+            existe_prod = True
+            pos = descripciones.index(nombre) + 1
     try:
         stock = int(input("Ingrese el stock del producto: "))
         if stock < 0:
@@ -176,64 +173,75 @@ def mostrar_datos(archivo, modo):
 
 def dar_baja_productos(archivo):
     productos = open_json_file(archivo)
+    if not productos:
+        print("No hay productos para dar de baja.")
+        return
+    print("\n Lista actual de productos:")
+    print("-"*50)
+    mostrar_datos(archivo, "r")
+    print("-"*50)
+    codigos = [prod['codigo'] for prod in productos]
     try:
-        while True:
-            print("\n Lista actual de productos:")
-            print("-"*50)
-            mostrar_datos(archivo, "r")
-            print("-"*50)
-            codigo=input("\nIngrese el código del producto a dar de baja (o ENTER para cancelar): ")
-            if codigo == "":
+        codigo = int(input("\nIngrese el código del producto a dar de baja (o 0 para cancelar): "))
+        if codigo == 0:
                 print("Operación cancelada.\n")
-                break
-            encontrado=False
-            codigos = [prod['codigo'] for prod in productos]
-            if codigo in codigos:
-                pos = codigos.index(codigo)
-                print(pos)
-                confirmar=input(f"¿Está seguro que desea dar de baja el producto {productos[pos]['nombre']}? (s/n): ").strip().lower()
-                if confirmar == 's':
-                    productos.pop(pos)
-                    print("Producto dado de baja correctamente.\n")
-                else:
+                return
+    except ValueError:
+        print("Código no válido. Intente nuevamente.\n")
+    while codigo not in codigos:
+        print("Código no encontrado. Intente nuevamente.\n")
+        try:
+            codigo = int(input("\nIngrese el código del producto a dar de baja (o 0 para cancelar): "))
+            if codigo == 0:
                     print("Operación cancelada.\n")
-                    break
-            if not encontrado:
-                print("Código no encontrado. Intente nuevamente.\n")
+                    return
+        except ValueError:
+            print("Código no válido. Intente nuevamente.\n")
+    pos = codigos.index(codigo)
+    try:
+        confirmar=input(f"¿Está seguro que desea dar de baja el producto {productos[pos]['nombre']}? (s/n): ").lower()
+    except ValueError:
+        print(" Error: Ingresó una opción no válida. Volviendo al submenu.\n")
+        return
+    if confirmar == 's':
+        productos.pop(pos)
         with open(archivo, "w", encoding="utf-8") as arch:
-            json.dump(productos, arch, indent=4)
+            json.dump(productos, arch, ensure_ascii=False, indent=4)
+        print("Producto dado de baja correctamente.\n")
         print("Todos los cambios han sido guardados.")
-    except OSError as mensaje:
-        print(f"Error al abrir o escribir en el archivo: ", mensaje)
-
+    else:
+        print("Operación cancelada.\n")
 
 def buscar_producto(archivo):
-    
-    codigo_buscar = input("Ingrese el código del producto a buscar: ")
+    productos = open_json_file(archivo)
     try:
-        with open(archivo, "r", encoding="utf-8") as arch:
-            encontrado = False
-            for linea in arch:
-                codigo, nombre, stock, precio = linea.strip().split(";")
-                if codigo == codigo_buscar:
-                    print(f" Encontrado: {nombre} | Stock: {stock} | Precio: ${precio}\n")
-                    encontrado = True
-                    break
-            if not encontrado:
-                print(" Producto no encontrado.\n")
-    except FileNotFoundError:
-        print(" El archivo no existe.\n")
+        id_buscar = int(input("Ingrese el ID del producto a buscar: "))
+    except ValueError:
+        print(" Error: Ingrese un número válido para el ID.")
+        return
+    codigos = [prod['codigo'] for prod in productos]
+    pos_id = codigos.index(id_buscar) if id_buscar in codigos else -1
+    while pos_id == -1:
+        try:
+            id_buscar = int(input("Error. Ingrese el ID del producto a buscar: "))
+        except ValueError:
+            print(" Error: Ingrese un número válido para el ID.")
+            return
+        pos_id = codigos.index(id_buscar) if id_buscar in codigos else -1
+    print(f"Producto encontrado: ID: {productos[pos_id]['codigo']}, Nombre: {productos[pos_id]['nombre']}, Stock: {productos[pos_id]['stock']}, Precio: ${productos[pos_id]['precio']:.2f}")
 
 def detalle_medicamento(archivo): ##### falta modificarrrrr
     encabezados_productos = extraer_encabezado("encabezados_productos")
     try:
-        arch_productos = open("productos.txt", "r", encoding="utf-8")
+        arch_productos = open_json_file(archivo)
         matriz_productos = [linea.strip().split(";") for linea in arch_productos]
     except FileNotFoundError:
         print("Error! El archivo de productos no existe.")
         return
+    print("")
     print("Listado de medicamentos:")
-    print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
+    mostrar_datos(archivo, "r")
+    print("")
     id_med = int(input("Ingrese ID del medicamento a saber su detalle: "))
     pos_id = buscar_id(archivo, id_med)
 

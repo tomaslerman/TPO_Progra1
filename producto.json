@@ -34,11 +34,5 @@
         "nombre": "Alplax",
         "stock": 7,
         "precio": 5000
-    },
-    {
-        "codigo": 7,
-        "nombre": "Buscapina",
-        "stock": 10,
-        "precio": 1300.0
     }
 ]
