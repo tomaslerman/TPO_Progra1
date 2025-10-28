@@ -26,60 +26,91 @@ def submenu_ventas():
            # mostrar_matriz(encabezados_ventas, matriz_ventas)
     enter = input("Volviendo al menú principal...")
 
-def agregar_venta_y_detalle(matriz):
+def agregar_venta_y_detalle(matriz): 
     venta = []
     id_venta = len(matriz) + 1
     fecha = fechaYvalidacion()
     id_cliente = int(input("Ingrese el ID del cliente: "))
-    pos_cliente = buscar_id(matriz_clientes, id_cliente)
+    pos_cliente = buscar_id(matriz_clientes, id_cliente) 
+    
     while pos_cliente == -1:
         print("Error! El ID del cliente es inválido")
         id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
         pos_cliente = buscar_id(matriz_clientes, id_cliente)
+    
     print ("Ingresando a detalle de venta...")
     enter = input("Presione Enter para continuar...")
-    total = agregar_detalle_de_venta(id_cliente, id_venta, matriz_detalle_ventas)
+    total = agregar_detalle_de_venta(id_cliente, id_venta)
+    
     descuento = buscar_descuento_obra_social(id_cliente)
     total2 = aplicar_descuento(total, id_cliente, descuento)
     venta = [id_venta, fecha, id_cliente, total2]
-    matriz.append(venta)
+    matriz.append(venta) 
+    print("Venta agregada exitosamente.")
 
-def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
-    detalle_venta = []
+def agregar_detalle_de_venta(id_cliente, id_venta):
+    try:
+        with open('productos.json', 'r', encoding='utf-8') as f:
+            productos_data = json.load(f)
+    except FileNotFoundError:
+        print("Error: El archivo 'productos.json' no se encontró.")
+        productos_data = {}
+    except json.JSONDecodeError:
+        print("Error: El archivo 'productos.json' está dañado.")
+        productos_data = {}
+
+    if not productos_data:
+        print("Error: No hay datos de productos cargados. No se puede continuar.")
+        return 0 
+
     total = 0
-    producto = int(input("Ingrese el código del producto: "))
-    while (producto!=-1) and (producto <1 or producto > len(matriz_productos)):
+    producto_id = input("Ingrese el código del producto (-1 para salir): ")
+
+    while (producto_id != "-1") and (producto_id not in productos_data):
         print("Error! El código del producto es inválido.")
-        producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar productos: "))
-    while producto != -1:
+        producto_id = input("Ingrese nuevamente el código del producto o -1: ")
+
+    while producto_id != "-1":
+        producto_info = productos_data[producto_id]
+        
         receta = input("¿El cliente tiene receta? (s/n): ").lower()
         while receta not in ['s', 'n']:
             print("Error! Opción inválida.")
             receta = input("¿El cliente tiene receta? (s/n): ").lower()
+        
         if receta == 's':
-            id_receta, cantidad = agregar_receta(id_cliente,matriz_productos)
-            subtotal = matriz_productos[producto][3] * cantidad
-            detalle_venta = [id_venta, id_receta, subtotal]
-            matriz.append(detalle_venta)
+            id_receta, cantidad = agregar_receta(id_cliente)
+            subtotal = producto_info["precio"] * cantidad
+            
+        
+            linea_a_escribir = f"{id_venta},{id_receta},{subtotal}\n"
+            with open('ventas.txt', 'a', encoding='utf-8') as f:
+                f.write(linea_a_escribir)
+                
             total += subtotal
-            producto = int(input("Ingrese el código del producto o -1 para dejar de agregar productos: "))
-            while (producto!=-1) and (producto <1 or producto > len(matriz_productos)):
-                print("Error! El código del producto es inválido.")
-                producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar productos: "))
+        
         else:
             cantidad = int(input("Ingrese la cantidad del producto: "))
-            while cantidad > matriz_productos[producto][2]:
-                print(f"Error! Sólo hay {matriz_productos[producto][2]} unidades disponibles.")
+            
+            while cantidad > producto_info["stock"]:
+                print(f"Error! Sólo hay {producto_info['stock']} unidades disponibles.")
                 cantidad = int(input("Vuelva a ingresar la cantidad del producto: "))
-            subtotal = matriz_productos[producto][3] * cantidad
-            detalle_venta = [id_venta, "VL", subtotal]
-            matriz.append(detalle_venta)
+            
+            subtotal = producto_info["precio"] * cantidad
+            
+           
+            linea_a_escribir = f"{id_venta},VL,{subtotal}\n"
+            with open('ventas.txt', 'a', encoding='utf-8') as f:
+                f.write(linea_a_escribir)
+
             total += subtotal
-            producto = int(input("Ingrese el código del producto o -1 para dejar de agregar productos: "))
-            while (producto!=-1) and (producto <1 or producto > len(matriz_productos)):
-                print("Error! El código del producto es inválido.")
-                producto = int(input("Ingrese nuevamente el código del producto o -1 para dejar de agregar productos: "))
-    print("Detalles de la venta agregados correctamente.")
+        
+        producto_id = input("Ingrese el código del producto (-1 para salir): ")
+        while (producto_id != "-1") and (producto_id not in productos_data):
+            print("Error! El código del producto es inválido.")
+            producto_id = input("Ingrese nuevamente el código del producto o -1: ")
+
+    print("Detalles de la venta guardados en ventas.txt.")
     print(f"Total de la venta: ${total}")
     return total
 
@@ -90,7 +121,7 @@ def obtener_obra_social_cliente(id_cliente):
     """
     try:
         with open("clientes.json", "r", encoding="utf-8") as archivo:
-            clientes = json.load(archivo)   # deserialización JSON → dict
+            clientes = json.load(archivo)  
     except FileNotFoundError:
         print("Error: el archivo de clientes no existe.")
         return None
@@ -114,7 +145,6 @@ def buscar_descuento_obra_social(id_cliente):
     Busca el descuento de la obra social del cliente indicado,
     leyendo obras_sociales.json y clientes.json.
     """
-    # 1️⃣ Obtener el ID de la obra social desde clientes.json
     id_obra_social = obtener_obra_social_cliente(id_cliente)
     if id_obra_social is None:
         return 0
