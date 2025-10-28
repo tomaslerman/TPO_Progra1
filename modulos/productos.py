@@ -1,5 +1,5 @@
 
-from .funciones_generales import buscar_id_json,mostrar_matriz_cuadro, mostrar_encabezado,mostrar_datos, extraer_encabezado_submenu
+from .funciones_generales import buscar_id_json,mostrar_matriz_cuadro, mostrar_encabezado,mostrar_datos, extraer_encabezado_submenu, buscar_id, extraer_encabezado
 import re
 import json
 
@@ -45,7 +45,7 @@ def submenu_inventario():
                     input("Presione Enter para continuar")
             if opcion == 5:
                 try: 
-                    detalle_medicamento(matriz)
+                    detalle_medicamento(archivo)
                 except ValueError:
                     print(" Error al mostrar detalles de medicamentos")        
             if opcion == -1:
@@ -242,7 +242,7 @@ def buscar_producto(archivo):
     except FileNotFoundError:
         print(" El archivo no existe.\n")
 
-def detalle_medicamento(matriz): ##### falta modificarrrrr
+def detalle_medicamento(archivo): ##### falta modificarrrrr
     encabezados_productos = extraer_encabezado("encabezados_productos")
     try:
         arch_productos = open("productos.txt", "r", encoding="utf-8")
@@ -253,21 +253,21 @@ def detalle_medicamento(matriz): ##### falta modificarrrrr
     print("Listado de medicamentos:")
     print(mostrar_matriz_cuadro(encabezados_productos, matriz_productos))
     id_med = int(input("Ingrese ID del medicamento a saber su detalle: "))
-    pos_id = buscar_id(matriz, id_med)
+    pos_id = buscar_id(archivo, id_med)
 
     while pos_id == -1:
         id_med = int(input("Error. Ingrese ID del medicamento a saber su detalle: "))
-        pos_id = buscar_id(matriz, id_med)
-    print("Medicamento seleccionado :",matriz[pos_id][1])
-    if re.findall("zina$", matriz[pos_id][1].lower()):
+        pos_id = buscar_id(archivo, id_med)
+    print("Medicamento seleccionado :",archivo[pos_id][1])
+    if re.findall("zina$", archivo[pos_id][1].lower()):
         print("Medicamento antihistamínico de segunda generacion,uso para sintomas de alergias.") 
-    elif re.findall("mol$", matriz[pos_id][1].lower()):
+    elif re.findall("mol$", archivo[pos_id][1].lower()):
         print("Medicamento analgesico y antipiretico,uso para dolor leve a moderado y fiebre.")
-    elif re.findall("eno$", matriz[pos_id][1].lower()):
+    elif re.findall("eno$", archivo[pos_id][1].lower()):
         print("Medicamento reduce la inflamacion en tejidos. ")
-    elif re.findall("zol$", matriz[pos_id][1].lower()):
+    elif re.findall("zol$", archivo[pos_id][1].lower()):
         print("Medicamento para reducir la produccion de acido en el estomago.")
-    elif re.findall("lina$", matriz[pos_id][1].lower()):
+    elif re.findall("lina$", archivo[pos_id][1].lower()):
         print("Medicamento para tratar infecciones bacterianas.")
     else:
         print("No se puede saber especificamente su tipo")
