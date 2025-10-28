@@ -1,4 +1,3 @@
-
 from .funciones_generales import buscar_id_json,mostrar_matriz_cuadro, mostrar_encabezado,mostrar_datos, extraer_encabezado_submenu, buscar_id, extraer_encabezado
 import re
 import json
@@ -15,215 +14,198 @@ def submenu_inventario():
 
         try:
             opcion = int(input("Seleccione una opción: "))
-            if opcion == 1:
+            while (opcion > 0 and opcion < 5) and opcion != -1:
+                if opcion == 1:
+                    try:
+                        agregar_productos(archivo)
+                        input("Producto agregado exitosamente, presione Enter para continuar ...")
+                    except Exception as e:
+                        print(f"Error al agregar producto: {e}")
+                        input("Presione Enter para continuar...")
+                        
+                elif opcion == 2:
+                    try:
+                        modificar_productos(archivo)
+                        input("Producto modificado exitosamente, presione Enter para continuar...")
+                    except Exception as e:
+                        print(f"Error al modificar producto: {e}")
+                        input("Presione Enter para continuar...")
+                elif opcion == 3:
+                    try:
+                        dar_baja_productos(archivo)
+                        input("Producto eliminado exitosamente ...")
+                    except Exception as e:
+                        print(f"Error al dar de baja el producto: {e}")
+                        input("Presione Enter para continuar...")    
+                elif opcion == 4:
+                    try:
+                        mostrar_datos("producto.json","r")
+                    except ValueError:
+                        print("Error al mostrar datos")
+                        input("Presione Enter para continuar")
+                elif opcion == 5:
+                    try: 
+                        detalle_medicamento(archivo)
+                    except ValueError:
+                        print(" Error al mostrar detalles de medicamentos")
+                print("---" * 10)
+                print("Submenú Inventario")
+                print("---" * 10)
+                mostrar_encabezado(encabezados_submenu_inventario)   
                 try:
-                    agregar_productos(archivo)
-                    input("Producto agregado exitosamente, presione Enter para continuar ...")
-                except Exception as e:
-                    print(f"Error al agregar producto: {e}")
-                    input("Presione Enter para continuar...")
-                    
-            if opcion == 2:
-                try:
-                    modificar_productos(archivo)
-                    input("Producto modificado exitosamente, presione Enter para continuar...")
-                except Exception as e:
-                    print(f"Error al modificar producto: {e}")
-                    input("Presione Enter para continuar...")
-            if opcion == 3:
-                try:
-                    dar_baja_productos(archivo)
-                    input("Producto eliminado exitosamente ...")
-                except Exception as e:
-                    print(f"Error al dar de baja el producto: {e}")
-                    input("Presione Enter para continuar...")    
-            if opcion == 4:
-                try:
-                     mostrar_datos("producto.json","r")
+                    opcion = int(input("Seleccione una opción: "))  
                 except ValueError:
-                    print("Error al mostrar datos")
-                    input("Presione Enter para continuar")
-            if opcion == 5:
-                try: 
-                    detalle_medicamento(archivo)
-                except ValueError:
-                    print(" Error al mostrar detalles de medicamentos")        
-            if opcion == -1:
-                try:
-                    from .menu_p import menu_principal
-                    menu_principal()
-                except ValueError:
-                    print("Opcion fuera del rango")
-                       
+                    print("Error: Debe ingresar un número entero válido.")       
         except ValueError:
             print("Error: Debe ingresar un número entero válido.")
-             
+    enter = input("Presione Enter para volver al menu principal...")
+
+def open_json_file(archivo):
+    try:
+        with open(archivo, "r", encoding="utf-8") as file:
+            data = json.load(file)
+        return data
+    except FileNotFoundError:
+        print(f" El archivo {archivo} no existe.\n")
+        return []
+    except json.JSONDecodeError:
+        print(f" El archivo {archivo} no tiene un formato válido.\n")
+        return []
 
 def agregar_productos(archivo):
+    productos = open_json_file(archivo)
+    id = len(productos) + 1
     try:
-        try:
-            with open(archivo, "r", encoding="UTF-8") as arch:
-                productos=json.load(arch)
-                       
-        except (FileNotFoundError, OSError):
-            productos=[]  # si el archivo no existe, se creará más adelante
-       
-        print("\n--- Agregando producto ...")
-        while True:
-            try:
-                cod=int(input("Ingrese el código del medicamento: "))
-                pos,existe=buscar_id_json(archivo, cod)
-                if existe :
-                    print("Error! El código ya existe. Ingrese un código diferente.")
-                else:
-                    break
-            except ValueError:
-                print("Error! Debe ingresar un número entero para el código.")
-        while True:
-            try:
-                producto = input("Ingrese el nombre del medicamento a agregar : ").strip().capitalize()
-                pos,existe_prod=buscar_id_json(archivo, producto)
-                if existe_prod :
-                    print("Error! El nombre del medicamento ya existe. Ingrese un nombre diferente.")
-                else:
-                    break    
-            except ValueError:
-                print("Error! Debe ingresar un nombre válido para el medicamento.")    
-                
-        stock = input("Ingrese la cantidad en stock: ")
-        precio = input("Ingrese el precio unitario: $")
-
-        nuevo_producto={
-            "codigo": cod,
-            "nombre": producto,
-            "stock": stock,
-            "precio": precio
-            }
-        productos.append(nuevo_producto)
-
-        print("Producto agregado .\n")
-
-        # Ordenar por código antes de guardar
-        productos.sort(key=lambda x: int(x["codigo"]))
-
-        with open(archivo, "w", encoding="utf-8") as arch:
-            json.dump(productos, arch, indent=4, ensure_ascii=False)   #ensure_ascii evita la codificacion de esos caracteres en formato unicode dentro del JSON 
-
-        print("Archivo actualizado correctamente.\n")
+        nombre = input(str("Ingrese el nombre del producto: "))
+    except ValueError:
+        print(" Error: Ingrese un nombre válido.")
+    pos,existe_prod = buscar_id_json(archivo,nombre)
+    if existe_prod:
+        print(f'El producto ya existe en el inventario, id: {pos}')
+        return
+    try:
+        stock = int(input("Ingrese el stock del producto: "))
+        if stock < 0:
+            print(" Error: El stock no puede ser negativo.")
+            return
+    except ValueError:
+        print(" Error: Ingrese un número válido para el stock.")
+        return
+    try:
+        precio = float(input("Ingrese el precio del producto: "))
+        if precio < 0:
+            print(" Error: El precio no puede ser negativo.")
+            return
+    except ValueError:
+        print(" Error: Ingrese un número válido para el precio.")
+        return
+    nuevo_producto = {
+        "codigo": id,
+        "nombre": nombre,
+        "stock": stock,
+        "precio": precio
+    }
+    productos.append(nuevo_producto)
+    try:
+        with open(archivo, "w", encoding="utf-8") as file:
+            json.dump(productos, file, indent=4)
     except FileNotFoundError:
         print("El archivo no existe.")
     except OSError as mensaje:
         print(" Error al abrir o escribir en el archivo:", mensaje)
 
-
-def modificar_productos(archivo):
+def modificar_productos(archivo):    
+    productos = open_json_file(archivo)
+    codigos = [prod['codigo'] for prod in productos]
     try:
-        with open(archivo, "r", encoding="UTF-8") as arch:
-                productos=json.load(arch)
-        print("\n--- Modificando producto ...")
-        
-        if not productos:
-            print("No hay productos para modificar.")
+        id_modificar = int(input("Ingrese el ID del producto a modificar: "))
+    except ValueError:
+        print(" Error: Ingrese un número válido para el ID.")
+        return
+    while id_modificar not in codigos:
+        try:
+            id_modificar = int(input("Error. Ingrese el ID del producto a modificar: "))
+        except ValueError:
+            print(" Error: Ingrese un número válido para el ID.")
             return
-        
-        while True:
-            try:
-                codigo_existe=int(input("Ingrese nuevo codigo del producto, si desea ver los datos presione 0: "))
-                if codigo_existe==0:
-                    mostrar_datos("producto.json","r")
-                    continue
-                break
-            except ValueError:
-                    print("Error! Debe ingresar numeros enteros")
-        
-        indice,producto_encontrado=buscar_id_json(archivo,codigo_existe)
-        if indice == -1:
-            print("El código no existe en el archivo.")
-            return
-             
-        else:
-             print(f"Producto encontrado puede continuar el proceso:")
-        
-        nuevo_codigo_ingresado=int(input(f"Ingrese el nuevo código del medicamento [{producto_encontrado['codigo']}]: "))
-        nuevo_nombre = input(f"Ingrese el nuevo nombre del medicamento[{producto_encontrado['nombre']}]: ").strip().capitalize() 
-        nuevo_stock = input(f"Ingrese el nuevo stock [{producto_encontrado['stock']}]: ")
-        nuevo_precio = input(f"Ingrese el nuevo precio unitario [${producto_encontrado['precio']}]: $")
-        
-        if nuevo_codigo_ingresado:
-            try:
-                nuevo_cod_val=int(nuevo_codigo_ingresado)
-                for p in productos:
-                    if p!= producto_encontrado and int(p["codigo"]== nuevo_cod_val):
-                        print("No puede repetir el codigo ingrese otro nuevamente:")
-                        return
-                producto_encontrado["codigo"] = nuevo_cod_val
-            except ValueError:
-                print("Codigo invalido se mantendra el anterior")
-                
-        if nuevo_nombre:
-            try:
-                producto_encontrado["nombre"] = nuevo_nombre
-            except ValueError:
-                print(" Nombre invalido se mantendra el nombre anterior")
-        if nuevo_stock:
-            try:
-                producto_encontrado["stock"]=int(nuevo_stock)
-            except ValueError:
-                print("Stock invalido, se mantendra stock anterior.")
-        if nuevo_precio:
-            try:
-                producto_encontrado["precio"]=int(nuevo_precio)
-            except ValueError:
-                print("Precio invalido se mantendra precio anterior.")   
-        
-        productos[indice] = producto_encontrado     
-                   
-        productos.sort(key=lambda x: int(x["codigo"]))
-    
-        # Guardar nuevamente en el archivo
-        with open(archivo, "w", encoding="UTF-8") as arch:
-            json.dump(productos, arch, indent=4, ensure_ascii=False)
+    pos_id = codigos.index(id_modificar)
 
-        print("Producto modificado correctamente.\n")
-
+    try:
+        opcion_modificar = input("¿Qué desea modificar? (1. nombre/2. stock/3. precio): ")
+    except ValueError:
+        print(" Error: Ingrese una opción válida.")
+        return
+    if opcion_modificar == '1':
+        try:
+            nuevo_nombre = input("Ingrese el nuevo nombre del producto: ")
+            productos[pos_id]['nombre'] = nuevo_nombre
+        except ValueError:
+            print(" Error: Ingrese un nombre válido.")
+    elif opcion_modificar == '2':
+        try:
+            nuevo_stock = int(input("Ingrese el nuevo stock del producto: "))
+            productos[pos_id]['stock'] = nuevo_stock
+        except ValueError:
+            print(" Error: Ingrese un número válido para el stock.")
+    elif opcion_modificar == '3':
+        try:
+            nuevo_precio = float(input("Ingrese el nuevo precio del producto: "))
+            productos[pos_id]['precio'] = nuevo_precio
+        except ValueError:
+            print(" Error: Ingrese un número válido para el precio.")
+    try:
+        with open(archivo, "w", encoding="utf-8") as file:
+            json.dump(productos, file, indent=4)
     except FileNotFoundError:
         print("El archivo no existe.")
     except OSError as mensaje:
-        print("Error al abrir o escribir en el archivo:", mensaje)
-            
-def dar_baja_productos(archivo): #### falta modificarrrr
+        print(" Error al abrir o escribir en el archivo:", mensaje)
+
+def mostrar_datos(archivo, modo):
     try:
-        with open(archivo, "r", encoding="utf-8") as arch:
-            lineas = arch.readlines()
-        productos=[linea.strip().split(";") for linea in lineas]
+        with open(archivo, modo, encoding="UTF-8") as datos:
+            productos = json.load(datos)
+            print("\nLISTADO DE PRODUCTOS")
+            print(f'{"ID":<10}{"Descripción":<30}{"Stock":<6}{"Precio":<10}')
+
+            for prod in productos:
+                print(f"{prod['codigo']:<10}{prod['nombre']:<30}{prod['stock']:<6}${prod['precio']:<10.2f}")
+
+    except (FileNotFoundError, OSError) as error:
+        print(f'Error! {error}')
+
+def dar_baja_productos(archivo):
+    productos = open_json_file(archivo)
+    try:
         while True:
             print("\n Lista actual de productos:")
             print("-"*50)
-            for prod in productos:
-                print(f"Código: {prod[0]}, Medicamento: {prod[1]}, Stock: {prod[2]}, Precio Unitario: ${prod[3]}")
-                print("-"*50)
-            codigo=input("\nIngrese el código del producto a dar de baja (o enter para terminar): ")
+            mostrar_datos(archivo, "r")
+            print("-"*50)
+            codigo=input("\nIngrese el código del producto a dar de baja (o ENTER para cancelar): ")
             if codigo == "":
+                print("Operación cancelada.\n")
                 break
             encontrado=False
-            for prod in productos:
-                if prod[0]== codigo:
-                    encontrado=True
-                    confirmar=input(f"¿Está seguro que desea dar de baja el producto {prod[1]}? (s/n): ")
-                    if confirmar.lower() == 's':
-                        productos.remove(prod)
-                        print("Producto dado de baja correctamente.\n")
-                    else:
-                        print("Operación cancelada.\n")
+            codigos = [prod['codigo'] for prod in productos]
+            if codigo in codigos:
+                pos = codigos.index(codigo)
+                print(pos)
+                confirmar=input(f"¿Está seguro que desea dar de baja el producto {productos[pos]['nombre']}? (s/n): ").strip().lower()
+                if confirmar == 's':
+                    productos.pop(pos)
+                    print("Producto dado de baja correctamente.\n")
+                else:
+                    print("Operación cancelada.\n")
                     break
             if not encontrado:
                 print("Código no encontrado. Intente nuevamente.\n")
         with open(archivo, "w", encoding="utf-8") as arch:
-            for prod in productos:
-                arch.write(";".join(prod) + "\n")
+            json.dump(productos, arch, indent=4)
         print("Todos los cambios han sido guardados.")
     except OSError as mensaje:
         print(f"Error al abrir o escribir en el archivo: ", mensaje)
+
 
 def buscar_producto(archivo):
     

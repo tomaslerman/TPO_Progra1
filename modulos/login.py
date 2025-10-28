@@ -1,7 +1,18 @@
 from .menu_p import menu_principal
+import json
 
 def login():
     print("Bienvenido al sistema de gestión de farmacia.")
+    try:
+        with open("login.json", "r") as archivo:
+            diccionario_login = json.load(archivo)
+    except FileNotFoundError:
+        print("Error: El archivo de login no fue encontrado.")
+        return
+    except json.JSONDecodeError:
+        print("Error: El archivo de login no tiene un formato válido.")
+        return
+    
     while True:  # loop hasta que logre loguearse
         try:
             usuario = pedir_usuario()
