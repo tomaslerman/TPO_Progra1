@@ -1,15 +1,15 @@
 {
     "1": {
-        "obra_social": "1",
-        "nombre": "JuanPerez",
-        "edad": 30,
-        "tel": "123456789",
+        "obra_social": "4",
+        "nombre": "assaasa",
+        "edad": 15,
+        "tel": "12",
         "estado": "Active"
     },
     "2": {
         "obra_social": "2",
-        "nombre": "MariaGomez",
-        "edad": 25,
+        "nombre": "Jhonson",
+        "edad": 45,
         "tel": "987654321",
         "estado": "Inactive"
     },

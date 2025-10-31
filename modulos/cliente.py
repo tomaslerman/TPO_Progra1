@@ -97,7 +97,6 @@ def abrir_archivos(ruta_original, ruta_aux):
         return None, None
 
 def modificar_cliente():
-    """Controla todo el proceso de modificación usando un archivo auxiliar."""
     ruta_archivo = "clientes.json"
     clientes = leer_json(ruta_archivo)
 
@@ -111,30 +110,44 @@ def modificar_cliente():
         return
 
     cliente = clientes[id_str]
-    print(f"\nCliente encontrado: {cliente['nombre']} (Edad: {cliente['edad']}, Tel: {cliente['telefono']})")
+    print(f"\nCliente encontrado: {cliente['nombre']} (Edad: {cliente['edad']}, Tel: {cliente['tel']}, Obra social: {cliente['obra_social']})")
 
-    nuevo_nombre = validar_nombre()
-    nueva_edad = pedir_entero("Ingrese la nueva edad: ")
-    if nueva_edad is None:
-        return
-    nueva_obra = pedir_entero("Ingrese el nuevo ID de obra social: ")
-    if nueva_obra is None:
-        return
-    nuevo_tel = pedir_entero("Ingrese el nuevo número de teléfono: ")
-    if nuevo_tel is None:
-        return
+    # vamos a ir guardando SOLO los cambios
+    cambios = {}
 
-    cliente.update({
-        "nombre": nuevo_nombre,
-        "edad": nueva_edad,
-        "id_obra": nueva_obra,
-        "telefono": nuevo_tel
-    })
+    # NOMBRE
+    resp = input("¿Desea modificar el nombre? (s/n): ").lower()
+    if resp == "s":
+        cambios["nombre"] = validar_nombre()
 
-    guardar_json(ruta_archivo, clientes)
-    print("\nRegistro modificado correctamente.")
+    # EDAD
+    resp = input("¿Desea modificar la edad? (s/n): ").lower()
+    if resp == "s":
+        nueva_edad = pedir_entero("Ingrese la nueva edad: ")
+        if nueva_edad is not None:
+            cambios["edad"] = nueva_edad
 
+    # TELÉFONO (en tu JSON la clave es 'tel')
+    resp = input("¿Desea modificar el teléfono? (s/n): ").lower()
+    if resp == "s":
+        nuevo_tel = input("Ingrese el nuevo número de teléfono: ")
+        cambios["tel"] = nuevo_tel
 
+    # OBRA SOCIAL (en tu JSON la clave es 'obra_social')
+    resp = input("¿Desea modificar la obra social? (s/n): ").lower()
+    if resp == "s":
+        nueva_obra = pedir_entero("Ingrese el nuevo ID de obra social: ")
+        if nueva_obra is not None:
+            cambios["obra_social"] = str(nueva_obra)
+
+    # aplicar los cambios de verdad
+    if cambios:
+        cliente.update(cambios)
+        clientes[id_str] = cliente
+        guardar_json(ruta_archivo, clientes)
+        print("\nRegistro modificado correctamente.")
+    else:
+        print("\nNo se realizaron cambios.")
 def baja_cliente():
     """Controla el proceso de baja usando archivo auxiliar (según PPT)."""
     ruta_archivo = "clientes.json"

@@ -50,26 +50,49 @@ def mostrar_matriz(titulos, matriz):
         print(" | ".join(str(valor) for valor in fila_completa))
 
 def mostrar_matriz_clientes(ruta_archivo):
+    """Muestra los clientes activos del archivo JSON en formato de tabla."""
     try:
-        with open(ruta_archivo, "r") as archivo:
+        with open(ruta_archivo, "r", encoding="utf-8") as archivo:
             clientes = json.load(archivo)
-        titulos = ["ID", "Nombre", "Edad", "Teléfono", "Estado"]
-        matriz = []
-        for cliente in clientes.values():
-            fila = [cliente["id_obra"], cliente["nombre"], cliente["edad"], cliente["telefono"], cliente["estado"]]
-            matriz.append(fila)
     except FileNotFoundError:
         print("Error: No se encontró el archivo de clientes.")
         return
-    anchos = [max(len(str(item)) for item in col) for col in zip(*([titulos] + matriz))]
-    for i, titulo in enumerate(titulos):
-        print(f"{titulo:<{anchos[i]}}", end="  ")
-    print()
-    for fila in range (len(matriz)):
-        if matriz[fila][5] == "Active":
-            for columna in range (len(matriz[fila])):
-                print(f"{matriz[fila][columna]:<{anchos[columna]}}", end="  ")
-            print()
+    except json.JSONDecodeError:
+        print("Error: Formato JSON inválido.")
+        return
+    except OSError:
+        print("Error al abrir el archivo.")
+        return
+
+    # Títulos de columnas
+    titulos = ["ID", "Nombre", "Edad", "Teléfono", "Obra social", "Estado"]
+    filas = []
+
+    # Armo la "matriz" de filas
+    for id_cliente, datos in clientes.items():
+        if datos["estado"].lower() == "active":
+            fila = [
+                id_cliente,
+                datos["nombre"],
+                datos["edad"],
+                datos["tel"],
+                datos["obra_social"],
+                datos["estado"]
+            ]
+            filas.append(fila)
+
+    if not filas:
+        print("No hay clientes activos para mostrar.")
+        return
+
+    print(f"{'ID':<5} {'Nombre':<15} {'Edad':<5} {'Teléfono':<12} {'Obra Social':<12} {'Estado':<10}")
+    print("-" * 65)
+
+    # Mostrar solo los clientes activos
+    for fila in filas:
+        if fila[5].lower() == "active":
+         print(f"{fila[0]:<5} {fila[1]:<15} {fila[2]:<5} {fila[3]:<12} {fila[4]:<12} {fila[5]:<10}")
+
 
 def mostrar_matriz_cuadro(encabezados, matriz):
     for i in range(len(encabezados)):
