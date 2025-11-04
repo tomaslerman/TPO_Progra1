@@ -1,6 +1,7 @@
 from .funciones_generales import mostrar_encabezado, validar_opcion, leer_ventas, fechaYvalidacion, buscar_id, open_json_file, extraer_encabezado_submenu
 from .datos_de_prueba import *
 from .recetas import agregar_receta
+import json
 
 def submenu_ventas():
     encabezados = extraer_encabezado_submenu("ventas")
@@ -27,108 +28,50 @@ def submenu_ventas():
            # mostrar_matriz(encabezados_ventas, matriz_ventas)
     enter = input("Volviendo al menú principal...")
 
-def open_ventas_file():
-    matriz_ventas = []
-    try:
-        with open('ventas.txt', "rt", encoding="UTF-8") as arch:
-            for linea in arch:
-                fila = linea.strip().split(";")
-                if len(fila) == 4:
-                    try:
-                        fila[0] = int(fila[0])
-                        fila[2] = int(fila[2])
-                        fila[3] = float(fila[3])
-                        matriz_ventas.append(fila)
-                    except ValueError:
-                        print(f"Advertencia: línea con datos inválidos → {linea.strip()}")
-                else:
-                    print(f"Advertencia: línea con formato incorrecto → {linea.strip()}")
-    except FileNotFoundError:
-        print("Advertencia: no se encontró el archivo ventas.txt.")
-    return matriz_ventas
-
-def open_detalle_ventas_file():
-    matriz_detalle_ventas = []
-    try:
-        with open('detalle_ventas.txt', "rt", encoding="UTF-8") as arch:
-            for linea in arch:
-                fila = linea.strip().split(";")
-                if len(fila) == 3:
-                    try:
-                        fila[0] = int(fila[0])
-                        fila[1] = int(fila[1])
-                        fila[2] = int(fila[2])
-                        matriz_detalle_ventas.append(fila)
-                    except ValueError:
-                        print(f"Advertencia: línea con datos inválidos → {linea.strip()}")
-    except FileNotFoundError:
-        print("Advertencia: no se encontró el archivo detalle_ventas.txt.")
-    except Exception as e:
-        print(f"Error al leer detalle_ventas.txt: {e}")
-    return matriz_detalle_ventas
-
-def open_recetas_file():
-    matriz_recetas = []
-    try:
-        with open('recetas.txt', "rt", encoding="UTF-8") as arch:
-            for linea in arch:
-                fila = linea.strip().split(";")
-                if len(fila) == 5:
-                    try:
-                        fila[0] = int(fila[0])
-                        fila[1] = int(fila[1])
-                        fila[4] = int(fila[4])
-                        matriz_recetas.append(fila)
-                    except ValueError:
-                        print(f"Advertencia: línea con datos inválidos → {linea.strip()}")
-    except FileNotFoundError:
-        print("Advertencia: no se encontró el archivo recetas.txt.")
-    except Exception as e:
-        print(f"Error al leer recetas.txt: {e}")
-    return matriz_recetas
-
 def agregar_venta_y_detalle():
-    matriz = open_ventas_file()
-    matriz_detalle_ventas = open_detalle_ventas_file()
     matriz_clientes = open_json_file('clientes.json')
-    venta = []
 
-    if not matriz:
-        id_venta = 1
-    else:
-        id_venta = matriz[-1][0] + 1
-
+    try:
+        with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+            lineas = archivo_ventas.readlines()
+            if lineas:
+                ultimo_id = int(lineas[-1].split(';')[0])
+            else:
+                ultimo_id = 0
+    except(FileNotFoundError,OSError) as error:
+        print(f"Error{error}")
+        return
+    id_venta = ultimo_id + 1
     fecha = fechaYvalidacion()
     id_cliente = int(input("Ingrese el ID del cliente: "))
-    pos_cliente = buscar_id(matriz_clientes, id_cliente)
-    while pos_cliente == -1:
-        print("Error! El ID del cliente es inválido")
-        id_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
-        pos_cliente = buscar_id(matriz_clientes, id_cliente)
-
+    pos = -1
+    while pos == -1:
+        for key in matriz_clientes:
+            if int(key) == id_cliente:
+                pos = key
+        if pos == -1:
+            print("Error! El ID del cliente es inválido.")
+            id_cliente = int(input("Ingrese el ID del cliente: "))
+    print("")
     print("Ingresando a detalle de venta...")
     input("Presione Enter para continuar...")
-    total = agregar_detalle_de_venta(id_cliente, id_venta, matriz_detalle_ventas)
-    print(f"Subtotal de la venta: ${total}")
+    print("")
+    total = agregar_detalle_de_venta(id_cliente, id_venta)
+    total = float(total)
+    print(f'Subtotal de la venta: ${total}')
     descuento = buscar_descuento_obra_social(id_cliente)
     print(f"Descuento aplicado: {descuento}%")
     total2 = aplicar_descuento(total, descuento)
     print(f"Total de la venta: ${total2}")
     venta = [id_venta, fecha, id_cliente, total2]
-    matriz.append(venta)
-
     try:
         with open('ventas.txt', 'a', encoding='utf-8') as archivo_ventas:
-            archivo_ventas.write(f"\n{id_venta};{fecha};{id_cliente};{total2}")
-        print("Venta guardada exitosamente.")
-    except OSError:
-        print("Error al abrir ventas.txt para escritura.")
-    except FileNotFoundError:
-        print("Error: no se encontró el archivo ventas.txt para escritura.")
+            archivo_ventas.write(f"{venta[0]};{venta[1]};{venta[2]};{venta[3]}\n")
+    except(FileNotFoundError,OSError) as error:
+        print(f"Error{error}")
 
-def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
+def agregar_detalle_de_venta(id_cliente, id_venta):
     matriz_productos = open_json_file('producto.json')
-    nuevos_detalles = []
     total = 0
 
     try:
@@ -164,7 +107,6 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
         if producto_actual is None:
             print("Error! El código del producto no existe.")
             break
-
         receta = input("¿El cliente tiene receta? (s/n): ").lower()
         while receta not in ['s', 'n']:
             print("Error! Opción inválida.")
@@ -174,8 +116,11 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
             id_receta, cantidad = agregar_receta(id_cliente, matriz_productos)
             subtotal = producto_actual["precio"] * cantidad
             detalle_venta = [id_venta, id_receta, subtotal]
-            matriz.append(detalle_venta)
-            nuevos_detalles.append(detalle_venta)
+            try:
+                with open('detalle_ventas.txt', 'a', encoding='utf-8') as archivo_detalle:
+                    archivo_detalle.write(f"{detalle_venta[0]};{detalle_venta[1]};{detalle_venta[2]}\n")
+            except(FileNotFoundError,OSError) as error:
+                print(f"Error{error}")
             total += subtotal
         else:
             try:
@@ -191,13 +136,14 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
                 except ValueError:
                     print("Error! Debe ingresar un número válido.")
                     cantidad = 0
-
             subtotal = producto_actual["precio"] * cantidad
             detalle_venta = [id_venta, "VL", subtotal]
-            matriz.append(detalle_venta)
-            nuevos_detalles.append(detalle_venta)
+            try:
+                with open('detalle_ventas.txt', 'a', encoding='utf-8') as archivo_detalle:
+                    archivo_detalle.write(f"{detalle_venta[0]};{detalle_venta[1]};{detalle_venta[2]}\n")
+            except(FileNotFoundError,OSError) as error:
+                print(f"Error{error}")
             total += subtotal
-
         try:
             producto = int(input("Ingrese el código del producto o -1 para dejar de agregar productos: "))
         except ValueError:
@@ -220,35 +166,19 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
                 producto_encontrado = True
             else:
                 producto_encontrado = False
-
-    # Guardar solo los nuevos detalles
-    if nuevos_detalles:
-        try:
-            with open('detalle_ventas.txt', 'a', encoding='utf-8') as archivo_detalle:
-                for detalle in nuevos_detalles:
-                    archivo_detalle.write(f"\n{detalle[0]};{detalle[1]};{detalle[2]}")
-            print("Detalle de venta guardado exitosamente.")
-        except OSError:
-            print("Error al abrir detalle_ventas.txt para escritura.")
-        except FileNotFoundError:
-            print("Error: no se encontró el archivo detalle_ventas.txt para escritura.")
-    else:
-        print("No se agregaron nuevos detalles.")
-
-    print("Detalles de la venta agregados correctamente.")
-
     return total
 
 def buscar_descuento_obra_social(id_cliente):
     matriz_clientes = open_json_file('clientes.json')
     matriz_obras_sociales = open_json_file('obras_sociales.json')
     id_cliente_str = str(id_cliente)
-    if id_cliente_str in matriz_clientes:
-        nombre_obra_social = matriz_clientes[id_cliente_str]["obra_social"]
-        if nombre_obra_social in matriz_obras_sociales:
-            return matriz_obras_sociales[nombre_obra_social]
-    return 0 
 
+    if id_cliente_str in matriz_clientes:
+        id_obra_social = str(matriz_clientes[id_cliente_str].get("obra_social"))
+        if id_obra_social in matriz_obras_sociales:
+            descuento = matriz_obras_sociales[id_obra_social].get("descuento", 0)
+            return descuento
+    return 0
 
 def aplicar_descuento(total, descuento):
     total2 = total - (total * (descuento / 100)) if descuento else total
@@ -257,11 +187,16 @@ def aplicar_descuento(total, descuento):
     return total2
 
 def modificar_venta():
-    matriz = open_ventas_file()
     matriz_clientes = open_json_file('clientes.json')
     matriz_productos = open_json_file('producto.json')
-    matriz_recetas = open_detalle_ventas_file()
-    matriz_codigos_ventas = [fila[0] for fila in matriz]
+    matriz_codigos_ventas = []
+    try:
+        with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+            for linea in archivo_ventas:
+                codigo_venta = int(linea.split(';')[0])
+                matriz_codigos_ventas.append(codigo_venta)
+    except (FileNotFoundError, OSError) as error:
+        print(f"Error: {error}")
 
     try:
         id_venta = int(input("Ingrese el ID de la venta a modificar: "))
@@ -276,10 +211,38 @@ def modificar_venta():
         except ValueError:
             print("Error! Debe ingresar un número válido.")
             return
+    
+    pos = matriz_codigos_ventas.index(id_venta)
+    try:
+        with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+            lineas = archivo_ventas.readlines()
+            venta_linea = lineas[pos]
+            venta_datos = venta_linea.strip().split(';')
+            print("Datos actuales de la venta:")
+            print(f"ID Venta: {venta_datos[0]}")
+            print(f"Fecha: {venta_datos[1]}")
+            print(f"ID Cliente: {venta_datos[2]}")
+            print(f"Total: {venta_datos[3]}")
+    except (FileNotFoundError, OSError) as error:
+        print(f"Error: {error}")
+        return
+    try:
+        with open('detalle_ventas.txt', 'r', encoding='utf-8') as archivo_detalle:
+            lineas_detalle = archivo_detalle.readlines()
+            for linea in lineas_detalle:
+                detalle_datos = linea.strip().split(';')
+                if int(detalle_datos[0]) == id_venta:
+                    print("Detalle de la venta:")
+                    print(f"ID Detalle: {detalle_datos[0]}")
+                    print(f"ID Receta/Venta Libre: {detalle_datos[1]}")
+                    print(f"Subtotal: {detalle_datos[2]}")
+                else:
+                    detalle_datos = None
+    except (FileNotFoundError, OSError) as error:
+        print(f"Error: {error}")
+        return
 
-    pos = buscar_id(matriz, id_venta)
-    print("Venta encontrada:")
-    print(matriz[pos])
+    print("")
     print("¿Qué desea modificar?")
     for k, v in opciones_modificacion_ventas.items():
         print(f"{k}. {v}")
@@ -290,7 +253,17 @@ def modificar_venta():
         return
 
     if modificacion == 1:
-        matriz[pos][1] = fechaYvalidacion()
+        nueva_fecha = fechaYvalidacion()
+        try:
+            with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+                lineas = archivo_ventas.readlines()
+            venta_datos[1] = nueva_fecha
+            lineas[pos] = ';'.join(venta_datos) + '\n'
+            with open('ventas.txt', 'w', encoding='utf-8') as archivo_ventas:
+                archivo_ventas.writelines(lineas)
+        except (FileNotFoundError, OSError) as error:
+            print(f"Error: {error}")
+            return
         print("Fecha actualizada correctamente.")
 
     elif modificacion == 2:
@@ -299,167 +272,181 @@ def modificar_venta():
         except ValueError:
             print("Error! Debe ingresar un número válido.")
             return
-
-        pos_cliente = buscar_id(matriz_clientes, nuevo_cliente)
-        while pos_cliente == -1:
-            print("El ID del cliente es inválido")
+        while nuevo_cliente not in matriz_clientes:
+            print("Error! El ID del cliente es inválido.")
             try:
                 nuevo_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
             except ValueError:
                 print("Error! Debe ingresar un número válido.")
                 return
-            pos_cliente = buscar_id(matriz_clientes, nuevo_cliente)
-
-        matriz[pos][2] = nuevo_cliente
-        descuento = buscar_descuento_obra_social(nuevo_cliente)
-        total = float(matriz[pos][3])
-        matriz[pos][3] = aplicar_descuento(total, descuento)
-        print("Cliente y descuento actualizados correctamente.")
-
+        try:
+            with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+                lineas = archivo_ventas.readlines()
+            venta_datos[2] = str(nuevo_cliente)
+            lineas[pos] = ';'.join(venta_datos) + '\n'
+            with open('ventas.txt', 'w', encoding='utf-8') as archivo_ventas:
+                archivo_ventas.writelines(lineas)
+        except (FileNotFoundError, OSError) as error:
+            print(f"Error: {error}")
+            return
+        print("ID del cliente actualizado correctamente.")
+    
     elif modificacion == 3:
-        id_cliente = matriz[pos][2]
+        id_cliente = int(venta_datos[2])
         print("¿Desea modificar la receta o venta libre?")
         tipo = int(input("Ingrese 1 para receta o 2 para venta libre: "))
 
         if tipo == 1:
             try:
-                id_producto = int(input("Ingrese el código del producto asociado a la receta: "))
+                id_producto = int(input("Ingrese el código del producto a modificar en la receta: "))
             except ValueError:
                 print("Error! Debe ingresar un número válido.")
                 return
-
+            
             producto_encontrado = False
-            for p in matriz_productos:
-                if p["codigo"] == id_producto:
+            for producto in matriz_productos:
+                if producto["codigo"] == id_producto:
                     producto_encontrado = True
-                    producto_actual = p
+                    producto_actual = producto
                     break
-            if not producto_encontrado:
-                print("Error! El código del producto no existe.")
-                return
-
-            id_receta, cantidad = agregar_receta(id_producto, matriz_recetas)
-
-            try:
-                with open('recetas.txt', 'a', encoding='utf-8') as archivo_recetas:
-                    archivo_recetas.write(f"{id_receta};{id_producto};{fechaYvalidacion()};{input('Ingrese el nombre del médico: ')};{cantidad}\n")
-                print("Receta guardada exitosamente.")
-            except OSError:
-                print("Error al abrir recetas.txt para escritura.")
-            except FileNotFoundError:
-                print("Error: no se encontró el archivo recetas.txt para escritura.")
-
-            subtotal = producto_actual["precio"] * cantidad
-            descuento = buscar_descuento_obra_social(id_cliente)
-            total2 = aplicar_descuento(subtotal, descuento)
-            matriz[pos][3] = total2
-            print(f"Detalle actualizado con receta. Total nuevo: ${total2:.2f}")
-
-        elif tipo == 2:
-            try:
-                id_receta_eliminar = int(input("Ingrese el ID de la receta a eliminar (si corresponde): "))
-            except ValueError:
-                print("Error! Debe ingresar un número válido.")
-                id_receta_eliminar = None
-
-            if id_receta_eliminar:
-                nuevas_recetas = []
-                for linea in matriz_recetas:
-                    if int(linea[0]) != id_receta_eliminar:
-                        nuevas_recetas.append(linea)
-                try:
-                    with open('recetas.txt', 'w', encoding='utf-8') as archivo_recetas:
-                        archivo_recetas.writelines(nuevas_recetas)
-                    print(f"Receta ID {id_receta_eliminar} eliminada exitosamente.")
-                except FileNotFoundError:
-                    print("Error: no se encontró el archivo recetas.txt para eliminar.")
-                except Exception as e:
-                    print(f"Error al eliminar la receta: {e}")
-
-            try:
-                id_producto = int(input("Ingrese el código del nuevo producto: "))
-            except ValueError:
-                print("Error! Debe ingresar un número válido.")
-                return
-
-            while id_producto < 1 or id_producto > len(matriz_productos):
+            while not producto_encontrado:
                 print("Error! El código del producto es inválido.")
-                id_producto = int(input("Ingrese nuevamente el código del producto: "))
-
-            stock_disp = matriz_productos[id_producto - 1]["stock"]
+                try:
+                    id_producto = int(input("Vuelva a ingresar el código del producto: "))
+                except ValueError:
+                    print("Error! Debe ingresar un número válido.")
+                    return
+                for producto in matriz_productos:
+                    if producto["codigo"] == id_producto:
+                        producto_encontrado = True
+                        producto_actual = producto
+                        break
+            
+            id_receta, cantidad = agregar_receta(id_cliente, matriz_productos)
+            subtotal = producto_actual["precio"] * cantidad
             try:
-                cantidad = int(input("Ingrese la cantidad del producto: "))
-            except ValueError:
-                print("Error! Debe ingresar un número válido.")
+                with open('detalle_ventas.txt', 'r', encoding='utf-8') as archivo_detalle:
+                    lineas = archivo_detalle.readlines()
+                for i in range(len(lineas)):
+                    detalle_datos = lineas[i].strip().split(';')
+                    if int(detalle_datos[0]) == id_venta:
+                        detalle_datos[1] = str(id_receta)
+                        detalle_datos[2] = str(subtotal)
+                        lineas[i] = ';'.join(detalle_datos) + '\n'
+                        break
+                with open('detalle_ventas.txt', 'w', encoding='utf-8') as archivo_detalle:
+                    archivo_detalle.writelines(lineas)
+            except (FileNotFoundError, OSError) as error:
+                print(f"Error: {error}")
                 return
-
-            while cantidad > stock_disp:
-                print(f"Error! Sólo hay {stock_disp} unidades disponibles.")
-                cantidad = int(input("Vuelva a ingresar la cantidad del producto: "))
-
-            precio = matriz_productos[id_producto - 1]["precio"]
-            subtotal = precio * cantidad
+            
             descuento = buscar_descuento_obra_social(id_cliente)
             total2 = aplicar_descuento(subtotal, descuento)
-            matriz[pos][3] = total2
-            print(f"Detalle actualizado como venta libre. Total nuevo: ${total2:.2f}")
-
-        else:
-            print("Opción inválida.")
-            return
-
+            try:
+                with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+                    lineas = archivo_ventas.readlines()
+                venta_datos[3] = str(total2)
+                lineas[pos] = ';'.join(venta_datos) + '\n'
+                with open('ventas.txt', 'w', encoding='utf-8') as archivo_ventas:
+                    archivo_ventas.writelines(lineas)
+            except (FileNotFoundError, OSError) as error:
+                print(f"Error: {error}")
+                return
+            print("Detalle de venta modificado correctamente.")
+        
+        elif tipo == 2:
+            if detalle_datos is None:
+                print("No se encontró el detalle de venta para modificar.")
+                respuesta = input("Desea agregar un nuevo detalle de venta? (s/n)").lower()
+                if respuesta == 's':
+                    agregar_detalle_de_venta(id_cliente, id_venta)
+                else:
+                    print("Operación cancelada.")
+                    return
+            else:
+                if detalle_datos[1] != "VL":
+                    try:
+                        with open('detalle_ventas.txt', 'w', encoding='utf-8') as archivo_detalle:
+                            for linea in archivo_detalle:
+                                detalle_datos = linea.strip().split(';')
+                                if int(detalle_datos[0]) == id_venta:
+                                    print("El detalle actual no es de venta libre.")
+                                    respuesta = input("Desea cambiar a venta libre? (s/n)").lower()
+                                    if respuesta == 's':
+                                        detalle_datos[1] = "VL"
+                                        try:
+                                            cantidad = int(input("Ingrese la cantidad del producto: "))
+                                        except ValueError:
+                                            print("Error! Debe ingresar un número válido.")
+                                            return
+                                    else:
+                                        print("Operación cancelada.")
+                                        return
+                    except (FileNotFoundError, OSError) as error:
+                        print(f"Error: {error}")
+                        return
+                    try:
+                        with open('recetas.json', 'w', encoding='utf-8') as archivo_recetas:
+                            recetas = json.load(archivo_recetas)
+                            recetas.pop(detalle_datos[1], None)
+                            json.dump(recetas, archivo_recetas, ensure_ascii=False, indent=4)
+                    except (FileNotFoundError, OSError) as error:
+                        print(f"Error: {error}")
+                        return
     else:
-        print("Opción inválida.")
-        return
-
-    try:
-        with open('ventas.txt', 'w', encoding='utf-8') as archivo_ventas:
-            for venta in matriz:
-                archivo_ventas.write(f"{venta[0]};{venta[1]};{venta[2]};{venta[3]}\n")
-        print("Venta modificada exitosamente.")
-    except OSError:
-        print("Error al abrir ventas.txt para escritura.")
-    except FileNotFoundError:
-        print("Error: no se encontró el archivo ventas.txt para escritura.")
+        print("Opción de modificación inválida.")
 
 def dar_baja_ventas():
-    matriz_ventas = open_ventas_file()
-    matriz_detalle_ventas = open_detalle_ventas_file()
-    matriz_recetas = open_recetas_file()
-    id_elemento = int(input("Ingrese el ID: "))
-    pos = buscar_id(matriz_ventas,id_elemento)
+    id_venta = int(input("Ingrese el ID: "))
+    pos = -1
+
     while pos==-1:
-        print("Error! El ID ingresado es inválido")
-        id_elemento = int(input("Vuelva a ingresar el ID: "))
-        pos = buscar_id(matriz_ventas,id_elemento)
-    for i in range(len(matriz_ventas[0])):
-        print(matriz_ventas[pos][i])
-    confirmacion = int(input("Desea eliminar estos datos? (1 para SI o 2 para NO): "))
+        try:
+            with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+                for linea in archivo_ventas:
+                    partes = linea.strip().split(';')
+                    id_venta_linea = partes[0] 
+                    if id_venta_linea == str(id_venta):
+                        pos = 0
+        except(FileNotFoundError,OSError) as error:
+            print(f"Error{error}")
+            return
+        if pos == -1:
+            print("Error! El ID ingresado es inválido")
+            id_venta = int(input("Vuelva a ingresar el ID: "))
+    
+    print("Datos de la venta a eliminar:")
+    try:
+        with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+            for linea in archivo_ventas:
+                partes = linea.strip().split(';')
+                id_venta_linea = partes[0] 
+                if id_venta_linea == str(id_venta):
+                    print("ID Venta:", partes[0])
+                    print("Fecha:", partes[1])
+                    print("ID Cliente:", partes[2])
+                    print("Total:", partes[3])
+    except(FileNotFoundError,OSError) as error:
+        print(f"Error{error}")
+        return
+    confirmacion = int(input("Confirma la eliminación? (1-Si / 2-No): "))
     if confirmacion == 1:
-        matriz_ventas.pop(pos)
+        try:
+            with open('ventas.txt', 'r', encoding='utf-8') as archivo_ventas:
+                lineas = archivo_ventas.readlines()
+                nuevas_lineas = []
+                for linea in lineas:
+                    partes = linea.strip().split(';')
+                    id_venta_linea = partes[0]
+                    if id_venta_linea != str(id_venta):
+                        nuevas_lineas.append(linea)
+        except(FileNotFoundError,OSError) as error:
+            print(f"Error{error}")
         try:
             with open('ventas.txt', 'w', encoding='utf-8') as archivo_ventas:
-                for venta in matriz_ventas:
-                    archivo_ventas.write(f"{venta[0]};{venta[1]};{venta[2]};{venta[3]}\n")
-            print("Ventas actualizadas exitosamente después de la baja.")
-        except OSError:
-            print("Error al abrir ventas.txt para escritura.")
-        except FileNotFoundError:
-            print("Error: no se encontró el archivo ventas.txt para escritura.")
-        if matriz_detalle_ventas[pos][1] == "VL":
-            pass
-        else:
-            matriz_detalle_ventas.pop(pos)
-            matriz_recetas.pop(matriz_detalle_ventas[pos][1])
-        try:
-            with open('detalle_ventas.txt', 'w', encoding='utf-8') as archivo_detalle:
-                for detalle in matriz_detalle_ventas:
-                    archivo_detalle.write(f"{detalle[0]};{detalle[1]};{detalle[2]}\n")
-            print("Detalle de ventas actualizado exitosamente después de la baja.")
-        except OSError:
-            print("Error al abrir detalle_ventas.txt para escritura.")
-        except FileNotFoundError:
-            print("Error: no se encontró el archivo detalle_ventas.txt para escritura.")
+                archivo_ventas.writelines(nuevas_lineas)
+        except(FileNotFoundError,OSError) as error:
+            print(f"Error{error}")
     else:
         print("Cancelando operación")
-        enter = input("Volviendo a menu...")
+          
