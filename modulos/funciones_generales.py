@@ -218,7 +218,7 @@ def dar_baja_elementos(matriz):
     pos = buscar_id(matriz,id_elemento)
     while pos==-1:
         print("Error! El ID ingresado es inválido")
-        receta = int(input("Vuelva a ingresar el ID: "))
+        id_elemento = int(input("Vuelva a ingresar el ID: "))
         pos = buscar_id(matriz,id_elemento)
     for i in range(len(matriz[0])):
         print(matriz[pos][i])
@@ -226,12 +226,12 @@ def dar_baja_elementos(matriz):
     if confirmacion == 1:
         matriz.pop(pos)
         try:
-            with open('clientes.json', 'w', encoding='utf-8') as archivo_clientes:
-                json.dump(matriz, archivo_clientes, ensure_ascii=False, indent=4)
+            with open('productos.json', 'w', encoding='utf-8') as archivo_productos:
+                json.dump(matriz, archivo_productos, ensure_ascii=False, indent=4)
         except OSError:
-            print("Error al abrir clientes.json para escritura.")
+            print("Error al abrir productos.json para escritura.")
         except FileNotFoundError:
-            print("Error: no se encontró el archivo clientes.json para escritura.")
+            print("Error: no se encontró el archivo productos.json para escritura.")
         enter = input("Dato eliminado exitosamente. Volviendo a menu...")
     else:
         print("Cancelando operación")
@@ -248,7 +248,6 @@ def open_json_file(nombre_archivo):
     except json.JSONDecodeError:
         print(f"Error: el archivo {nombre_archivo} no tiene un formato JSON válido.")
         return []
-
 
 def leer_ventas():
     """Lee ventas.txt y devuelve una lista de listas con los datos."""

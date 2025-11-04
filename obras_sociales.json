@@ -1,7 +1,22 @@
 {
-    "Osde": 10,
-    "Hospitalitaliano": 15,
-    "Medife": 20,
-    "Omint": 5,
-    "Osecac": 12
+    "1": {
+        "nombre": "Osde",
+        "descuento": 10
+    },
+    "2": {
+        "nombre": "Hospitalitaliano",
+        "descuento": 15
+    },
+    "3": {
+        "nombre": "Medife",
+        "descuento": 20
+    },
+    "4": {
+        "nombre": "Omint",
+        "descuento": 5
+    },
+    "5": {
+        "nombre": "Osecac",
+        "descuento": 12
+    }
 }

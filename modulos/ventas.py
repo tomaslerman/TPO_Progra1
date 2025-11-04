@@ -1,7 +1,6 @@
-from .funciones_generales import mostrar_encabezado, validar_opcion, dar_baja_elementos, mostrar_matriz, fechaYvalidacion, buscar_id, open_json_file, extraer_encabezado_submenu
+from .funciones_generales import mostrar_encabezado, validar_opcion, leer_ventas, fechaYvalidacion, buscar_id, open_json_file, extraer_encabezado_submenu
 from .datos_de_prueba import *
 from .recetas import agregar_receta
-import json
 
 def submenu_ventas():
     encabezados = extraer_encabezado_submenu("ventas")
@@ -20,10 +19,10 @@ def submenu_ventas():
             modificar_venta()
             enter = input("Volviendo a menu...")
         elif opcion == 3:  # Dar baja venta
-            dar_baja_elementos()
+            dar_baja_ventas()
             enter = input("Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz()
+            leer_ventas()
             enter = input("Presione Enter para continuar...")
            # mostrar_matriz(encabezados_ventas, matriz_ventas)
     enter = input("Volviendo al menú principal...")
@@ -58,7 +57,7 @@ def open_detalle_ventas_file():
                     try:
                         fila[0] = int(fila[0])
                         fila[1] = int(fila[1])
-                        fila[2] = float(fila[2])
+                        fila[2] = int(fila[2])
                         matriz_detalle_ventas.append(fila)
                     except ValueError:
                         print(f"Advertencia: línea con datos inválidos → {linea.strip()}")
@@ -138,7 +137,10 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
         print("Error! Debe ingresar un número válido.")
         producto = -1
 
-    producto_encontrado = any(p["codigo"] == producto for p in matriz_productos)
+    if [lambda p: p["codigo"] == producto for p in matriz_productos]:
+        producto_encontrado = True
+    else:
+        producto_encontrado = False
 
     while (producto != -1) and not producto_encontrado:
         print("Error! El código del producto es inválido.")
@@ -147,7 +149,10 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
         except ValueError:
             print("Error! Debe ingresar un número válido.")
             producto = -1
-        producto_encontrado = any(p["codigo"] == producto for p in matriz_productos)
+        if [lambda p: p["codigo"] == producto for p in matriz_productos]:
+            producto_encontrado = True
+        else:
+            producto_encontrado = False
 
     while producto != -1:
         producto_actual = None
@@ -199,7 +204,11 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
             print("Error! Debe ingresar un número válido.")
             producto = -1
 
-        producto_encontrado = any(p["codigo"] == producto for p in matriz_productos)
+        if [lambda p: p["codigo"] == producto for p in matriz_productos]:
+            producto_encontrado = True
+        else:
+            producto_encontrado = False
+            
         while (producto != -1) and not producto_encontrado:
             print("Error! El código del producto es inválido.")
             try:
@@ -207,7 +216,10 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
             except ValueError:
                 print("Error! Debe ingresar un número válido.")
                 producto = -1
-            producto_encontrado = any(p["codigo"] == producto for p in matriz_productos)
+            if [lambda p: p["codigo"] == producto for p in matriz_productos]:
+                producto_encontrado = True
+            else:
+                producto_encontrado = False
 
     # Guardar solo los nuevos detalles
     if nuevos_detalles:
@@ -224,7 +236,7 @@ def agregar_detalle_de_venta(id_cliente, id_venta, matriz):
         print("No se agregaron nuevos detalles.")
 
     print("Detalles de la venta agregados correctamente.")
-    print(f"Subtotal de la venta: ${total}")
+
     return total
 
 def buscar_descuento_obra_social(id_cliente):
@@ -409,3 +421,45 @@ def modificar_venta():
         print("Error al abrir ventas.txt para escritura.")
     except FileNotFoundError:
         print("Error: no se encontró el archivo ventas.txt para escritura.")
+
+def dar_baja_ventas():
+    matriz_ventas = open_ventas_file()
+    matriz_detalle_ventas = open_detalle_ventas_file()
+    matriz_recetas = open_recetas_file()
+    id_elemento = int(input("Ingrese el ID: "))
+    pos = buscar_id(matriz_ventas,id_elemento)
+    while pos==-1:
+        print("Error! El ID ingresado es inválido")
+        id_elemento = int(input("Vuelva a ingresar el ID: "))
+        pos = buscar_id(matriz_ventas,id_elemento)
+    for i in range(len(matriz_ventas[0])):
+        print(matriz_ventas[pos][i])
+    confirmacion = int(input("Desea eliminar estos datos? (1 para SI o 2 para NO): "))
+    if confirmacion == 1:
+        matriz_ventas.pop(pos)
+        try:
+            with open('ventas.txt', 'w', encoding='utf-8') as archivo_ventas:
+                for venta in matriz_ventas:
+                    archivo_ventas.write(f"{venta[0]};{venta[1]};{venta[2]};{venta[3]}\n")
+            print("Ventas actualizadas exitosamente después de la baja.")
+        except OSError:
+            print("Error al abrir ventas.txt para escritura.")
+        except FileNotFoundError:
+            print("Error: no se encontró el archivo ventas.txt para escritura.")
+        if matriz_detalle_ventas[pos][1] == "VL":
+            pass
+        else:
+            matriz_detalle_ventas.pop(pos)
+            matriz_recetas.pop(matriz_detalle_ventas[pos][1])
+        try:
+            with open('detalle_ventas.txt', 'w', encoding='utf-8') as archivo_detalle:
+                for detalle in matriz_detalle_ventas:
+                    archivo_detalle.write(f"{detalle[0]};{detalle[1]};{detalle[2]}\n")
+            print("Detalle de ventas actualizado exitosamente después de la baja.")
+        except OSError:
+            print("Error al abrir detalle_ventas.txt para escritura.")
+        except FileNotFoundError:
+            print("Error: no se encontró el archivo detalle_ventas.txt para escritura.")
+    else:
+        print("Cancelando operación")
+        enter = input("Volviendo a menu...")

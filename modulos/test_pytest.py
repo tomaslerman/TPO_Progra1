@@ -32,3 +32,5 @@ def test_stock_por_agotar():
         [3, "Amoxicilina", 2, 20]
     ]
     assert resultado == esperado, f"Se esperaba {esperado} pero se obtuvo {resultado}"
+
+
