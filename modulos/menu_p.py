@@ -15,7 +15,7 @@ def menu_principal():
         print("---"* 10)
         mostrar_encabezado(encabezados_menu)
         opcion = int(input("Seleccione una opción: "))
-        opcion = validar_opcion(opcion, 1, 4, encabezados_menu)
+        opcion = validar_opcion(opcion, 1, 5, encabezados_menu)
         if opcion == 1:  # Ventas
             submenu_ventas()
         elif opcion == 2:  # Inventario

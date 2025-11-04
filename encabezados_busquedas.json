@@ -1,4 +1,6 @@
 {
-    "1": "Ventas de un cliente específico",
-    "2": "Ventas de un producto específico"
+    "busquedas":{
+        "1": "Ventas de un cliente específico",
+        "2": "Ventas de un producto específico"
+    }
 }

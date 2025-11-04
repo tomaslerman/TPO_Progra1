@@ -1,18 +1,33 @@
-from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar_opcion, open_json_file, leer_ventas, leer_productos 
+from .funciones_generales import fechaYvalidacion,extraer_encabezado_submenu, mostrar_encabezado, validar_opcion, open_json_file, leer_productos 
 import json
+from functools import reduce
 
 def submenu_reportes():
     opcion = 0
-    encabezados_sub_menu_reportes = extraer_encabezado("reportes")
+    encabezados_sub_menu_reportes = extraer_encabezado_submenu("reportes")
     while opcion != -1:
         print("---"* 10)
         print("Submenú Reportes")
         print("---"* 10)
         mostrar_encabezado(encabezados_sub_menu_reportes)
         opcion = int(input("Seleccione una opción: "))
-        opcion = validar_opcion(opcion, 1, 4, encabezados_sub_menu_reportes)
+        opcion = validar_opcion(opcion, 1, 5, encabezados_sub_menu_reportes)
         if opcion == 1:  # Estadística de ventas
             estadisticas_ventas()
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 2:
+            cant_cl_ac = total_clientes_activos()
+            print(f"La cantidad de clientes activos actualmente es {cant_cl_ac}")
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 3:
+            tot_gastado = total_gastado_por_cliente()
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 4:
+            buscar_producto_minimo()
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 5:
+            fecha_a_buscar = fechaYvalidacion()
+            total_dia =total_ventas_por_fecha(fecha_a_buscar)
             enter = input("Presione Enter para continuar...")
     enter = input("Volviendo a menu...")
 
@@ -63,50 +78,63 @@ def total_clientes_activos():
     return contar_clientes_activos(clientes)
 
 
-def sumar_totales_cliente(ventas, id_cliente, i=0):
-    """Suma recursivamente los totales de ventas del cliente indicado."""
-    if i == len(ventas):
+def sumar_totales_cliente(arch, id_cliente):
+    linea = arch.readline()
+    if not linea:                    
         return 0
-    else:
-        venta = ventas[i]
-        total_actual = venta[3] if venta[2] == id_cliente else 0
-        return total_actual + sumar_totales_cliente(ventas, id_cliente, i + 1)
-    
+
+    partes = linea.strip().split(";")
+    if len(partes) != 4:
+        # línea inválida: seguir con la siguiente
+        return sumar_totales_cliente(arch, id_cliente)
+
+    try:
+        id_cli = int(partes[2])
+        total  = float(partes[3])
+    except ValueError:
+        # datos no numéricos: seguir con la siguiente
+        return sumar_totales_cliente(arch, id_cliente)
+
+    aporte = total if id_cli == id_cliente else 0
+    return aporte + sumar_totales_cliente(arch, id_cliente)
 
 def total_gastado_por_cliente():
-    """Pide un ID, valida que el cliente exista y esté activo, y muestra su total gastado."""
-    clientes = open_json_file(clientes.json)
-    if len(clientes) == 0:
+    """Pide un ID, valida cliente activo y suma las ventas leyéndolas en streaming (readline + recursión)."""
+    clientes = open_json_file("clientes.json")
+    if not clientes:
         print("No hay clientes cargados.")
-        return
-
-    ventas = leer_ventas()
-    if len(ventas) == 0:
-        print("No hay ventas cargadas.")
         return
 
     # pedir ID y validar
     while True:
-        try:
-            id_cliente = int(input("Ingrese el ID del cliente: "))
+        id_ing = input("Ingrese el ID del cliente: ")
+        if id_ing.isdigit():
+            id_cliente = int(id_ing)
             break
-        except ValueError:
-            print("Error: debe ingresar un número entero.")
+        print("Error: debe ingresar un número entero.")
 
     cliente = clientes.get(str(id_cliente))
     if cliente is None:
         print("El cliente no existe.")
         return
 
-    if cliente["estado"].lower() != "active":
-        print(f"El cliente {cliente['nombre']} está inactivo. No tiene ventas activas.")
+    if str(cliente.get("estado", "")).lower() != "active":
+        print(f"El cliente {cliente.get('nombre','')} está inactivo. No tiene ventas activas.")
         return
 
-    total = sumar_totales_cliente(ventas, id_cliente)
+    # Abrimos ventas.txt y sumamos recursivamente SIN cargar todo en memoria
+    try:
+        with open("ventas.txt", "r", encoding="utf-8") as arch:
+            total = sumar_totales_cliente(arch, id_cliente)
+    except FileNotFoundError:
+        print("Error: no se encontró el archivo ventas.txt.")
+        return
+    except OSError:
+        print("Error al abrir ventas.txt.")
+        return
+
     print(f"El cliente {cliente['nombre']} gastó un total de: ${total:.2f}")
     return total
-
-#revisar:
 
 def producto_minimo_precio(productos, i=0):
     """
@@ -131,4 +159,34 @@ def buscar_producto_minimo():
 
     producto_min = producto_minimo_precio(productos)
     print(f"Producto con menor precio: {producto_min['nombre']} (${producto_min['precio']})")
-    return producto_min["codigo"]
+
+def total_ventas_por_fecha(fecha_busqueda):
+    """
+    Devuelve el total de las ventas realizadas en una fecha determinada,
+    usando reduce() para sumar los totales directamente desde el archivo.
+    """
+    try:
+        with open("ventas.txt", "r", encoding="utf-8") as archivo:
+            # Creamos una lista con los totales de las ventas que coinciden con la fecha
+            totales = []
+            for linea in archivo:
+                partes = linea.strip().split(";")
+                if len(partes) == 4 and partes[1] == fecha_busqueda:
+                    try:
+                        total = float(partes[3])
+                        totales.append(total)
+                    except ValueError:
+                        continue  
+
+        if len(totales) == 0:
+            print(f"No hay ventas registradas para la fecha {fecha_busqueda}.")
+            return 0
+
+        # Aplicamos reduce para sumar los totales
+        total_final = reduce(lambda x, y: x + y, totales)
+        print(f"Total de ventas del día {fecha_busqueda}: ${total_final:.2f}")
+        return total_final
+
+    except FileNotFoundError:
+        print("Error: no se encontró el archivo ventas.txt.")
+        return 0
