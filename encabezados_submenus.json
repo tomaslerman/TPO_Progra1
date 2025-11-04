@@ -38,6 +38,7 @@
         "2": "Cantidad de clientes activos",
         "3": "Total gastado por cliente especifico",
         "4": "Buscar producto mas barato",
+        "5": "Total ventas en una fecha especifica",
         "-1": "Volver a menu"
     }
 }
