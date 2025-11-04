@@ -3,11 +3,10 @@ import re
 from functools import reduce
 
 def submenu_busquedas():
+   
+    encabezados_submenu_busquedas = extraer_encabezado_busquedas("busquedas")
     opcion = 0
-    while opcion != -1:
-        encabezados_submenu_busquedas = extraer_encabezado_busquedas("busquedas")
-    archivo = "producto.json"
-    while True:
+    while opcion!=1:
         print("---" * 10)
         print("Submenú Búsquedas")
         print("---" * 10)
