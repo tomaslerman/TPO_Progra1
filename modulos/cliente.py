@@ -1,4 +1,4 @@
-from .funciones_generales import extraer_encabezado_submenu, mostrar_encabezado, validar_opcion, mostrar_matriz_clientes
+from .funciones_generales import open_json_file,extraer_encabezado_submenu, mostrar_encabezado, validar_opcion, mostrar_matriz_clientes
 import json
 
 def obtener_ultimo_id(ruta_archivo):
@@ -16,6 +16,46 @@ def validar_nombre():
         print("Valor no válido. Solo letras y espacios.")
         nombre = input("Ingrese el nombre: ")
     return nombre
+
+def ingresar_obra_social():
+    obras_sociales = open_json_file("obras_sociales.json")
+
+    if not obras_sociales:
+        print("No se pudieron cargar las obras sociales.")
+        return None
+
+    while True:
+        nombre = input("Ingrese el nombre de la obra social: ").strip()
+
+        # Buscar la key correspondiente al nombre ingresado
+        key_encontrada = None
+        for key, datos in obras_sociales.items():
+            if datos["nombre"].lower() == nombre.lower():
+                key_encontrada = key
+                break
+
+        if key_encontrada is not None:
+            print(f"Obra social encontrada: {obras_sociales[key_encontrada]['nombre']} (ID {key_encontrada})")
+            return key_encontrada
+        else:
+            print("Obra social no encontrada.")
+            respuesta = input("¿Desea volver a intentarlo? (s/n): ").lower()
+            if respuesta != "s":
+                print("Operación cancelada.")
+                return None
+
+def ingresar_telefono():
+    telefono = input("Ingrese el número de teléfono: ")
+
+    while not telefono.isdigit() or len(telefono) < 7 or len(telefono) > 15:
+        print("Error: el teléfono debe contener solo números y tener entre 7 y 15 dígitos.")
+        respuesta = input("¿Desea volver a intentarlo? (s/n): ").lower()
+        if respuesta != "s":
+            print("Ingreso cancelado por el usuario.")
+            return None
+        telefono = input("Ingrese el número de teléfono: ")
+
+    return telefono
 
 def pedir_entero(mensaje):
     while True:
@@ -62,10 +102,10 @@ def agregar_cliente():
     edad = pedir_entero("Ingrese edad: ")
     if edad is None:
         return
-    id_obra = pedir_entero("Ingrese ID de obra social (número): ")
+    id_obra = ingresar_obra_social()
     if id_obra is None:
         return
-    telefono = pedir_entero("Ingrese número de teléfono: ")
+    telefono = ingresar_telefono()
     if telefono is None:
         return
 
@@ -112,7 +152,6 @@ def modificar_cliente():
     cliente = clientes[id_str]
     print(f"\nCliente encontrado: {cliente['nombre']} (Edad: {cliente['edad']}, Tel: {cliente['tel']}, Obra social: {cliente['obra_social']})")
 
-    # vamos a ir guardando SOLO los cambios
     cambios = {}
 
     # NOMBRE
@@ -130,13 +169,13 @@ def modificar_cliente():
     # TELÉFONO (en tu JSON la clave es 'tel')
     resp = input("¿Desea modificar el teléfono? (s/n): ").lower()
     if resp == "s":
-        nuevo_tel = input("Ingrese el nuevo número de teléfono: ")
+        nuevo_tel = ingresar_telefono()
         cambios["tel"] = nuevo_tel
 
     # OBRA SOCIAL (en tu JSON la clave es 'obra_social')
     resp = input("¿Desea modificar la obra social? (s/n): ").lower()
     if resp == "s":
-        nueva_obra = pedir_entero("Ingrese el nuevo ID de obra social: ")
+        nueva_obra = ingresar_obra_social()
         if nueva_obra is not None:
             cambios["obra_social"] = str(nueva_obra)
 

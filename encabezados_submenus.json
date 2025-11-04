@@ -34,7 +34,10 @@
         "-1": "Volver a menu"
     },
     "reportes": {
-        "1": "Estadística de ventas",
+        "1": "Estadistica de ventas",
+        "2": "Cantidad de clientes activos",
+        "3": "Total gastado por cliente especifico",
+        "4": "Buscar producto mas barato",
         "-1": "Volver a menu"
     }
 }

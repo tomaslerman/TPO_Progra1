@@ -1,9 +1,9 @@
-from .funciones_generales import extraer_encabezado, mostrar_encabezado, validar_opcion, open_json_file, leer_ventas, leer_productos 
+from .funciones_generales import extraer_encabezado_submenu, mostrar_encabezado, validar_opcion, open_json_file, leer_ventas, leer_productos 
 import json
 
 def submenu_reportes():
     opcion = 0
-    encabezados_sub_menu_reportes = extraer_encabezado("reportes")
+    encabezados_sub_menu_reportes = extraer_encabezado_submenu("reportes")
     while opcion != -1:
         print("---"* 10)
         print("Submenú Reportes")
@@ -13,6 +13,16 @@ def submenu_reportes():
         opcion = validar_opcion(opcion, 1, 4, encabezados_sub_menu_reportes)
         if opcion == 1:  # Estadística de ventas
             estadisticas_ventas()
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 2:
+            cant_cl_ac = total_clientes_activos()
+            print(f"La cantidad de clientes activos actualmente es {cant_cl_ac}")
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 3:
+            tot_gastado = total_gastado_por_cliente()
+            enter = input("Presione Enter para continuar...")
+        elif opcion == 4:
+            buscar_producto_minimo()
             enter = input("Presione Enter para continuar...")
     enter = input("Volviendo a menu...")
 
@@ -75,7 +85,7 @@ def sumar_totales_cliente(ventas, id_cliente, i=0):
 
 def total_gastado_por_cliente():
     """Pide un ID, valida que el cliente exista y esté activo, y muestra su total gastado."""
-    clientes = open_json_file(clientes.json)
+    clientes = open_json_file("clientes.json")
     if len(clientes) == 0:
         print("No hay clientes cargados.")
         return
@@ -106,7 +116,6 @@ def total_gastado_por_cliente():
     print(f"El cliente {cliente['nombre']} gastó un total de: ${total:.2f}")
     return total
 
-#revisar:
 
 def producto_minimo_precio(productos, i=0):
     """
@@ -131,4 +140,3 @@ def buscar_producto_minimo():
 
     producto_min = producto_minimo_precio(productos)
     print(f"Producto con menor precio: {producto_min['nombre']} (${producto_min['precio']})")
-    return producto_min["codigo"]
