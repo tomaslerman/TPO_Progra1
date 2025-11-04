@@ -160,7 +160,7 @@ def fechaYvalidacion():
         except AssertionError as error:
             print(error)
 
-    fecha = f"{dia}/{mes}/{anio}"
+    fecha = f"{dia}-{mes}-{anio}"
     return fecha
 
 def buscar_por_nombre(matriz, nombre, columna, encabezados):
@@ -170,16 +170,22 @@ def buscar_por_nombre(matriz, nombre, columna, encabezados):
     else:
         print("No se encontraron coincidencias.")
 
-def buscar_id(matriz,dato):
-    i=0
-    pos = -1
-    encontro=False
-    while i < len(matriz) and encontro==False:
-        if str (matriz[i][0])== str(dato):
-            encontro=True
-            pos = i
-        i+=1    
-    return pos
+def buscar_id(matriz, dato):
+    # Si se puede iterar con índices y acceder con [0], asumimos lista de listas
+    try:
+        if type(matriz[0]) == list:
+            for i in range(len(matriz)):
+                if str(matriz[i][0]) == str(dato):
+                    return i
+            return -1
+    except (TypeError, KeyError, IndexError):
+        pass
+
+    # Si llega acá, probablemente sea un diccionario
+    for clave in matriz:
+        if str(clave) == str(dato):
+            return clave
+    return -1
 
 def buscar_id_json(archivo, codigo):
     
@@ -207,9 +213,6 @@ def mostrar_datos(archivo,modo):
     except(FileNotFoundError,OSError) as error:
         print(f"Error{error}")
 
-
-
-
 def dar_baja_elementos(matriz):
     id_elemento = int(input("Ingrese el ID: "))
     pos = buscar_id(matriz,id_elemento)
@@ -222,21 +225,28 @@ def dar_baja_elementos(matriz):
     confirmacion = int(input("Desea eliminar estos datos? (1 para SI o 2 para NO): "))
     if confirmacion == 1:
         matriz.pop(pos)
+        try:
+            with open('clientes.json', 'w', encoding='utf-8') as archivo_clientes:
+                json.dump(matriz, archivo_clientes, ensure_ascii=False, indent=4)
+        except OSError:
+            print("Error al abrir clientes.json para escritura.")
+        except FileNotFoundError:
+            print("Error: no se encontró el archivo clientes.json para escritura.")
         enter = input("Dato eliminado exitosamente. Volviendo a menu...")
     else:
         print("Cancelando operación")
         enter = input("Volviendo a menu...")
     
-def open_json_file(archivo):
+def open_json_file(nombre_archivo):
     try:
-        with open(archivo, "r", encoding="utf-8") as file:
-            data = json.load(file)
-        return data
+        with open(nombre_archivo, "r", encoding="utf-8") as archivo:
+            datos = json.load(archivo)
+        return datos
     except FileNotFoundError:
-        print(f" El archivo {archivo} no existe.\n")
+        print(f"Error: no se encontró el archivo {nombre_archivo}")
         return []
     except json.JSONDecodeError:
-        print(f" El archivo {archivo} no tiene un formato válido.\n")
+        print(f"Error: el archivo {nombre_archivo} no tiene un formato JSON válido.")
         return []
 
 

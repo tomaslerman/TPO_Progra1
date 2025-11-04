@@ -33,7 +33,7 @@
     "detalle_ventas" : {
         "1": "ID Venta",
         "2": "ID Receta",
-        "3": "Subtotal"
+        "3": "Cantidad"
     },
     "obras_sociales" : {
         "1": "ID Obra Social",

@@ -7,26 +7,96 @@ opciones_modificacion_ventas = {
 '''
 DATOS BACKUP:
 
-clientes.txt
-1;1;JuanPerez;30;123456789;Active
-2;2;MariaGomez;25;987654321;Inactive
-3;3;CarlosLopez;40;456789123;Active
-4;4;AnaMartinez;35;321654987;Inactive
-5;5;LuisFernandez;28;159753486;Active
+clientes.json
+{
+    "1": {
+        "obra_social": 1,
+        "nombre": "JuanPerez",
+        "edad": 30,
+        "tel": "123456789",
+        "estado": "Active"
+    },
+    "2": {
+        "obra_social": 2,
+        "nombre": "MariaGomez",
+        "edad": 45,
+        "tel": "987654321",
+        "estado": "Inactive"
+    },
+    "3": {
+        "obra_social": 3,
+        "nombre": "CarlosLopez",
+        "edad": 40,
+        "tel": "456789123",
+        "estado": "Active"
+    },
+    "4": {
+        "obra_social": 4,
+        "nombre": "AnaMartinez",
+        "edad": 35,
+        "tel": "321654987",
+        "estado": "Inactive"
+    },
+    "5": {
+        "obra_social": 5,
+        "nombre": "LuisFernandez",
+        "edad": 28,
+        "tel": "159753486",
+        "estado": "Active"
+    }
+}
 
-obras_sociales.txt
-1;Osde;10
-2;Hospitalitaliano;15
-3;Medife;20
-4;Omint;5
-5;Osecac;12
+obras_sociales.json
+{
+    "1": {
+        "nombre": "Osde",
+        "descuento": 10
+    },
+    "2": {
+        "nombre": "Hospitalitaliano",
+        "descuento": 15
+    },
+    "3": {
+        "nombre": "Medife",
+        "descuento": 20
+    },
+    "4": {
+        "nombre": "Omint",
+        "descuento": 5
+    },
+    "5": {
+        "nombre": "Osecac",
+        "descuento": 12
+    }
+}
 
-productos.txt
-1;Paracetamol;100;50
-2;Ibuprofeno;3;15
-3;Amoxicilina;2;20
-4;Omeprazol;5;25
-5;Cetirizina;4;30
+productos.json
+{
+    "1": {
+        "descripcion": "Paracetamol",
+        "stock": 100,
+        "precio": 50
+    },
+    "2": {
+        "descripcion": "Ibuprofeno",
+        "stock": 3,
+        "precio": 15
+    },
+    "3": {
+        "descripcion": "Amoxicilina",
+        "stock": 2,
+        "precio": 20
+    },
+    "4": {
+        "descripcion": "Omeprazol",
+        "stock": 5,
+        "precio": 25
+    },
+    "5": {
+        "descripcion": "Cetirizina",
+        "stock": 4,
+        "precio": 30
+    }
 
 ventas.txt
 1;2023-10-01;1;150

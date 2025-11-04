@@ -230,11 +230,11 @@ def buscar_producto(archivo):
         pos_id = codigos.index(id_buscar) if id_buscar in codigos else -1
     print(f"Producto encontrado: ID: {productos[pos_id]['codigo']}, Nombre: {productos[pos_id]['nombre']}, Stock: {productos[pos_id]['stock']}, Precio: ${productos[pos_id]['precio']:.2f}")
 
-def detalle_medicamento(archivo): ##### falta modificarrrrr
-    encabezados_productos = extraer_encabezado("encabezados_productos")
+def detalle_medicamento(archivo):
     try:
         arch_productos = open_json_file(archivo)
         matriz_productos = [linea.strip().split(";") for linea in arch_productos]
+        codigos = [int(prod['codigo']) for prod in arch_productos]
     except FileNotFoundError:
         print("Error! El archivo de productos no existe.")
         return
@@ -242,22 +242,27 @@ def detalle_medicamento(archivo): ##### falta modificarrrrr
     print("Listado de medicamentos:")
     mostrar_datos(archivo, "r")
     print("")
-    id_med = int(input("Ingrese ID del medicamento a saber su detalle: "))
-    pos_id = buscar_id(archivo, id_med)
+    try:
+        id_med = int(input("Ingrese ID del medicamento a saber su detalle: "))
+    except ValueError:
+        print("Error: Ingrese un número válido para el ID.")
+        return
+    pos_id = codigos.index(id_med) if id_med in codigos else -1
 
     while pos_id == -1:
+        
         id_med = int(input("Error. Ingrese ID del medicamento a saber su detalle: "))
-        pos_id = buscar_id(archivo, id_med)
-    print("Medicamento seleccionado :",archivo[pos_id][1])
-    if re.findall("zina$", archivo[pos_id][1].lower()):
-        print("Medicamento antihistamínico de segunda generacion,uso para sintomas de alergias.") 
-    elif re.findall("mol$", archivo[pos_id][1].lower()):
+        pos_id = codigos.index(id_med) if id_med in codigos else -1
+    print("Medicamento seleccionado :",arch_productos[pos_id][1])
+    if re.findall("zina$", arch_productos[pos_id][1].lower()):
+        print("Medicamento antihistamínico de segunda generacion,uso para sintomas de alergias.")
+    elif re.findall("mol$", arch_productos[pos_id][1].lower()):
         print("Medicamento analgesico y antipiretico,uso para dolor leve a moderado y fiebre.")
-    elif re.findall("eno$", archivo[pos_id][1].lower()):
+    elif re.findall("eno$", arch_productos[pos_id][1].lower()):
         print("Medicamento reduce la inflamacion en tejidos. ")
-    elif re.findall("zol$", archivo[pos_id][1].lower()):
+    elif re.findall("zol$", arch_productos[pos_id][1].lower()):
         print("Medicamento para reducir la produccion de acido en el estomago.")
-    elif re.findall("lina$", archivo[pos_id][1].lower()):
+    elif re.findall("lina$", arch_productos[pos_id][1].lower()):
         print("Medicamento para tratar infecciones bacterianas.")
     else:
         print("No se puede saber especificamente su tipo")
