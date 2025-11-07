@@ -113,7 +113,12 @@ def agregar_detalle_de_venta(id_cliente, id_venta):
             receta = input("¿El cliente tiene receta? (s/n): ").lower()
 
         if receta == 's':
-            id_receta, cantidad = agregar_receta(id_cliente, matriz_productos)
+            id_producto = producto
+            id_receta, cantidad = agregar_receta(id_cliente, id_producto)
+            if id_receta == None or cantidad == None:
+                return 0
+            else:
+                pass
             subtotal = producto_actual["precio"] * cantidad
             detalle_venta = [id_venta, id_receta, subtotal]
             try:
@@ -272,7 +277,8 @@ def modificar_venta():
         except ValueError:
             print("Error! Debe ingresar un número válido.")
             return
-        while nuevo_cliente not in matriz_clientes:
+        nuevo_cliente = str(nuevo_cliente)
+        while nuevo_cliente not in [cliente[0] for cliente in matriz_clientes]:
             print("Error! El ID del cliente es inválido.")
             try:
                 nuevo_cliente = int(input("Vuelva a ingresar el ID del cliente: "))
@@ -322,7 +328,7 @@ def modificar_venta():
                         producto_actual = producto
                         break
             
-            id_receta, cantidad = agregar_receta(id_cliente, matriz_productos)
+            id_receta, cantidad = agregar_receta(id_producto)
             subtotal = producto_actual["precio"] * cantidad
             try:
                 with open('detalle_ventas.txt', 'r', encoding='utf-8') as archivo_detalle:
@@ -447,6 +453,28 @@ def dar_baja_ventas():
                 archivo_ventas.writelines(nuevas_lineas)
         except(FileNotFoundError,OSError) as error:
             print(f"Error{error}")
+        
+        try:
+            with open('detalle_ventas.txt', 'r', encoding='utf-8') as archivo_detalle:
+                nuevas_lineas = [linea for linea in archivo_detalle if not linea.startswith(f"{id_venta};")]
+
+            with open('detalle_ventas.txt', 'w', encoding='utf-8') as archivo_detalle:
+                archivo_detalle.writelines(nuevas_lineas)
+
+            print("Detalles de venta eliminados.")
+        except (FileNotFoundError, OSError):
+            print("No se encontró detalle_ventas.txt, se omitió.")
+        
+        try:
+            with open('recetas.txt', 'r', encoding='utf-8') as archivo_recetas:
+                nuevas_lineas = [linea for linea in archivo_recetas if not linea.startswith(f"{id_venta};")]
+
+            with open('recetas.txt', 'w', encoding='utf-8') as archivo_recetas:
+                archivo_recetas.writelines(nuevas_lineas)
+
+            print("Recetas asociadas eliminadas.")
+        except (FileNotFoundError, OSError):
+            print("No se encontró recetas.txt, se omitió.")
     else:
         print("Cancelando operación")
           

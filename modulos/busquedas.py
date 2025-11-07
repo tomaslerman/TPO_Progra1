@@ -1,5 +1,4 @@
 from .funciones_generales import buscar_id, mostrar_encabezado, extraer_encabezado_busquedas
-import re
 from functools import reduce
 
 def submenu_busquedas():
