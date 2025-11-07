@@ -199,19 +199,15 @@ def buscar_id_json(archivo, codigo):
     except (FileNotFoundError, json.JSONDecodeError):
         return -1,None
 
-def mostrar_datos(archivo,modo):
+def mostrar_datos(archivo):
     try:
-        with open (archivo,modo,encoding="UTF-8")as datos:
-            productos=json.load(datos)
-            print("--------------------")
-            print("Datos de Productos:")
-            print("---------------------")
-            print(f'{"|Codigo|":^8}  {"|Medicamento|":^20} {"|Stock|":^10} {"|Precio|":^10}')  
-            for pro in productos:
-                prec=f"${pro["precio"]}" 
-                print(f"{pro["codigo"]:^8}{pro["nombre"]:^20} {pro["stock"]:^15} {prec:^3}")
-    except(FileNotFoundError,OSError) as error:
-        print(f"Error{error}")
+        with open(archivo, "r", encoding="utf-8") as datos:
+            productos = json.load(datos)
+            print(f'{"ID":<6}{"Descripción":<25}{"Stock":<8}{"Precio":<10}')
+            for id_prod, datos in productos.items():
+                print(f"{id_prod:<6}{datos['descripcion']:<25}{datos['stock']:<8}${datos['precio']:<10.2f}")
+    except (FileNotFoundError, OSError) as error:
+        print(f"Error al abrir el archivo: {error}")
 
 def dar_baja_elementos(matriz):
     id_elemento = int(input("Ingrese el ID: "))

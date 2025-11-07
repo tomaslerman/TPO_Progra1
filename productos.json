@@ -1,0 +1,27 @@
+{
+    "1": {
+        "descripcion": "Paracetamol",
+        "stock": 100,
+        "precio": 5000.0
+    },
+    "2": {
+        "descripcion": "Ibuprofeno",
+        "stock": 30,
+        "precio": 1500.0
+    },
+    "3": {
+        "descripcion": "Amoxicilina",
+        "stock": 20,
+        "precio": 2000.0
+    },
+    "4": {
+        "descripcion": "Omeprazol",
+        "stock": 50,
+        "precio": 2500.0
+    },
+    "5": {
+        "descripcion": "Cetirizina",
+        "stock": 40,
+        "precio": 3000.0
+    }
+}
