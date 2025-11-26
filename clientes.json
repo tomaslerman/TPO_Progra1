@@ -9,16 +9,16 @@
     "2": {
         "obra_social": 2,
         "nombre": "MariaGomez",
-        "edad": 45,
+        "edad": 30,
         "tel": "987654321",
-        "estado": "Inactive"
+        "estado": "Active"
     },
     "3": {
         "obra_social": 3,
         "nombre": "CarlosLopez",
         "edad": 40,
         "tel": "456789123",
-        "estado": "Active"
+        "estado": "Inactive"
     },
     "4": {
         "obra_social": 4,

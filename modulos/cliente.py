@@ -1,4 +1,4 @@
-from .funciones_generales import open_json_file,extraer_encabezado_submenu, mostrar_encabezado, validar_opcion, mostrar_matriz_clientes
+from .funciones_generales import formatear_nombre_cliente, open_json_file, extraer_encabezado_submenu, mostrar_encabezado, validar_opcion, mostrar_matriz_clientes
 import json
 
 def obtener_ultimo_id(ruta_archivo):
@@ -12,9 +12,11 @@ def obtener_ultimo_id(ruta_archivo):
 
 def validar_nombre():
     nombre = input("Ingrese el nombre: ")
+    nombre = formatear_nombre_cliente(nombre)
     while not nombre.replace(" ", "").isalpha():
         print("Valor no válido. Solo letras y espacios.")
         nombre = input("Ingrese el nombre: ")
+        nombre = formatear_nombre_cliente(nombre)
     return nombre
 
 def ingresar_obra_social():
@@ -61,7 +63,7 @@ def pedir_entero(mensaje):
     while True:
         try:
             valor = int(input(mensaje))
-            if valor > 0:              
+            if valor > 0:
                 return valor
             else:
                 print("Error: el número debe ser mayor que 0.")
@@ -91,7 +93,7 @@ def guardar_json(ruta_archivo, data):
             json.dump(data, f, indent=4, ensure_ascii=False)
     except OSError:
         print("Error al escribir en el archivo JSON.")
-  
+
 def agregar_cliente():
     """Controla el alta del cliente, usando las funciones auxiliares."""
     ruta_archivo = "clientes.json"
@@ -110,11 +112,12 @@ def agregar_cliente():
         return
 
     estado = "Active"
+
     clientes[str(id_cliente)] = {
-        "id_obra": id_obra,
+        "obra_social": str(id_obra),
         "nombre": nombre,
         "edad": edad,
-        "telefono": telefono,
+        "tel": telefono,
         "estado": estado
     }
 
@@ -150,7 +153,28 @@ def modificar_cliente():
         return
 
     cliente = clientes[id_str]
-    print(f"\nCliente encontrado: {cliente['nombre']} (Edad: {cliente['edad']}, Tel: {cliente['tel']}, Obra social: {cliente['obra_social']})")
+
+    # --- Verificar si el cliente está activo antes de modificar ---
+    estado_actual = cliente.get("estado", "Active")
+    if estado_actual.lower() != "active":
+        print("\nEl cliente seleccionado está INACTIVO.")
+        resp_reactivar = input("¿Desea reactivar al cliente para poder modificarlo? (s/n): ").lower()
+        if resp_reactivar != "s":
+            print("Operación cancelada. No se realizaron modificaciones.")
+            return
+        # Reactivar cliente
+        cliente["estado"] = "Active"
+        clientes[id_str] = cliente
+        guardar_json(ruta_archivo, clientes)
+        print("Cliente reactivado correctamente.\n")
+
+    # Lectura de datos actuales
+    nombre_cliente = cliente.get("nombre", "Sin nombre")
+    edad_cliente = cliente.get("edad", "Sin edad")
+    telefono_cliente = cliente.get("tel", "Sin teléfono")
+    obra_cliente = cliente.get("obra_social", "Sin obra social")
+
+    print(f"\nCliente encontrado: {nombre_cliente} (Edad: {edad_cliente}, Tel: {telefono_cliente}, Obra social: {obra_cliente})")
 
     cambios = {}
 
@@ -166,13 +190,14 @@ def modificar_cliente():
         if nueva_edad is not None:
             cambios["edad"] = nueva_edad
 
-    # TELÉFONO (en tu JSON la clave es 'tel')
+    # TELÉFONO 
     resp = input("¿Desea modificar el teléfono? (s/n): ").lower()
     if resp == "s":
         nuevo_tel = ingresar_telefono()
-        cambios["tel"] = nuevo_tel
+        if nuevo_tel is not None:
+            cambios["tel"] = nuevo_tel
 
-    # OBRA SOCIAL (en tu JSON la clave es 'obra_social')
+    # OBRA SOCIAL
     resp = input("¿Desea modificar la obra social? (s/n): ").lower()
     if resp == "s":
         nueva_obra = ingresar_obra_social()
@@ -187,8 +212,9 @@ def modificar_cliente():
         print("\nRegistro modificado correctamente.")
     else:
         print("\nNo se realizaron cambios.")
+
 def baja_cliente():
-    """Controla el proceso de baja usando archivo auxiliar (según PPT)."""
+    """Controla el proceso de baja lógica del cliente."""
     ruta_archivo = "clientes.json"
     clientes = leer_json(ruta_archivo)
 
@@ -202,11 +228,12 @@ def baja_cliente():
         return
 
     cliente = clientes[id_str]
-    if cliente["estado"].lower() == "inactive":
+    if cliente.get("estado", "").lower() == "inactive":
         print("El cliente ya se encuentra dado de baja.")
         return
 
     cliente["estado"] = "Inactive"
+    clientes[id_str] = cliente
     guardar_json(ruta_archivo, clientes)
     print("Cliente dado de baja correctamente.")
 
@@ -214,27 +241,32 @@ def submenu_clientes():
     opcion = 0
     encabezados_submenu_clientes = extraer_encabezado_submenu("clientes")
     while opcion != -1:
-        print("---"* 10)
+        print("---" * 10)
         print("Submenú Clientes")
-        print("---"* 10)
+        print("---" * 10)
         mostrar_encabezado(encabezados_submenu_clientes)
-        opcion = int(input("Seleccione una opción: "))
+        try:
+            opcion = int(input("Seleccione una opción: "))
+        except ValueError:
+            print("Error: debe ingresar un número.")
+            continue
+
         opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
             agregar_cliente()
-            enter = input("Cliente agregado exitosamente. Volviendo a menu...")
+            input("Cliente agregado exitosamente. Volviendo a menú...")
         elif opcion == 2:  # Modificar cliente
             modificar_cliente()
-            enter = input("Cliente modificado exitosamente. Volviendo a menu...")
+            input("Cliente modificado exitosamente. Volviendo a menú...")
         elif opcion == 3:  # Dar baja cliente
             baja_cliente()
-            enter = input("Cliente eliminado exitosamente. Volviendo a menu...")
+            input("Cliente eliminado exitosamente. Volviendo a menú...")
         elif opcion == 4:  # Mostrar lista completa
             mostrar_matriz_clientes("clientes.json")
-    enter = input(" Volviendo a menu...")
+    input(" Volviendo a menú...")
 
 def ordenar_clientes_por_nombre(matriz_clientes):
     clientes_ordenados = sorted(matriz_clientes, key=lambda fila: fila[2].lower())
     print("Clientes ordenados por nombre:")
     for cliente in clientes_ordenados:
-         print(cliente[2])
+        print(cliente[2])

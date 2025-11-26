@@ -13,7 +13,7 @@ def submenu_reportes():
         opcion = int(input("Seleccione una opción: "))
         opcion = validar_opcion(opcion, 1, 5, encabezados_sub_menu_reportes)
         if opcion == 1:  # Estadística de ventas
-            estadisticas_ventas()
+            estadisticas_ventas() 
             enter = input("Presione Enter para continuar...")
         elif opcion == 2:
             cant_cl_ac = total_clientes_activos()

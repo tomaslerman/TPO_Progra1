@@ -288,3 +288,28 @@ def leer_productos():
     except OSError:
         print("Error al abrir producto.json.")
         return []
+
+def formatear_nombre_cliente(nombre_crudo):
+    nombre_crudo = str(nombre_crudo)
+    # Limpiamos espacios al inicio y al final
+    nombre_limpio = nombre_crudo.strip()
+
+    if not nombre_limpio:
+        return ""
+
+    partes = nombre_limpio.split()
+    partes_formateadas = []
+
+    for palabra in partes:
+        # Si la palabra tiene al menos 1 caracter
+        if len(palabra) > 0:
+            # Primer letra mayúscula (slicing [:1]) y resto minúscula ([1:])
+            primera = palabra[:1].upper()
+            resto = palabra[1:].lower()
+            partes_formateadas.append(primera + resto)
+        else:
+            partes_formateadas.append(palabra)
+
+    # Volvemos a unir las palabras con un espacio
+    nombre_formateado = " ".join(partes_formateadas)
+    return nombre_formateado

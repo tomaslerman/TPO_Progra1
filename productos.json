@@ -14,11 +14,6 @@
         "stock": 20,
         "precio": 2000.0
     },
-    "4": {
-        "descripcion": "Omeprazol",
-        "stock": 50,
-        "precio": 2500.0
-    },
     "5": {
         "descripcion": "Cetirizina",
         "stock": 40,
