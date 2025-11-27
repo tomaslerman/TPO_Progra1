@@ -177,30 +177,42 @@ def buscar_producto_minimo():
     print(f"Producto con menor precio: {producto_min['nombre']} (${producto_min['precio']})")
 
 def total_ventas_por_fecha(fecha_busqueda):
-    """
-    Devuelve el total de las ventas realizadas en una fecha determinada,
-    usando reduce() para sumar los totales directamente desde el archivo.
-    """
     try:
         with open("ventas.txt", "r", encoding="utf-8") as archivo:
-            totales = []
-            for linea in archivo:
-                partes = linea.strip().split(";")
-                if len(partes) == 4 and partes[1] == fecha_busqueda:
-                    try:
-                        total = float(partes[3])
-                        totales.append(total)
-                    except ValueError:
-                        continue  
+            totales_validos = []
 
-        if len(totales) == 0:
-            print(f"No hay ventas registradas para la fecha {fecha_busqueda}.")
+            for numero_linea, linea in enumerate(archivo, start=1):
+                partes = linea.strip().split(";")
+                if len(partes) != 4:
+                    continue
+
+                fecha = partes[1]
+                total_str = partes[3]
+
+                if fecha != fecha_busqueda:
+                    continue
+
+                try:
+                    total = float(total_str)
+                    totales_validos.append(total)
+                except ValueError:
+                    print(
+                        f"No se pudo agregar la línea {numero_linea}: "
+                        f"total '{total_str}' no es un número válido."
+                    )
+                    continue
+
+        if not totales_validos:
+            print(f"No hay ventas registradas válidas para la fecha {fecha_busqueda}.")
             return 0
 
-        total_final = reduce(lambda x, y: x + y, totales)
+        total_final = reduce(lambda x, y: x + y, totales_validos, 0.00)
         print(f"Total de ventas del día {fecha_busqueda}: ${total_final:.2f}")
         return total_final
 
     except FileNotFoundError:
         print("Error: no se encontró el archivo ventas.txt.")
+        return 0
+    except OSError:
+        print("Error al abrir ventas.txt.")
         return 0
