@@ -5,7 +5,7 @@ def submenu_busquedas():
    
     encabezados_submenu_busquedas = extraer_encabezado_busquedas("busquedas")
     opcion = 0
-    while opcion!=1:
+    while opcion != -1:
         print("---" * 10)
         print("Submenú Búsquedas")
         print("---" * 10)
@@ -17,119 +17,108 @@ def submenu_busquedas():
             continue
         while opcion not in [1, 2, -1]:
             print("Error! Opción inválida.")
-            opcion = int(input("Seleccione una opción: "))
+            try:
+                opcion = int(input("Seleccione una opción: "))
+            except ValueError:
+                print("Error! Opción inválida.")
+                opcion = 0 
+                continue
+
         if opcion == 1:
-            id_cliente = int(input("Ingrese el ID del cliente: "))
+            try:
+                id_cliente = int(input("Ingrese el ID del cliente: "))
+            except ValueError:
+                print("Error! Debe ingresar un número entero.")
+                continue
             ventas_de_x_cliente(id_cliente)
-            enter = input("Presione Enter para continuar...")
+            input("Presione Enter para continuar...")
         elif opcion == 2:
-            id_producto = int(input("Ingrese el ID del producto: "))
+            try:
+                id_producto = int(input("Ingrese el ID del producto: "))
+            except ValueError:
+                print("Error! Debe ingresar un número entero.")
+                continue
             ventas_de_x_producto(id_producto)
-            enter = input("Presione Enter para continuar...")
-    enter = input("Volviendo al menú principal...")
-
-def ventas_de_x_cliente(id_cliente):
-    try:
-        arch_clientes = open("clientes.txt", "r", encoding="utf-8")
-        matriz_clientes = [linea.strip().split(";") for linea in arch_clientes]
-    except FileNotFoundError:
-        print("Error! El archivo de clientes no existe.")
-    finally:
-        try:
-            arch_clientes.close()
-        except:
-            print("Error al cerrar el archivo de clientes.")
-    pos_cliente = buscar_id(matriz_clientes, id_cliente)
-    if pos_cliente == -1:
-        print("Error! El ID del cliente es inválido.")
-        return
-    if matriz_clientes[pos_cliente][5] == "Inactive":
-        print("El cliente está inactivo. No se pueden mostrar las ventas.")
-        return
-    print(f"Ventas del cliente {matriz_clientes[pos_cliente][2]} (ID {id_cliente}):")
-    try:
-        arch_ventas = open("ventas.txt", "r", encoding="utf-8")
-        matriz_ventas = [linea.strip().split(";") for linea in arch_ventas]
-    except FileNotFoundError:
-        print("Error! El archivo de ventas no existe.")
-        return
-    finally:
-        try:
-            arch_ventas.close()
-        except:
-            print("Error al cerrar el archivo de ventas.")
-    ventas_cliente = [venta for venta in matriz_ventas if int(venta[2]) == id_cliente]
-    if not ventas_cliente:
-        print("No hay ventas registradas para este cliente.")
-        return
-    print(f"{'ID Venta':<10}{'Fecha':<15}{'Total':<10}")
-    for venta in ventas_cliente:
-        print(f"{int(venta[0]):<10}{venta[1]:<15}${float(venta[3]):<10.2f}")
-
+            input("Presione Enter para continuar...")
+    input("Volviendo al menú principal...")
 
 def ventas_de_x_producto(id_producto):
+    matriz_productos = []
     try:
-        arch_productos = open("productos.txt", "r", encoding="utf-8")
-        matriz_productos = [linea.strip().split(";") for linea in arch_productos]
+        with open("productos.txt", "r", encoding="utf-8") as arch_productos:
+            matriz_productos = [linea.strip().split(";") for linea in arch_productos if linea.strip()]
     except FileNotFoundError:
         print("Error! El archivo de productos no existe.")
         return
-    finally:
-        try:
-            arch_productos.close()
-        except:
-            print("Error al cerrar el archivo de productos.")
+
     pos_producto = buscar_id(matriz_productos, id_producto)
     if pos_producto == -1:
         print("Error! El ID del producto es inválido.")
         return
+
     print(f"Ventas del producto {matriz_productos[pos_producto][1]} (ID {id_producto}):")
+
+    matriz_detalle_ventas = []
     try:
-        arch_detalle_ventas = open("detalle_ventas.txt", "r", encoding="utf-8")
-        matriz_detalle_ventas = [linea.strip().split(";") for linea in arch_detalle_ventas]
+        with open("detalle_ventas.txt", "r", encoding="utf-8") as arch_detalle_ventas:
+            matriz_detalle_ventas = [linea.strip().split(";") for linea in arch_detalle_ventas if linea.strip()]
     except FileNotFoundError:
         print("Error! El archivo de detalle de ventas no existe.")
         return
-    finally:
-        try:
-            arch_detalle_ventas.close()
-        except:
-            print("Error al cerrar el archivo de detalle de ventas.")
+
     ventas_producto = [detalle for detalle in matriz_detalle_ventas if int(detalle[1]) == id_producto]
     if not ventas_producto:
         print("No hay ventas registradas para este producto.")
         return
+
     print(f"{'ID Venta':<10}{'ID Receta':<10}{'Subtotal':<10}")
     for detalle in ventas_producto:
-        print(f"{int(detalle[0]):<10}{detalle[1]:<10}${float(detalle[2]):<10.2f}")
+        try:
+            print(f"{int(detalle[0]):<10}{detalle[1]:<10}${float(detalle[2]):<10.2f}")
+        except (ValueError, IndexError):
+            print("Error en el formato de una línea de detalle de ventas.")
 
-def ventas_de_x_cliente2(id_cliente): #versión 2.0
-    with open("ventas.txt", "r", encoding="utf-8") as f:
-        lineas = f.readlines()
+def ventas_de_x_cliente(id_cliente):
+    id_cliente_str = str(id_cliente)
 
-    ventas = list(
-        map(
-            lambda l: l.strip().split(";"),
-            filter(lambda l: l.strip() != "", lineas)
+    try:
+        with open("ventas.txt", "r", encoding="utf-8") as f:
+            ventas = [
+                l.strip().split(";")
+                for l in f
+                if l.strip()
+            ]
+    except FileNotFoundError:
+        print("Error! El archivo de ventas no existe.")
+        return
+
+    try:
+        ventas_dict = list(
+            map(
+                lambda v: {
+                    "id_venta": v[0],
+                    "fecha": v[1],
+                    "id_cliente": v[2],
+                    "total": float(v[3])
+                },
+                ventas
+            )
         )
-    )
+    except (IndexError, ValueError):
+        print("Error en el formato de alguna línea del archivo de ventas.")
+        return
 
-    ventas_dict = list(
-        map(
-            lambda v: {
-                "id_venta": v[0],
-                "fecha": v[1],
-                "id_cliente": v[2],
-                "total": float(v[3])
-            },
-            ventas
-        )
-    )
+    ventas_cliente = list(filter(lambda v: v["id_cliente"] == id_cliente_str, ventas_dict))
 
-    ventas_cliente = list(filter(lambda v: v["id_cliente"] == id_cliente, ventas_dict))
+    if not ventas_cliente:
+        print(f"No hay ventas registradas para el cliente {id_cliente}.")
+        return
+
     montos = list(map(lambda v: v["total"], ventas_cliente))
     total_gastado = reduce(lambda acc, x: acc + x, montos, 0)
+
     ultimas3 = ventas_cliente[-3:]
+
     print(f"Cliente {id_cliente} gastó un total de: ${total_gastado:.2f}")
     print("Últimas 3 ventas:")
     for v in ultimas3:

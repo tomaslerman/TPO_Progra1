@@ -1,4 +1,4 @@
-from .funciones_generales import mostrar_encabezado,mostrar_datos, extraer_encabezado_submenu, open_json_file, validar_opcion
+from .funciones_generales import mostrar_encabezado, mostrar_datos, extraer_encabezado_submenu, open_json_file, validar_opcion
 import re
 import json
 
@@ -6,36 +6,34 @@ def submenu_inventario():
     encabezados = extraer_encabezado_submenu("inventario")
     opcion = 0
     while opcion != -1:
-        print("---"* 10)
+        print("---" * 10)
         print("Submenú Inventario")
-        print("---"* 10)
+        print("---" * 10)
         mostrar_encabezado(encabezados)
-        opcion = int(input("Seleccione una opción: "))
+        try:
+            opcion = int(input("Seleccione una opción: "))
+        except ValueError:
+            print("Error: debe ingresar un número entero.")
+            continue
+
         opcion = validar_opcion(opcion, 1, 5, encabezados)
-        if opcion == 1:  # Agregar venta
+        if opcion == 1:  # Agregar producto
             agregar_productos('productos.json')
-            enter = input("Volviendo a menu...")
-        elif opcion == 2:  # Modificar detalle de venta
+            input("Volviendo a menu...")
+        elif opcion == 2:  # Modificar producto
             modificar_productos('productos.json')
-            enter = input("Volviendo a menu...")
-        elif opcion == 3:  # Dar baja venta
+            input("Volviendo a menu...")
+        elif opcion == 3:  # Dar baja producto
             dar_baja_productos('productos.json')
-            enter = input("Volviendo a menu...")
+            input("Volviendo a menu...")
         elif opcion == 4:  # Mostrar lista completa
             mostrar_datos('productos.json')
-            enter = input("Volviendo a menu...")
-        elif opcion==5:
+            input("Volviendo a menu...")
+        elif opcion == 5:
             detalle_medicamento('productos.json')
-            enter = input("Volviendo a menu...")
-           # mostrar_matriz(encabezados_ventas, matriz_ventas)
-    enter = input("Volviendo al menú principal...")
+            input("Volviendo a menu...")
+    input("Volviendo al menú principal...")
 
-def open_json_file(ruta):
-    try:
-        with open(ruta, "r", encoding="utf-8") as file:
-            return json.load(file)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return {}
 
 def agregar_productos(archivo):
     productos = open_json_file(archivo)
@@ -93,10 +91,9 @@ def agregar_productos(archivo):
     try:
         with open(archivo, "w", encoding="utf-8") as file:
             json.dump(productos, file, indent=4, ensure_ascii=False)
-        print(f"\n Producto '{nombre}' agregado correctamente (ID {id_nuevo}).")
+        print(f"\nProducto '{nombre}' agregado correctamente (ID {id_nuevo}).")
     except OSError as e:
         print("Error al escribir en el archivo:", e)
-
 
 def modificar_productos(archivo):
     productos = open_json_file(archivo)
@@ -110,13 +107,9 @@ def modificar_productos(archivo):
     for id_prod, datos in productos.items():
         print(f'{id_prod:<6}{datos["descripcion"]:<25}{datos["stock"]:<8}{datos["precio"]:<10.2f}')
 
-    try:
-        id_modificar = input("\nIngrese el ID del producto a modificar: ").strip()
-        if id_modificar not in productos:
-            print("Error: El ID ingresado no existe.")
-            return
-    except ValueError:
-        print("Error: Ingrese un número válido para el ID.")
+    id_modificar = input("\nIngrese el ID del producto a modificar: ").strip()
+    if id_modificar not in productos:
+        print("Error: El ID ingresado no existe.")
         return
 
     print("\n¿Qué desea modificar?")
@@ -181,26 +174,28 @@ def dar_baja_productos(archivo):
     mostrar_datos(archivo)
     print("-" * 50)
 
-    try:
-        codigo = input("\nIngrese el ID del producto a dar de baja (o 0 para cancelar): ").strip()
-        if codigo == "0":
-            print("Operación cancelada.\n")
-            return
-        if codigo not in productos:
-            print("Código no encontrado. Intente nuevamente.\n")
-            return
-    except ValueError:
-        print("Código no válido. Intente nuevamente.\n")
+    codigo = input("\nIngrese el ID del producto a dar de baja (o 0 para cancelar): ").strip()
+    if codigo == "0":
+        print("Operación cancelada.\n")
+        return
+    if codigo not in productos:
+        print("Código no encontrado. Intente nuevamente.\n")
         return
 
-    confirmar = input(f"¿Está seguro que desea dar de baja el producto '{productos[codigo]['descripcion']}'? (s/n): ").lower()
+    confirmar = input(
+        f"¿Está seguro que desea dar de baja el producto '{productos[codigo]['descripcion']}'? (s/n): "
+    ).lower()
     if confirmar == 's':
         productos.pop(codigo)
-        with open(archivo, "w", encoding="utf-8") as arch:
-            json.dump(productos, arch, ensure_ascii=False, indent=4)
-        print("Producto dado de baja correctamente.\nTodos los cambios han sido guardados.")
+        try:
+            with open(archivo, "w", encoding="utf-8") as arch:
+                json.dump(productos, arch, ensure_ascii=False, indent=4)
+            print("Producto dado de baja correctamente.\nTodos los cambios han sido guardados.")
+        except OSError as e:
+            print("Error al escribir en el archivo:", e)
     else:
         print("Operación cancelada.\n")
+
 
 def buscar_producto(archivo):
     productos = open_json_file(archivo)
@@ -208,18 +203,20 @@ def buscar_producto(archivo):
         print("No hay productos registrados.")
         return
 
-    try:
-        id_buscar = input("Ingrese el ID del producto a buscar: ").strip()
-    except ValueError:
-        print("Error: Ingrese un número válido para el ID.")
-        return
+    id_buscar = input("Ingrese el ID del producto a buscar: ").strip()
 
     if id_buscar not in productos:
         print("Error: El ID ingresado no existe.")
         return
 
     prod = productos[id_buscar]
-    print(f"Producto encontrado: ID: {id_buscar}, Descripción: {prod['descripcion']}, Stock: {prod['stock']}, Precio: ${prod['precio']:.2f}")
+    print(
+        f"Producto encontrado: ID: {id_buscar}, "
+        f"Descripción: {prod['descripcion']}, "
+        f"Stock: {prod['stock']}, "
+        f"Precio: ${prod['precio']:.2f}"
+    )
+
 
 def detalle_medicamento(archivo):
     productos = open_json_file(archivo)
@@ -231,11 +228,7 @@ def detalle_medicamento(archivo):
     mostrar_datos(archivo)
     print("")
 
-    try:
-        id_med = input("Ingrese ID del medicamento para ver su detalle: ").strip()
-    except ValueError:
-        print("Error: Ingrese un ID válido.")
-        return
+    id_med = input("Ingrese ID del medicamento para ver su detalle: ").strip()
 
     if id_med not in productos:
         print("Error: ID no encontrado.")
@@ -244,18 +237,20 @@ def detalle_medicamento(archivo):
     descripcion = productos[id_med]["descripcion"]
     print(f"Medicamento seleccionado: {descripcion}")
 
-    if re.findall("zina$", descripcion.lower()):
+    desc_lower = descripcion.lower()
+    if re.findall("zina$", desc_lower):
         print("Medicamento antihistamínico de segunda generación, usado para síntomas de alergia.")
-    elif re.findall("mol$", descripcion.lower()):
+    elif re.findall("mol$", desc_lower):
         print("Medicamento analgésico y antipirético, usado para dolor leve a moderado y fiebre.")
-    elif re.findall("eno$", descripcion.lower()):
+    elif re.findall("eno$", desc_lower):
         print("Medicamento que reduce la inflamación en tejidos.")
-    elif re.findall("zol$", descripcion.lower()):
+    elif re.findall("zol$", desc_lower):
         print("Medicamento que reduce la producción de ácido en el estómago.")
-    elif re.findall("lina$", descripcion.lower()):
+    elif re.findall("lina$", desc_lower):
         print("Medicamento utilizado para tratar infecciones bacterianas.")
     else:
         print("No se puede determinar específicamente su tipo.")
+
 
 def stock_por_agotar(archivo):
     productos = open_json_file(archivo)
@@ -263,9 +258,9 @@ def stock_por_agotar(archivo):
         print("No hay productos registrados.")
         return
 
-    productos_agotarse = [ 
-        (id_prod, datos['descripcion'], datos['stock'], datos['precio']) 
-        for id_prod, datos in productos.items() 
+    productos_agotarse = [
+        (id_prod, datos['descripcion'], datos['stock'], datos['precio'])
+        for id_prod, datos in productos.items()
         if datos['stock'] <= 2
     ]
 

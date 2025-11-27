@@ -30,7 +30,8 @@
         "1": "Agregar cliente",
         "2": "Modificar Cliente",
         "3": "Dar baja cliente",
-        "4": "Mostrar lista completa",
+        "4": "Mostrar lista (activos)",
+        "5": "Mostrar lista (completa)",
         "-1": "Volver a menu"
     },
     "reportes": {

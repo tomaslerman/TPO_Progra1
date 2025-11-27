@@ -49,7 +49,7 @@ def mostrar_matriz(titulos, matriz):
         fila_completa = fila + [""] * (len(titulos) - len(fila))
         print(" | ".join(str(valor) for valor in fila_completa))
 
-def mostrar_matriz_clientes(ruta_archivo):
+def mostrar_matriz_clientes(ruta_archivo, mostrar_inactivos):
     """Muestra los clientes activos del archivo JSON en formato de tabla."""
     try:
         with open(ruta_archivo, "r", encoding="utf-8") as archivo:
@@ -70,16 +70,15 @@ def mostrar_matriz_clientes(ruta_archivo):
 
     # Armo la "matriz" de filas
     for id_cliente, datos in clientes.items():
-        if datos["estado"].lower() == "active":
-            fila = [
-                id_cliente,
-                datos["nombre"],
-                datos["edad"],
-                datos["tel"],
-                datos["obra_social"],
-                datos["estado"]
-            ]
-            filas.append(fila)
+        fila = [
+            id_cliente,
+            datos["nombre"],
+            datos["edad"],
+            datos["tel"],
+            datos["obra_social"],
+            datos["estado"]
+        ]
+        filas.append(fila)
 
     if not filas:
         print("No hay clientes activos para mostrar.")
@@ -89,9 +88,16 @@ def mostrar_matriz_clientes(ruta_archivo):
     print("-" * 65)
 
     # Mostrar solo los clientes activos
-    for fila in filas:
-        if fila[5].lower() == "active":
-         print(f"{fila[0]:<5} {fila[1]:<15} {fila[2]:<5} {fila[3]:<12} {fila[4]:<12} {fila[5]:<10}")
+    if not mostrar_inactivos:
+        for fila in filas:
+            if fila[5].lower() == "active":
+                print(f"{fila[0]:<5} {fila[1]:<15} {fila[2]:<5} {fila[3]:<12} {fila[4]:<12} {fila[5]:<10}")
+    # Mostrar todos los clientes, incluidos los inactivos
+    else:
+        for fila in filas:
+            print(f"{fila[0]:<5} {fila[1]:<15} {fila[2]:<5} {fila[3]:<12} {fila[4]:<12} {fila[5]:<10}")
+    
+    enter = input("Presione Enter para volver al submenú...")
 
 
 def mostrar_matriz_cuadro(encabezados, matriz):
@@ -274,19 +280,19 @@ def leer_ventas():
         print("Error al abrir ventas.txt.")
 
 def leer_productos():
-    """Lee producto.json y devuelve la lista de productos."""
+    """Lee productos.json y devuelve la lista de productos."""
     try:
-        with open("producto.json", "r", encoding="utf-8") as archivo:
+        with open("productos.json", "r", encoding="utf-8") as archivo:
             productos = json.load(archivo)  # deserializa JSON → lista de diccionarios
             return productos
     except FileNotFoundError:
-        print("Error: no se encontró el archivo producto.json.")
+        print("Error: no se encontró el archivo productos.json.")
         return []
     except json.JSONDecodeError:
-        print("Error: formato JSON inválido en producto.json.")
+        print("Error: formato JSON inválido en productos.json.")
         return []
     except OSError:
-        print("Error al abrir producto.json.")
+        print("Error al abrir productos.json.")
         return []
 
 def formatear_nombre_cliente(nombre_crudo):

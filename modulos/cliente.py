@@ -251,7 +251,7 @@ def submenu_clientes():
             print("Error: debe ingresar un número.")
             continue
 
-        opcion = validar_opcion(opcion, 1, 4, encabezados_submenu_clientes)
+        opcion = validar_opcion(opcion, 1, 5, encabezados_submenu_clientes)
         if opcion == 1:  # Agregar cliente
             agregar_cliente()
             input("Cliente agregado exitosamente. Volviendo a menú...")
@@ -260,9 +260,11 @@ def submenu_clientes():
             input("Cliente modificado exitosamente. Volviendo a menú...")
         elif opcion == 3:  # Dar baja cliente
             baja_cliente()
-            input("Cliente eliminado exitosamente. Volviendo a menú...")
-        elif opcion == 4:  # Mostrar lista completa
-            mostrar_matriz_clientes("clientes.json")
+            input("Cliente dado de baja exitosamente. Volviendo a menú...")
+        elif opcion == 4:  # Mostrar lista activos
+            mostrar_matriz_clientes("clientes.json", False)
+        elif opcion == 5:  # Mostrar lista completa
+            mostrar_matriz_clientes("clientes.json", True)
     input(" Volviendo a menú...")
 
 def ordenar_clientes_por_nombre(matriz_clientes):
