@@ -18,5 +18,75 @@
         "descripcion": "Cetirizina",
         "stock": 40,
         "precio": 3000.0
+    },
+    "6": {
+        "descripcion": "Diclofenac",
+        "stock": 50,
+        "precio": 1800.0
+    },
+    "7": {
+        "descripcion": "Azitromicina",
+        "stock": 25,
+        "precio": 4500.0
+    },
+    "8": {
+        "descripcion": "Ranitidina",
+        "stock": 60,
+        "precio": 2200.0
+    },
+    "9": {
+        "descripcion": "Omeprazol",
+        "stock": 80,
+        "precio": 3200.0
+    },
+    "10": {
+        "descripcion": "Loratadina",
+        "stock": 35,
+        "precio": 2800.0
+    },
+    "11": {
+        "descripcion": "Metformina",
+        "stock": 70,
+        "precio": 3500.0
+    },
+    "12": {
+        "descripcion": "Aspirina",
+        "stock": 45,
+        "precio": 1200.0
+    },
+    "13": {
+        "descripcion": "Tramadol",
+        "stock": 15,
+        "precio": 8000.0
+    },
+    "14": {
+        "descripcion": "Amiodarona",
+        "stock": 10,
+        "precio": 9000.0
+    },
+    "15": {
+        "descripcion": "Dexametasona",
+        "stock": 22,
+        "precio": 2500.0
+    },
+    "16": {
+        "descripcion": "Furosemida",
+        "stock": 55,
+        "precio": 1700.0
+    },
+    "17": {
+        "descripcion": "Prednisona",
+        "stock": 65,
+        "precio": 2600.0
+    },
+    "18": {
+        "descripcion": "Clonazepam",
+        "stock": 12,
+        "precio": 7000.0
+    },
+    "19": {
+        "descripcion": "Salbutamol",
+        "stock": 90,
+        "precio": 3100.0
     }
 }

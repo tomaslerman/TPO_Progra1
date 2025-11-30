@@ -166,7 +166,7 @@ def fechaYvalidacion():
         except AssertionError as error:
             print(error)
 
-    fecha = f"{dia}-{mes}-{anio}"
+    fecha = f"{anio}-{mes}-{dia}"
     return fecha
 
 def buscar_por_nombre(matriz, nombre, columna, encabezados):

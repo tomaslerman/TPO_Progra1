@@ -16,7 +16,7 @@ def submenu_reportes():
             print("Error: debe ingresar un número entero.")
             continue
 
-        opcion = validar_opcion(opcion, 1, 5, encabezados_sub_menu_reportes)
+        opcion = validar_opcion(opcion, 1, 7, encabezados_sub_menu_reportes)
         if opcion == 1:
             estadisticas_ventas() 
             input("Presione Enter para continuar...")
@@ -34,6 +34,12 @@ def submenu_reportes():
             fecha_a_buscar = fechaYvalidacion()
             total_dia = total_ventas_por_fecha(fecha_a_buscar)
             input("Presione Enter para continuar...")
+        elif opcion == 6:
+            edades_repetidas()
+            input("Presione Enter para continuar...")
+        elif opcion == 7:
+            obras_sociales_no_usadas()
+            input("Presione Enter para continuar...")   
     input("Volviendo a menu...")
 
 def estadisticas_ventas():
@@ -101,19 +107,21 @@ def total_clientes_activos():
 
 def sumar_totales_cliente(arch, id_cliente):
     total_cliente = 0.0
-    for linea in arch:
-        partes = linea.strip().split(";")
-        if len(partes) != 4:
-            continue
 
-        try:
-            id_cli = int(partes[2])
-            total  = float(partes[3])
-        except ValueError:
-            continue
+    linea = arch.readline().strip()   # Primera lectura
 
-        if id_cli == id_cliente:
-            total_cliente += total
+    while linea:                      # Mientras haya contenido
+        partes = linea.split(";")
+        if len(partes) == 4:
+            try:
+                id_cli = int(partes[2])
+                total = float(partes[3])
+                if id_cli == id_cliente:
+                    total_cliente += total
+            except ValueError:
+                pass
+
+        linea = arch.readline().strip()   # Leer la siguiente línea
 
     return total_cliente
 
@@ -166,41 +174,70 @@ def producto_minimo_precio(productos, i=0):
     else:
         return minimo_restante
 
+def producto_minimo_precio(productos, claves, i=0):
+    """
+    Devuelve el producto con el precio mínimo de forma recursiva.
+    productos: diccionario completo
+    claves: lista de claves del diccionario
+    i: índice de la clave actual
+    """
+    # Caso base: última clave
+    if i == len(claves) - 1:
+        return productos[claves[i]]
+
+    # Recursión al resto
+    minimo_restante = producto_minimo_precio(productos, claves, i + 1)
+
+    actual = productos[claves[i]]
+
+    # Comparación
+    if actual["precio"] <= minimo_restante["precio"]:
+        return actual
+    else:
+        return minimo_restante
+
 def buscar_producto_minimo():
-    """Busca el producto con el precio más bajo e imprime los datos."""
-    productos = leer_productos()
+    productos = open_json_file("productos.json")
+
     if len(productos) == 0:
         print("No hay productos cargados.")
         return None
 
-    producto_min = producto_minimo_precio(productos)
-    print(f"Producto con menor precio: {producto_min['nombre']} (${producto_min['precio']})")
+    claves = list(productos.keys())  # ✔ lista de claves del diccionario
+
+    producto_min = producto_minimo_precio(productos, claves)
+
+    print(f"Producto con menor precio: {producto_min['descripcion']} (${producto_min['precio']})")
+    return producto_min
+
 
 def total_ventas_por_fecha(fecha_busqueda):
     try:
         with open("ventas.txt", "r", encoding="utf-8") as archivo:
             totales_validos = []
 
-            for numero_linea, linea in enumerate(archivo, start=1):
-                partes = linea.strip().split(";")
-                if len(partes) != 4:
-                    continue
+            linea = archivo.readline().strip()    # 👉 primera lectura
+            numero_linea = 1                      # 👉 para mensajes de error
 
-                fecha = partes[1]
-                total_str = partes[3]
+            while linea:
+                partes = linea.split(";")
 
-                if fecha != fecha_busqueda:
-                    continue
+                if len(partes) == 4:
+                    fecha = partes[1]
+                    total_str = partes[3]
 
-                try:
-                    total = float(total_str)
-                    totales_validos.append(total)
-                except ValueError:
-                    print(
-                        f"No se pudo agregar la línea {numero_linea}: "
-                        f"total '{total_str}' no es un número válido."
-                    )
-                    continue
+                    if fecha == fecha_busqueda:
+                        try:
+                            total = float(total_str)
+                            totales_validos.append(total)
+                        except ValueError:
+                            print(
+                                f"No se pudo agregar la línea {numero_linea}: "
+                                f"total '{total_str}' no es un número válido."
+                            )
+
+                linea = archivo.readline().strip()   # 👉 leer la siguiente línea
+                numero_linea += 1
 
         if not totales_validos:
             print(f"No hay ventas registradas válidas para la fecha {fecha_busqueda}.")
@@ -216,3 +253,38 @@ def total_ventas_por_fecha(fecha_busqueda):
     except OSError:
         print("Error al abrir ventas.txt.")
         return 0
+    
+def edades_repetidas():
+    clientes = open_json_file("clientes.json")
+
+    edades = [d["edad"] for d in clientes.values()]
+    edades_unicas = set(edades)
+
+    repetidas = [e for e in edades_unicas if edades.count(e) > 1]
+
+    if repetidas: 
+        repetidas_texto = ", ".join(str(e) for e in repetidas)
+        print(f"Edades repetidas encontradas: {repetidas_texto}")
+    else:
+        print("No hay edades repetidas entre los clientes.")
+
+
+def obras_sociales_no_usadas():
+    obras = open_json_file("obras_sociales.json")
+    clientes = open_json_file("clientes.json")
+
+    todas = set(obras.keys())
+
+    # Obras sociales asignadas a algún cliente
+    usadas = {str(d["obra_social"]) for d in clientes.values()}
+    no_usadas = todas - usadas
+
+    if not no_usadas:
+        print("Todas las obras sociales están siendo utilizadas por al menos un cliente.")
+        return
+
+    lista_nombres = [obras[k]["nombre"] for k in no_usadas]
+
+    texto = ", ".join(lista_nombres)
+    print(f"Obras sociales NO utilizadas: {texto}")
+

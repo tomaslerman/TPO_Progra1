@@ -40,6 +40,8 @@
         "3": "Total gastado por cliente especifico",
         "4": "Buscar producto mas barato",
         "5": "Total ventas en una fecha especifica",
+        "6": "Edades de los clientes repetidas",
+        "7": "Obras sociales no utilizadas",
         "-1": "Volver a menu"
     }
 }

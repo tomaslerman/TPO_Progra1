@@ -23,7 +23,7 @@
     "4": {
         "obra_social": 4,
         "nombre": "AnaMartinez",
-        "edad": 35,
+        "edad": 40,
         "tel": "321654987",
         "estado": "Inactive"
     },
@@ -32,6 +32,76 @@
         "nombre": "LuisFernandez",
         "edad": 28,
         "tel": "159753486",
+        "estado": "Active"
+    },
+    "6": {
+        "obra_social": 1,
+        "nombre": "SofiaRamirez",
+        "edad": 32,
+        "tel": "114578965",
+        "estado": "Active"
+    },
+    "7": {
+        "obra_social": 3,
+        "nombre": "DiegoTorres",
+        "edad": 45,
+        "tel": "119854723",
+        "estado": "Inactive"
+    },
+    "8": {
+        "obra_social": 2,
+        "nombre": "CamilaSosa",
+        "edad": 28,
+        "tel": "112347895",
+        "estado": "Active"
+    },
+    "9": {
+        "obra_social": 5,
+        "nombre": "RicardoJuarez",
+        "edad": 35,
+        "tel": "113579246",
+        "estado": "Active"
+    },
+    "10": {
+        "obra_social": 4,
+        "nombre": "FlorenciaAcosta",
+        "edad": 30,
+        "tel": "117895432",
+        "estado": "Inactive"
+    },
+    "11": {
+        "obra_social": 2,
+        "nombre": "MatiasCorrea",
+        "edad": 40,
+        "tel": "116543278",
+        "estado": "Active"
+    },
+    "12": {
+        "obra_social": 3,
+        "nombre": "ValentinaMendez",
+        "edad": 26,
+        "tel": "119876543",
+        "estado": "Active"
+    },
+    "13": {
+        "obra_social": 1,
+        "nombre": "NicolasAlvarez",
+        "edad": 33,
+        "tel": "115432987",
+        "estado": "Inactive"
+    },
+    "14": {
+        "obra_social": 5,
+        "nombre": "JulietaRios",
+        "edad": 40,
+        "tel": "118653421",
+        "estado": "Active"
+    },
+    "15": {
+        "obra_social": 4,
+        "nombre": "FrancoGutierrez",
+        "edad": 28,
+        "tel": "119321876",
         "estado": "Active"
     }
 }
