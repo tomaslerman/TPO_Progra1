@@ -103,5 +103,75 @@
         "edad": 28,
         "tel": "119321876",
         "estado": "Active"
+    },
+    "16": {
+        "obra_social": 2,
+        "nombre": "MartinSilva",
+        "edad": 34,
+        "tel": "114563218",
+        "estado": "Active"
+    },
+    "17": {
+        "obra_social": 1,
+        "nombre": "LucianaPaz",
+        "edad": 29,
+        "tel": "112349876",
+        "estado": "Active"
+    },
+    "18": {
+        "obra_social": 3,
+        "nombre": "GabrielVega",
+        "edad": 42,
+        "tel": "117654321",
+        "estado": "Inactive"
+    },
+    "19": {
+        "obra_social": 5,
+        "nombre": "DanielaRuiz",
+        "edad": 27,
+        "tel": "113216549",
+        "estado": "Active"
+    },
+    "20": {
+        "obra_social": 4,
+        "nombre": "PabloNuñez",
+        "edad": 38,
+        "tel": "118765432",
+        "estado": "Active"
+    },
+    "21": {
+        "obra_social": 2,
+        "nombre": "CarlaBenitez",
+        "edad": 31,
+        "tel": "114321876",
+        "estado": "Inactive"
+    },
+    "22": {
+        "obra_social": 1,
+        "nombre": "JorgeMolina",
+        "edad": 45,
+        "tel": "115987321",
+        "estado": "Active"
+    },
+    "23": {
+        "obra_social": 3,
+        "nombre": "MarianaCastro",
+        "edad": 25,
+        "tel": "116549873",
+        "estado": "Active"
+    },
+    "24": {
+        "obra_social": 5,
+        "nombre": "EstebanOrtiz",
+        "edad": 36,
+        "tel": "112314567",
+        "estado": "Inactive"
+    },
+    "25": {
+        "obra_social": 4,
+        "nombre": "LauraDomínguez",
+        "edad": 39,
+        "tel": "119871234",
+        "estado": "Active"
     }
 }
