@@ -45,8 +45,8 @@ def submenu_busquedas():
 def ventas_de_x_producto(id_producto):
     matriz_productos = []
     try:
-        with open("productos.txt", "r", encoding="utf-8") as arch_productos:
-            matriz_productos = [linea.strip().split(";") for linea in arch_productos if linea.strip()]
+        with open("productos.json", "r", encoding="utf-8") as arch_productos:
+            matriz_productos = json.load(arch_productos)
     except FileNotFoundError:
         print("Error! El archivo de productos no existe.")
         return
