@@ -56,7 +56,7 @@ def ventas_de_x_producto(id_producto):
         print(f"Ventas del producto {info['descripcion']} (ID {id_producto}):")
     else:
         print("Error! El ID del producto es inválido.")
-        return
+        return 
 
     matriz_detalle_ventas = []
     try:
@@ -66,12 +66,14 @@ def ventas_de_x_producto(id_producto):
         print("Error! El archivo de detalle de ventas no existe.")
         return
 
-    ventas_producto = [detalle for detalle in matriz_detalle_ventas if int(detalle[1]) == id_producto]
+    ventas_producto = [detalle for detalle in matriz_detalle_ventas if detalle[1] == str(id_producto)]
+    
     if not ventas_producto:
         print("No hay ventas registradas para este producto.")
         return
 
-    print(f"{'ID Venta':<10}{'ID Prod.':<10}{'Subtotal':<10}")
+    print(f"{'ID Venta':<10}{'ID Receta':<10}{'Subtotal':<10}")
+    
     for detalle in ventas_producto:
         try:
             print(f"{int(detalle[0]):<10}{detalle[1]:<10}${float(detalle[2]):<10.2f}")
