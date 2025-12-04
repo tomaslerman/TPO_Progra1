@@ -43,7 +43,7 @@ def submenu_busquedas():
     input("Volviendo al menú principal...")
 
 def ventas_de_x_producto(id_producto):
-    
+
     try:
         with open("productos.json", "r", encoding="utf-8") as archivo:
             diccionario_productos = json.load(archivo)
@@ -56,7 +56,8 @@ def ventas_de_x_producto(id_producto):
         print(f"Ventas del producto {info['descripcion']} (ID {id_producto}):")
     else:
         print("Error! El ID del producto es inválido.")
-    
+        return
+
     matriz_detalle_ventas = []
     try:
         with open("detalle_ventas.txt", "r", encoding="utf-8") as arch_detalle_ventas:
@@ -70,7 +71,7 @@ def ventas_de_x_producto(id_producto):
         print("No hay ventas registradas para este producto.")
         return
 
-    print(f"{'ID Venta':<10}{'ID Receta':<10}{'Subtotal':<10}")
+    print(f"{'ID Venta':<10}{'ID Prod.':<10}{'Subtotal':<10}")
     for detalle in ventas_producto:
         try:
             print(f"{int(detalle[0]):<10}{detalle[1]:<10}${float(detalle[2]):<10.2f}")
