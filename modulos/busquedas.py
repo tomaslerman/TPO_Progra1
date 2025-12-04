@@ -1,6 +1,6 @@
 from .funciones_generales import buscar_id, mostrar_encabezado, extraer_encabezado_busquedas
 from functools import reduce
-
+import json
 def submenu_busquedas():
    
     encabezados_submenu_busquedas = extraer_encabezado_busquedas("busquedas")
@@ -43,21 +43,20 @@ def submenu_busquedas():
     input("Volviendo al menú principal...")
 
 def ventas_de_x_producto(id_producto):
-    matriz_productos = []
+    
     try:
-        with open("productos.json", "r", encoding="utf-8") as arch_productos:
-            matriz_productos = json.load(arch_productos)
+        with open("productos.json", "r", encoding="utf-8") as archivo:
+            diccionario_productos = json.load(archivo)
     except FileNotFoundError:
         print("Error! El archivo de productos no existe.")
-        return
-
-    pos_producto = buscar_id(matriz_productos, id_producto)
-    if pos_producto == -1:
+        diccionario_productos = {}
+    key_producto = str(id_producto)
+    if key_producto in diccionario_productos:
+        info = diccionario_productos[key_producto]
+        print(f"Ventas del producto {info['descripcion']} (ID {id_producto}):")
+    else:
         print("Error! El ID del producto es inválido.")
-        return
-
-    print(f"Ventas del producto {matriz_productos[pos_producto][1]} (ID {id_producto}):")
-
+    
     matriz_detalle_ventas = []
     try:
         with open("detalle_ventas.txt", "r", encoding="utf-8") as arch_detalle_ventas:
