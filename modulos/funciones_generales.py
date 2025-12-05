@@ -205,6 +205,23 @@ def buscar_id_json(archivo, codigo):
     except (FileNotFoundError, json.JSONDecodeError):
         return -1,None
 
+def buscar_id_prod(archivo, codigo):
+    try:
+        with open(archivo, "r", encoding="UTF-8") as arch:
+            productos = json.load(arch)
+
+        codigo = str(codigo)
+        if codigo in productos:
+            return codigo, productos[codigo]
+
+        return -1, None
+
+    except (FileNotFoundError, json.JSONDecodeError):
+        return -1, None
+
+
+
+
 def mostrar_datos(archivo):
     try:
         with open(archivo, "r", encoding="utf-8") as datos:
