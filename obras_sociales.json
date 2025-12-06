@@ -1,34 +1,122 @@
 {
-    "1": {
-        "nombre": "Osde",
-        "descuento": 10
-    },
-    "2": {
-        "nombre": "Hospitalitaliano",
-        "descuento": 15
-    },
-    "3": {
-        "nombre": "Medife",
-        "descuento": 20
-    },
-    "4": {
-        "nombre": "Omint",
-        "descuento": 5
-    },
-    "5": {
-        "nombre": "Osecac",
-        "descuento": 12
-    },
-    "6": {
-        "nombre": "SwissMedical",
-        "descuento": 18
-    },
-    "7": {
-        "nombre": "Galeno",
-        "descuento": 22
-    },
-    "8": {
-        "nombre": "SancorSalud",
-        "descuento": 17
-    }
+  "1": {
+    "nombre": "Osde",
+    "descuento": 10
+},
+  "2": {
+    "nombre": "Hospitalitaliano",
+    "descuento": 15
+},
+  "3": {
+    "nombre": "Medife",
+    "descuento": 20
+},
+  "4": {
+    "nombre": "Omint",
+    "descuento": 5
+},
+  "5": {
+    "nombre": "Osecac",
+    "descuento": 10
+},
+  "6": {
+    "nombre": "SwissMedical",
+    "descuento": 20
+  },
+  "7": {
+    "nombre": "Galeno",
+    "descuento": 20
+  },
+  "8": {
+    "nombre": "SancorSalud",
+    "descuento": 15
+  },
+  "9": {
+    "nombre": "AccordSalud",
+    "descuento": 15
+  },
+  "10": {
+    "nombre": "Avalian",
+    "descuento": 15
+  },
+  "11": {
+    "nombre": "PrevencionSalud",
+    "descuento": 20
+  },
+  "12": {
+    "nombre": "FederadaSalud",
+    "descuento": 15
+  },
+  "13": {
+    "nombre": "Nobis",
+    "descuento": 10
+  },
+  "14": {
+    "nombre": "Medicus",
+    "descuento": 20
+  },
+  "15": {
+    "nombre": "AmffaSalud",
+    "descuento": 10
+  },
+  "16": {
+    "nombre": "LuisPasteur",
+    "descuento": 20
+  },
+  "17": {
+    "nombre": "Dasuten",
+    "descuento": 5
+  },
+  "18": {
+    "nombre": "UnionPersonal",
+    "descuento": 20
+  },
+  "19": {
+    "nombre": "JerarquicosSalud",
+    "descuento": 15
+  },
+  "20": {
+    "nombre": "OSPIP",
+    "descuento": 10
+  },
+  "21": {
+    "nombre": "OSDEPYM",
+    "descuento": 10
+  },
+  "22": {
+    "nombre": "OSPES",
+    "descuento": 15
+  },
+  "23": {
+    "nombre": "OSPAT",
+    "descuento": 15
+  },
+  "24": {
+    "nombre": "OSUTHGRA",
+    "descuento": 20
+  },
+  "25": {
+    "nombre": "OSMATA",
+    "descuento": 15
+  },
+  "26": {
+    "nombre": "OSPACA",
+    "descuento": 10
+  },
+  "27": {
+    "nombre": "OSPIA",
+    "descuento": 15
+  },
+  "28": {
+    "nombre": "OSSEG",
+    "descuento": 15
+  },
+  "29": {
+    "nombre": "OSDOP",
+    "descuento": 10
+  },
+  "30": {
+    "nombre": "OSEP",
+    "descuento": 20
+  }
 }
