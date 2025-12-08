@@ -42,44 +42,6 @@ def submenu_busquedas():
             input("Presione Enter para continuar...")
     input("Volviendo al menú principal...")
 
-def ventas_de_x_producto(id_producto):
-
-    try:
-        with open("productos.json", "r", encoding="utf-8") as archivo:
-            diccionario_productos = json.load(archivo)
-    except FileNotFoundError:
-        print("Error! El archivo de productos no existe.")
-        diccionario_productos = {}
-    key_producto = str(id_producto)
-    if key_producto in diccionario_productos:
-        info = diccionario_productos[key_producto]
-        print(f"Ventas del producto {info['descripcion']} (ID {id_producto}):")
-    else:
-        print("Error! El ID del producto es inválido.")
-        return 
-
-    matriz_detalle_ventas = []
-    try:
-        with open("detalle_ventas.txt", "r", encoding="utf-8") as arch_detalle_ventas:
-            matriz_detalle_ventas = [linea.strip().split(";") for linea in arch_detalle_ventas if linea.strip()]
-    except FileNotFoundError:
-        print("Error! El archivo de detalle de ventas no existe.")
-        return
-
-    ventas_producto = [detalle for detalle in matriz_detalle_ventas if detalle[1] == str(id_producto)]
-    
-    if not ventas_producto:
-        print("No hay ventas registradas para este producto.")
-        return
-
-    print(f"{'ID Venta':<10}{'ID Receta':<10}{'Subtotal':<10}")
-    
-    for detalle in ventas_producto:
-        try:
-            print(f"{int(detalle[0]):<10}{detalle[1]:<10}${float(detalle[2]):<10.2f}")
-        except (ValueError, IndexError):
-            print("Error en el formato de una línea de detalle de ventas.")
-
 def ventas_de_x_cliente(id_cliente):
     id_cliente_str = str(id_cliente)
 
