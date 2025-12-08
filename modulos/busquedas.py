@@ -1,4 +1,4 @@
-from .funciones_generales import buscar_id, mostrar_encabezado, extraer_encabezado_busquedas
+from .funciones_generales import mostrar_encabezado, extraer_encabezado_busquedas
 from functools import reduce
 import json
 def submenu_busquedas():
@@ -31,14 +31,6 @@ def submenu_busquedas():
                 print("Error! Debe ingresar un número entero.")
                 continue
             ventas_de_x_cliente(id_cliente)
-            input("Presione Enter para continuar...")
-        elif opcion == 2:
-            try:
-                id_producto = int(input("Ingrese el ID del producto: "))
-            except ValueError:
-                print("Error! Debe ingresar un número entero.")
-                continue
-            ventas_de_x_producto(id_producto)
             input("Presione Enter para continuar...")
     input("Volviendo al menú principal...")
 
