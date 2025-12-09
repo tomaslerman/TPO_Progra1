@@ -1,7 +1,6 @@
 {
     "busquedas":{
         "1": "Ventas de un cliente especifico",
-        "2": "Ventas de un producto especifico",
         "-1": "Volver a menu"
     }
 }

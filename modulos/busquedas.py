@@ -15,7 +15,7 @@ def submenu_busquedas():
         except ValueError:
             print("Error! Opción inválida.")
             continue
-        while opcion not in [1, 2, -1]:
+        while opcion not in [1,-1]:
             print("Error! Opción inválida.")
             try:
                 opcion = int(input("Seleccione una opción: "))
