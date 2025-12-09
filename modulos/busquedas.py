@@ -72,9 +72,9 @@ def ventas_de_x_cliente(id_cliente):
 
     montos = list(map(lambda v: v["total"], ventas_cliente))
     total_gastado = reduce(lambda acc, x: acc + x, montos, 0)
-
+    #------------------ SLICING ------------------
     ultimas3 = ventas_cliente[-3:]
-
+    #---------------------------------------------
     print(f"Cliente {id_cliente} gastó un total de: ${total_gastado:.2f}")
     print("Últimas 3 ventas:")
     for v in ultimas3:
