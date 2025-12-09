@@ -1,5 +1,5 @@
 from .datos_de_prueba import *
-from modulos.funciones_generales import buscar_id_prod
+from modulos.funciones_generales import buscar_id_prod, open_json_file
 
 def test_buscar_id_prod_existente():
     """Debe encontrar el producto cuando el código existe."""
@@ -16,22 +16,27 @@ def test_buscar_id_prod_inexistente():
     assert clave == -1, "Error: para un código inexistente debería devolver -1"
     assert producto is None, "Error: para un código inexistente debería devolver None"
 
-def stock_por_agotar(matriz_productos):
-    productos_agotarse=[fila for fila in matriz_productos if (fila[2])<=2]
+def stock_por_agotar():
+    productos = open_json_file("productos.json")
+    if not productos:
+        print("No hay productos registrados.")
+        return
+    productos_agotarse = [
+        (id_prod, datos['descripcion'], datos['stock'], datos['precio'])
+        for id_prod, datos in productos.items()
+        if datos['stock'] <= 2
+    ]
     return productos_agotarse # Retorna la lista de productos con stock menor al umbral. Con los datos actuales, debería retornar Paracetamol y Amoxicilina.
 
 def test_stock_por_agotar():
-    try:
-        arch_productos = open("productos.txt", "r", encoding="utf-8")
-        matriz_productos = [linea.strip().split(";") for linea in arch_productos]
-    except FileNotFoundError:
-        print("Error! El archivo de productos no existe.")
-        return
-    resultado = stock_por_agotar(matriz_productos)
+    resultado = stock_por_agotar()
     esperado = [
-        [1, "Paracetamol", 1, 10],
-        [3, "Amoxicilina", 2, 20]
+        ('3', 'Amoxicilina', 2, 2000)
     ]
+    # Caso falso
+    '''esperado = [
+        (1, "Paracetamol", 1, 10)
+    ]'''
     assert resultado == esperado, f"Se esperaba {esperado} pero se obtuvo {resultado}"
 
   
