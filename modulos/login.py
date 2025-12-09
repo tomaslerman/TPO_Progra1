@@ -19,7 +19,6 @@ def login():
             contrasena = pedir_contrasena()
             validar_credenciales(usuario, contrasena, diccionario_login)
             print(f"Login ingresado correctamente para el usuario: {usuario}")
-            menu_principal()
             break  # corta el loop si el login fue correcto
         except ValueError as e:
             print(e)  # mensaje de error si no valida
